@@ -161,7 +161,7 @@ main {
     margin: 20px 0;
 }
 
-.footer__container {  
+.footer__inner {  
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -7,7 +7,7 @@
     <link rel="icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
-    <link rel="stylesheet" href="../admin.css">
+    <link rel="stylesheet" href="admin.css">
     <title>Панель администратора</title>
 </head>
 <body>
@@ -37,6 +37,18 @@
                             </button>
                             <div class="users__table">                              
                             </div>
+                        </div>
+                        <div class="page__status status">
+                            <h2 class="status__title title">Статус дисциплины</h2>
+                            <div data-selectField="statusDiscipline" class="status__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите статус дисциплины">Выберите статус дисциплины</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
+                            <button class="status__btn delete">
+                                <span class="delete__btn">Удалить статус дисциплины</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -148,7 +160,21 @@
             </div>
         </div>          
     </div>
-    
+    <div id="popup-deleteStatus" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="statusDisciplineId">
+                <h2 class="popup__title title">Вы действительно хотите удалить статус дисциплины?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="admin.js"></script>
 </body>
 </html>

@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", function() {
     let popupDeleteUserYesBtn = document.querySelector("#popup-deleteUser .confirm-button--yes")
     let popupDeleteUserNoBtn = document.querySelector("#popup-deleteUser .confirm-button--no")
 
+    let deleteStatusBtn = document.querySelector(".status__btn")
+    let popupDeleteStatus = document.querySelector("#popup-deleteStatus")
+    let popupDeleteStatusYesBtn = document.querySelector("#popup-deleteStatus .confirm-button--yes")
+    let popupDeleteStatusNoBtn = document.querySelector("#popup-deleteStatus .confirm-button--no")
+
     let popupCreateUserCheckbox = document.querySelector("#popup-createUser .checkbox label")
     let popupEditUserCheckbox = document.querySelector("#popup-editUser .checkbox label")
 
@@ -427,7 +432,65 @@ document.addEventListener("DOMContentLoaded", function() {
             window.location.assign("/login.html")
         }
     }
-    
+
+    //кнопка удаления статуса дисциплины
+    deleteStatusBtn.addEventListener("click", function() {
+        let selectedStatusDiscipline = document.querySelector("[data-selectfield=statusDiscipline] .select__text")
+
+        if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
+            selectedStatusDiscipline.closest(".select").classList.add("invalid")
+        } else {
+            selectedStatusDiscipline.closest(".select").classList.remove("invalid")
+            popupDeleteStatus.classList.add("open")
+            document.body.classList.add("no-scroll")
+
+            let statusDisciplineId = selectedStatusDiscipline.dataset.id
+            popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
+        }
+    })
+
+    //нажатие на кнопку да в модальном окне удаления статуса дисциплины
+    popupDeleteStatusYesBtn.addEventListener("click", function(e) {
+        let statusDisciplineId = popupDeleteStatus.querySelector("#statusDisciplineId").value
+        deleteStatusDiscipline(statusDisciplineId, this)
+    })
+
+    //нажатие на кнопку нет в модальном окне удаления статуса дисциплины
+    popupDeleteStatusNoBtn.addEventListener("click", function() {
+        popupDeleteStatus.querySelector(".popup__close").click()
+    })
+
+    //удаление статуса дисциплины
+    const deleteStatusDiscipline = async (statusDisciplineId, el) => {
+        el.classList.add("loading")
+        el.disabled = true
+
+        let response = await fetch(`${URL}/StatusDiscipline/DeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
+            method: "DELETE",
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            alert("Статус дисциплины успешно удален")
+            el.classList.remove("loading")
+            el.disabled = false
+            popupDeleteRpd.querySelector(".popup__close").click()
+            getDisciplinesByProfile(profileId)
+        } else if (response.status == 405) {
+            window.location.assign("/login.html")
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось удалить статус дисциплины. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+            
+            el.classList.remove("loading")
+            el.disabled = false
+        }
+    }
+
     //функционал выпадающих списков
     const select = document.querySelectorAll('.select');
     select.forEach(selectItem => {

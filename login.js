@@ -61,15 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("userRole", user.role)
             localStorage.setItem("persDepartmentId", user.persDepartmentId)
 
-            for (let keys of response.headers.keys()) {
-                console.log(keys)
-            }
-            //getCaseSDepartments().then(_ => getLevelEdues()).then(_ => getEduForms())
-            if (user.role != null) {
-                window.location.assign("/admin/admin.html")
-            } else {
-                window.location.assign("/admin/index.html")
-            }
+            
+            redirectByRole(user)
         } else {
             let error = await response.text()
             alert(error)
@@ -85,4 +78,14 @@ document.addEventListener("DOMContentLoaded", function() {
     loginBtn.addEventListener("click", function() {
         validateLoginForm()
     })
+
+    const redirectByRole = (user) => {
+        if (user.persDepartmentId != null) {
+            window.location.assign("/metodist/")
+        } else if (user.role == "UMU") {
+            window.location.assign("/umu/")
+        } else if (user.role == "admin") {
+            window.location.assign("/admin/")
+        }
+    }
 })
