@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" sizes="180x180" href="../img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
+    <link rel="stylesheet" href="../admin.css">
+    <title>Электронные образовательные ресурсы</title>
+</head>
+<body>
+    <div class="site-wrapper">
+        <header class="header">
+            <div class="header__container container">
+                <a href="" class="logo">
+                    <img src="../img/logo.svg" alt="">
+                </a>
+                <div class="action">
+                    <button type="button" class="action__btn"></button>
+                    <div class="action__text">
+                        Личный кабинет
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="page">
+                <div class="page__container container">
+                    <div class="page__header">
+                        <a href="/metodist/" class="page__link">
+                            <svg width="187" height="55" viewBox="0 0 187 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.7451 5.9399C11.3153 2.6184 14.6599 0.5 18.3338 0.5H177C182.247 0.5 186.5 4.7533 186.5 10V45C186.5 50.2467 182.247 54.5 177 54.5H18.3338C14.6599 54.5 11.3153 52.3816 9.7451 49.0601L1.47238 31.5601C0.257292 28.9897 0.257292 26.0103 1.47238 23.4399L5.95204 13.9637L9.7451 5.9399Z" stroke="#0050CF"/>
+                            </svg>   
+                            <span class="page__link-text">Образовательные программы</span>
+                        </a>
+                        <div class="page__info">
+                            <h1 class="page__title title">Направление: </h1>
+                            <p class="page__subtitle">Профиль: </p>
+                        </div>
+                        <button type="button" class="action-eor btn">
+                            Создать дисциплину
+                        </button>
+                    </div>
+                    <div class="page__accordeon accordeon">
+                        <ul class="accordeon__list">
+                            <!-- <li class="accordeon__item">
+                                <div class="accordeon__control" aria-expanded="false">               
+                                    <p class="accordeon__title">Обязательная часть</p>
+                                    <div class="accordeon__icon"></div>
+                                </div>
+                                <div class="accordeon__content" aria-hidden="true">
+                                    <table class="discipline-table">
+                                        <tbody>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span data-filerpdid="34" class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <span>история (история россии, всеобщая история)</span>   
+                                                    <label class="file-upload">                                      
+                                                        <span data-disciplineid="48" class="file-upload__btn btn"></span>
+                                                        <input type="file">
+                                                    </label>    
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                                    
+                                                </td>
+                                                
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <span>история (история россии, всеобщая история)</span>   
+                                                    <button class="file-upload">
+                                                        <span class="file-upload__btn btn"></span>
+                                                        <input type="file">
+                                                    </button>    
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                                    
+                                                </td>
+                                                
+                                            </tr>           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                            <li class="accordeon__item">
+                                <div class="accordeon__control" aria-expanded="false">               
+                                    <p class="accordeon__title">Обязательная часть</p>
+                                    <div class="accordeon__icon"></div>
+                                </div>
+                                <div class="accordeon__content" aria-hidden="true">
+                                    <table class="discipline-table">
+                                        <tbody>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <span>история (история россии, всеобщая история)</span>   
+                                                    <button class="file-upload">
+                                                        <span class="file-upload__btn btn"></span>
+                                                    </button>    
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                                    
+                                                </td>
+                                                
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <span>история (история россии, всеобщая история)</span>   
+                                                    <button class="file-upload">
+                                                        <span class="file-upload__btn btn"></span>
+                                                    </button>    
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                                    
+                                                </td>
+                                                
+                                            </tr>           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                            <li class="accordeon__item">
+                                <div class="accordeon__control" aria-expanded="false">               
+                                    <p class="accordeon__title">Обязательная часть</p>
+                                    <div class="accordeon__icon"></div>
+                                </div>
+                                <div class="accordeon__content" aria-hidden="true">
+                                    <table class="discipline-table">
+                                        <tbody>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <span>история (история россии, всеобщая история)</span>   
+                                                    <button class="file-upload">
+                                                        <span class="file-upload__btn btn"></span>
+                                                    </button>    
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                                    
+                                                </td>
+                                                
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <a href="">история (история россии, всеобщая история)</a>     
+                                                    <button type="button" class="delete">
+                                                        <span class="delete__btn btn"></span>
+                                                    </button>                 
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                     
+                                                </td>
+                                            </tr>
+                                            <tr class="discipline">
+                                                <td>Б1.О.1 .1</td>
+                                                <td>
+                                                    <span>история (история россии, всеобщая история)</span>   
+                                                    <button class="file-upload">
+                                                        <span class="file-upload__btn btn"></span>
+                                                    </button>    
+                                                    <button type="button" class="edit">
+                                                        <span class="edit__btn btn"></span>
+                                                    </button>                                    
+                                                </td>
+                                                
+                                            </tr>           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                    <div class="page__status status">
+                        <h2 class="status__title title">Статус дисциплины</h2>
+                        <div data-selectField="statusDiscipline" class="status__select select">
+                            <div class="select__btn">
+                                <span class="select__text" data-placeholder="Выберите статус дисциплины">Выберите статус дисциплины</span>
+                            </div>
+                            <ul class="select__options"></ul>
+                        </div>
+                        <button class="status__btn delete">
+                            <span class="delete__btn">Удалить статус дисциплины</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer__container container">
+                <div class="footer__inner">
+                    <a href="" class="logo">
+                        <img src="../img/logo-footer.svg" alt="">
+                    </a>
+                    <div class="footer__text">
+                        Сведения об образовательной организации
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <div id="popup-createStatus" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Создание статуса дисциплины</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <div class="popup-form__file-item">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Название</span>
+                            <input type="text" id="codeDiscipline" class="popup-form__input">
+                        </label>
+                    </div>
+                    <button type="button" class="popup-form__btn btn">Создать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-editStatus" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Изменение статуса дисциплины</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <div class="popup-form__file-item">
+                        <input type="hidden" id="statusDisciplineId">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Название</span>
+                            <input type="text" id="codeDiscipline" class="popup-form__input">
+                        </label>
+                    </div>
+                    <button type="button" class="popup-form__btn btn">Сохранить изменение</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-deleteStatus" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="statusDisciplineId">
+                <h2 class="popup__title title">Вы действительно хотите удалить статус дисциплины?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popup-createDiscipline" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Создание дисциплины</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <div class="popup-form__file-item">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Код дисциплины</span>
+                            <input type="text" id="codeDiscipline" class="popup-form__input">
+                        </label>
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Название</span>
+                            <input type="text" id="disciplineName" class="popup-form__input">
+                        </label>
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Статус дисциплины</span>
+                            <div data-selectField="statusDiscipline" class="popup-form__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите статус дисциплины">Выберите статус дисциплины</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
+                        </label>
+                        <div>
+                            <button type="button" class="popup-form__btn btn popup-form__btn--create-discipline">Создать дисциплину</button>
+                        </div>
+                    </div>
+                    <button type="button" class="popup-form__btn btn popup-form__btn--create-status">Создать статус дисциплины</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-editDiscipline" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Изменение названия дисциплины</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <input type="hidden" id="disciplineId">
+                    <div class="popup-form__file-item">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Название</span>
+                            <input type="text" class="popup-form__input">
+                        </label>
+                    </div>
+                    <button type="button" class="popup-form__btn btn">Сохранить изменение</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-deleteDiscipline" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="disciplineId">
+                <h2 class="popup__title title">Вы действительно хотите удалить дисциплину?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popup-createRpd" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Загрузка файла РПД</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <div class="popup-form__file-item">
+                        <input type="hidden" id="disciplineId">
+                        <input type="hidden" id="ecp">
+                        <input type="file" id="uploadedFile" class="visually-hidden">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Автор дисциплины</span>
+                            <div class="search">
+                                <div class="search__icon">
+                                    <svg viewBox="0 0 32 32" width="32pt" height="32pt"><path d=" M 31.437 28.596 L 25.243 22.4 C 29.878 16.206 28.614 7.428 22.42 2.793 C 16.227 -1.841 7.449 -0.578 2.814 5.616 C -1.821 11.809 -0.557 20.587 5.637 25.222 C 10.612 28.945 17.445 28.945 22.42 25.222 L 28.617 31.419 C 29.396 32.198 30.658 32.198 31.437 31.419 C 32.216 30.64 32.216 29.378 31.437 28.599 L 31.437 28.596 Z  M 14.08 24.026 C 8.576 24.026 4.113 19.564 4.113 14.059 C 4.113 8.555 8.576 4.093 14.08 4.093 C 19.585 4.093 24.047 8.555 24.047 14.059 C 24.041 19.561 19.582 24.02 14.08 24.026 Z " fill="rgb(210,210,210)"></path></svg>
+                                </div>
+                                <input class="search__input" type="text" placeholder="Поиск автора" list="authors">
+                                <datalist id="authors">
+                                </datalist>
+                            </div>
+                        </label>
+                        <div class="popup-form__file-name"></div>
+                    </div>
+                    <button type="button" class="popup-form__btn btn">Загрузить файл РПД</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-deleteRpd" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="fileRPDId">
+                <h2 class="popup__title title">Вы действительно хотите удалить запись?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+    </div>
+    <script src="eor.js"></script>
+</body>
+</html>

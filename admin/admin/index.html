@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" sizes="180x180" href="../img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
+    <link rel="stylesheet" href="../admin.css">
+    <title>Панель администратора</title>
+</head>
+<body>
+    <div class="site-wrapper">
+        <header class="header">
+            <div class="header__container container">
+                <a href="" class="logo">
+                    <img src="../img/logo.svg" alt="">
+                </a>
+                <div class="action">
+                    <button type="button" class="action__btn"></button>
+                    <div class="action__text">
+                        Личный кабинет
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="page">
+                <div class="page__container container">
+                    <h1 class="page__title title">Панель администратора</h1>
+                    <div class="page__content">
+                        <div class="page__users users">
+                            <h2 class="users__title title">Список всех пользователей</h2>
+                            <button type="button" class="users__btn btn">
+                                Создать пользователя
+                            </button>
+                            <div class="users__table">                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer__container container">
+                <div class="footer__inner">
+                    <a href="" class="logo">
+                        <img src="../img/logo-footer.svg" alt="">
+                    </a>
+                    <div class="footer__text">
+                        Сведения об образовательной организации
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="popup-createUser" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Создание пользователя</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <div class="popup-form__file-item">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Логин</span>
+                            <input type="text" id="login" class="popup-form__input">
+                        </label>
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Пароль</span>
+                            <input type="password" id="password" class="popup-form__input">
+                        </label>
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Кафедра</span>
+                            <div data-selectField="kafedra" class="popup-form__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите кафедру">Выберите кафедру</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
+                        </label>
+                        <label class="popup-form__label">
+                            <div class="checkbox">
+                                <input type="checkbox">
+                                <label>Предоставить пользователю роль админа</label>
+                            </div>
+                        </label>
+                    </div>
+                    <button type="button" class="popup-form__btn btn">Создать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-editUser" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Изменение пользователя</h2>
+                <form class="popup__form popup-form" action="" method="post">
+                    <div class="popup-form__file-item">
+                        <input type="hidden" id="userId">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Логин</span>
+                            <input type="text" id="userLogin" class="popup-form__input">
+                        </label>
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Пароль</span>
+                            <input type="password" id="userPassword" class="popup-form__input">
+                        </label>
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Кафедра</span>
+                            <div data-selectField="kafedra" class="popup-form__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите кафедру">Выберите кафедру</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
+                        </label>
+                        <label class="popup-form__label">
+                            <div class="checkbox">
+                                <input type="checkbox">
+                                <label>Предоставить пользователю роль админа</label>
+                            </div>
+                        </label>
+                    </div>
+                    <button type="button" class="popup-form__btn btn">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup-deleteUser" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="userId">
+                <h2 class="popup__title title">Вы действительно хотите удалить пользователя?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>          
+    </div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>

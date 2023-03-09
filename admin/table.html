@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="site-wrapper">
+        <header class="header">
+            <div class="header__container container">
+                <a href="" class="logo">
+                    <img src="img/logo.svg" alt="">
+                </a>
+                <div class="action">
+                    <button type="button" class="action__btn"></button>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="page">
+                <div class="page__container container">
+                    <div class="page__head">
+                        <h1 class="page__title">Образовательные программы</h1>  
+                        <div class="page__search search">
+                            <div class="search__icon">
+                                <svg viewBox="0 0 32 32" width="32pt" height="32pt"><path d=" M 31.437 28.596 L 25.243 22.4 C 29.878 16.206 28.614 7.428 22.42 2.793 C 16.227 -1.841 7.449 -0.578 2.814 5.616 C -1.821 11.809 -0.557 20.587 5.637 25.222 C 10.612 28.945 17.445 28.945 22.42 25.222 L 28.617 31.419 C 29.396 32.198 30.658 32.198 31.437 31.419 C 32.216 30.64 32.216 29.378 31.437 28.599 L 31.437 28.596 Z  M 14.08 24.026 C 8.576 24.026 4.113 19.564 4.113 14.059 C 4.113 8.555 8.576 4.093 14.08 4.093 C 19.585 4.093 24.047 8.555 24.047 14.059 C 24.041 19.561 19.582 24.02 14.08 24.026 Z " fill="rgb(210,210,210)"></path></svg>
+                            </div>
+                            <input class="search__input" type="text" placeholder="Поиск по факультету" list="faculties">
+                            <datalist id="faculties">
+                            </datalist>
+                            <button type="button" class="search__btn">Найти</button>
+                        </div>
+                    </div>
+                    <div class="page__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Код, шифр</th>
+                                    <th>Наименование профессии, специальности, направления подготовки, наименование группы научных специальостей</th>
+                                    <th>Профиль</th>
+                                    <th>Уровень образования</th>
+                                    <th>Форма обучения</th>
+                                    <th>Нормативный срок обучения</th>
+                                    <th>Срок действия государственной аккредитации ОП</th>
+                                    <th>Язык обучения</th>
+                                    <th>Учебные предметы, курсы, дисциплины (модули)</th>
+                                    <th>Рабочие программы практик, предусмотренных соответствующей образовательной программой</th>
+                                    <th>Дистанционное обучение</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer__container container">
+                <div class="footer__inner">
+                    <a href="" class="logo">
+                        <img src="../img/logo-footer.svg" alt="">
+                    </a>
+                    <div class="footer__text">
+                        Сведения об образовательной организации
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="table.js"></script>
+</body>
+</html>
