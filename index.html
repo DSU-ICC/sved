@@ -4,40 +4,64 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" sizes="180x180" href="../img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
-    <link rel="stylesheet" href="../admin.css">
-    <title>Панель администратора</title>
+    <link rel="icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="stylesheet" href="style.css">
+    <title>Образовательные программы</title>
 </head>
 <body>
     <div class="site-wrapper">
         <header class="header">
             <div class="header__container container">
                 <a href="" class="logo">
-                    <img src="../img/logo.svg" alt="">
+                    <img src="img/logo.svg" alt="">
                 </a>
                 <div class="action">
                     <button type="button" class="action__btn"></button>
-                    <div class="action__text">
-                        Личный кабинет
-                    </div>
                 </div>
             </div>
         </header>
         <main>
             <div class="page">
                 <div class="page__container container">
-                    <h1 class="page__title title">Панель администратора</h1>
-                    <div class="page__content">
-                        <div class="page__users users">
-                            <h2 class="users__title title">Список всех пользователей</h2>
-                            <button type="button" class="users__btn btn">
-                                Создать пользователя
-                            </button>
-                            <div class="users__table">                              
+                    <div class="page__head">
+                        <h1 class="page__title">Образовательные программы</h1>  
+                        <div class="page__search search">
+                            <div class="search__icon">
+                                <svg viewBox="0 0 32 32" width="32pt" height="32pt"><path d=" M 31.437 28.596 L 25.243 22.4 C 29.878 16.206 28.614 7.428 22.42 2.793 C 16.227 -1.841 7.449 -0.578 2.814 5.616 C -1.821 11.809 -0.557 20.587 5.637 25.222 C 10.612 28.945 17.445 28.945 22.42 25.222 L 28.617 31.419 C 29.396 32.198 30.658 32.198 31.437 31.419 C 32.216 30.64 32.216 29.378 31.437 28.599 L 31.437 28.596 Z  M 14.08 24.026 C 8.576 24.026 4.113 19.564 4.113 14.059 C 4.113 8.555 8.576 4.093 14.08 4.093 C 19.585 4.093 24.047 8.555 24.047 14.059 C 24.041 19.561 19.582 24.02 14.08 24.026 Z " fill="rgb(210,210,210)"></path></svg>
                             </div>
+                            <input class="search__input" type="text" placeholder="Поиск по факультету" list="faculties">
+                            <datalist id="faculties">
+                            </datalist>
+                            <button type="button" class="search__btn">Найти</button>
                         </div>
+                    </div>
+                    <div class="page__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Год реал-ии</th>
+                                    <th>Код, шифр</th>
+                                    <th>Наименование профессии, специальности, направления подготовки, наименование группы научных специальостей</th>
+                                    <th>Уровень образования</th>
+                                    <th>Профиль</th>
+                                    <th>ФГОС</th>
+                                    <th>ОПОП</th>
+                                    <th>Форма обучения</th>
+                                    <th>Учебный план</th>
+                                    <th>Аннотации к рабочим программам дисциплин</th>
+                                    <th>Рабочие программы дисциплин</th>
+                                    <th>Календарный учебный график</th>
+                                    <th>Рабочие программы практик, предусмотренных соответствующей образовательной программой</th>
+                                    <th>Программа ГИА</th>
+                                    <th>Матрицы компетенций</th>
+                                    <th>Методические материалы для обеспечения ОП</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -55,100 +79,7 @@
             </div>
         </footer>
     </div>
-
-    <div id="popup-createUser" class="popup">
-        <div class="popup__body">
-            <div class="popup__content">
-                <button type="button" class="popup__close">
-                    <img src="../img/close.svg" alt="">
-                </button>
-                <h2 class="popup__title title">Создание пользователя</h2>
-                <form class="popup__form popup-form" action="" method="post">
-                    <div class="popup-form__file-item">
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Логин</span>
-                            <input type="text" id="login" class="popup-form__input">
-                        </label>
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Пароль</span>
-                            <input type="password" id="password" class="popup-form__input">
-                        </label>
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Кафедра</span>
-                            <div data-selectField="kafedra" class="popup-form__select select">
-                                <div class="select__btn">
-                                    <span class="select__text" data-placeholder="Выберите кафедру">Выберите кафедру</span>
-                                </div>
-                                <ul class="select__options"></ul>
-                            </div>
-                        </label>
-                        <label class="popup-form__label">
-                            <div class="checkbox">
-                                <input type="checkbox">
-                                <label>Предоставить пользователю роль админа</label>
-                            </div>
-                        </label>
-                    </div>
-                    <button type="button" class="popup-form__btn btn">Создать</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div id="popup-editUser" class="popup">
-        <div class="popup__body">
-            <div class="popup__content">
-                <button type="button" class="popup__close">
-                    <img src="../img/close.svg" alt="">
-                </button>
-                <h2 class="popup__title title">Изменение пользователя</h2>
-                <form class="popup__form popup-form" action="" method="post">
-                    <div class="popup-form__file-item">
-                        <input type="hidden" id="userId">
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Логин</span>
-                            <input type="text" id="userLogin" class="popup-form__input">
-                        </label>
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Пароль</span>
-                            <input type="password" id="userPassword" class="popup-form__input">
-                        </label>
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Кафедра</span>
-                            <div data-selectField="kafedra" class="popup-form__select select">
-                                <div class="select__btn">
-                                    <span class="select__text" data-placeholder="Выберите кафедру">Выберите кафедру</span>
-                                </div>
-                                <ul class="select__options"></ul>
-                            </div>
-                        </label>
-                        <label class="popup-form__label">
-                            <div class="checkbox">
-                                <input type="checkbox">
-                                <label>Предоставить пользователю роль админа</label>
-                            </div>
-                        </label>
-                    </div>
-                    <button type="button" class="popup-form__btn btn">Сохранить изменения</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div id="popup-deleteUser" class="popup">
-        <div class="popup__body">
-            <div class="popup__content">
-                <button type="button" class="popup__close">
-                    <img src="../img/close.svg" alt="">
-                </button>
-                <input type="hidden" id="userId">
-                <h2 class="popup__title title">Вы действительно хотите удалить пользователя?</h2>
-                <div class="confirm-buttons">
-                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
-                    <button class="confirm-button confirm-button--no">Нет</button>
-                </div>
-            </div>
-        </div>          
-    </div>
-    
-    <script src="admin.js"></script>
+    <script src="main.js"></script>
 </body>
+
 </html>
