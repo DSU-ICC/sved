@@ -516,8 +516,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //нажатие на кнопку да в модальном окне удаления дисциплины
     popupDeleteDisciplineYesBtn.addEventListener("click", function(e) {
-        let disciplineId = popupDeleteDiscipline.querySelector("#disciplineId").value
-        sendRequestDeleteDiscipline(disciplineId, e.target)
+        let disciplineId = parseInt(popupDeleteDiscipline.querySelector("#disciplineId").value)
+        let updateDiscipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
+        updateDiscipline.isDeletionRequest = true
+        sendRequestDeleteDiscipline(updateDiscipline, e.target.parentNode)
     })
 
     //нажатие на кнопку нет в модальном окне удаления дисциплины
@@ -526,13 +528,17 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //функция отправки запроса на удаление дисциплины
-    const sendRequestDeleteDiscipline = async (disciplineId, el) => {
+    const sendRequestDeleteDiscipline = async (updateDiscipline, el) => {
         el.classList.add("loading")
         el.disabled = true 
 
         let response = await fetch(`${URL}/Discipline/EditDiscipline`, {
             method: "PUT",
-            credentials: "include"
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(updateDiscipline)
         })
 
         if (response.ok) {
