@@ -517,9 +517,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //нажатие на кнопку да в модальном окне удаления дисциплины
     popupDeleteDisciplineYesBtn.addEventListener("click", function(e) {
         let disciplineId = parseInt(popupDeleteDiscipline.querySelector("#disciplineId").value)
-        let updateDiscipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
-        updateDiscipline.isDeletionRequest = true
-        sendRequestDeleteDiscipline(updateDiscipline, e.target.parentNode)
+        sendRequestDeleteDiscipline(disciplineId, e.target.parentNode)
     })
 
     //нажатие на кнопку нет в модальном окне удаления дисциплины
@@ -528,24 +526,20 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //функция отправки запроса на удаление дисциплины
-    const sendRequestDeleteDiscipline = async (updateDiscipline, el) => {
+    const sendRequestDeleteDiscipline = async (disciplineId, el) => {
         el.classList.add("loading")
         el.disabled = true 
 
-        let response = await fetch(`${URL}/Discipline/EditDiscipline`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(updateDiscipline)
+        let response = await fetch(`${URL}/Discipline/RequestDeleteDiscipline?disciplineId=${disciplineId}`, {
+            method: "DELETE",
+            credentials: "include"
         })
 
         if (response.ok) {
             alert("Запрос на удаление дисциплины отправлен")
             el.classList.remove("loading")
             el.disabled = false
-            popupDeleteRpd.querySelector(".popup__close").click()
+            popupDeleteDiscipline.querySelector(".popup__close").click()
             getDisciplinesByProfile(profileId)
         } else {
             let error = await response.text()
@@ -735,7 +729,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
             selectedStatusDiscipline.closest(".select").classList.add("invalid")
         } else {
-            console.log("erqwe")
             selectedStatusDiscipline.closest(".select").classList.remove("invalid")
             popupDeleteStatus.classList.add("open")
             document.body.classList.add("no-scroll")
@@ -748,7 +741,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //нажатие на кнопку да в модальном окне удаления статуса дисциплины
     popupDeleteStatusYesBtn.addEventListener("click", function(e) {
         let statusDisciplineId = popupDeleteStatus.querySelector("#statusDisciplineId").value
-        sendRequestDeleteStatusDiscipline(statusDisciplineId, this)
+        sendRequestDeleteStatusDiscipline(statusDisciplineId, e.target.parentNode)
     })
 
     //нажатие на кнопку нет в модальном окне удаления статуса дисциплины
@@ -770,8 +763,9 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Запрос на удаление статуса дисциплины успешно отправлен")
             el.classList.remove("loading")
             el.disabled = false
-            popupDeleteRpd.querySelector(".popup__close").click()
+            popupDeleteStatus.querySelector(".popup__close").click()
             getDisciplinesByProfile(profileId)
+            getAllStatusDisciplines()
         } else if (response.status == 405) {
             window.location.assign("/login.html")
         } else {
@@ -833,6 +827,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
             }
             popupCreateDiscipline.querySelector("[data-selectfield=statusDiscipline] .select__options").innerHTML = res
+            document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
         } else if (response.status == 405) {
             window.location.assign("/login.html")
         } else {

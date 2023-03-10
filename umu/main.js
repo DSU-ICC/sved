@@ -245,9 +245,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     popupRejectDisciplineYesBtn.addEventListener("click", function(e) {
-        let disciplineId = popupRejectDiscipline.querySelector("#disciplineId").value
-        let rejectedDiscipline = disciplineList[]
+        let disciplineId = parseInt(popupRejectDiscipline.querySelector("#disciplineId").value)
+        let rejectedDiscipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
+        rejectedDiscipline.isDeletionRequest = false
+        sendRejectDeleteDiscipline(rejectedDiscipline, e.target)
     })
 
-    const sendRejectDeleteDiscipline = (as)
+    const sendRejectDeleteDiscipline = async (rejectedDiscipline, el) => {
+        el.classList.add("loading")
+        el.disabled = true
+
+        let response = await fetch(`${URL}/Discipline/EditDiscipline`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(rejectedDiscipline)
+        })
+
+        if (response.ok) {
+            alert("Отклонение удаления статуса дисциплины прошло успешно")
+            el.classList.remove("loading")
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getRequestsForDiscipline()
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось отклонить удаление статуса дисциплины. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+
+            el.classList.remove("loading")
+            el.disabled = false
+        }
+    }
 })
