@@ -872,25 +872,46 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //выход из аккаунта
+    //выход подьзователя из аккаунта
     const logout = async () => {
         let response = await fetch(`${URL}/Account/Logout`, {
             credentials: "include"
         }) 
 
         if (response.ok) {
-            localStorage.removeItem("userName")
-            localStorage.removeItem("userRole")
-            localStorage.removeItem("persDepartmentId")
+            localStorage.clear()
             window.location.assign("/login.html")
         }
     }
 
-    //кнопка выхода из аккаунта
+    const isAuthorize = () => localStorage.getItem("userId") != null
+
+    //нажатие на кнопку выхода из аккаунта пользователя
     logoutBtn.addEventListener("click", function() {
         logout()
     })
 
-    getDisciplinesByProfile(profileId)
-    getAllStatusDisciplines()
+    const hasUserAccessToRole = () => userRole === "null"
+
+    if (isAuthorize()) {
+        userId = localStorage.getItem("userId")
+        kafedra_id = localStorage.getItem("persDepartmentId")
+        userRole = localStorage.getItem("userRole")
+
+        let hasAccess = hasUserAccessToRole()
+        if (hasAccess) {
+            userName = localStorage.getItem("userName")
+            userRole = localStorage.getItem("userRole")
+
+            setUserName(userName)
+            getDisciplinesByProfile(profileId)
+            getAllStatusDisciplines()
+        } else {
+            window.location.assign(`/${userRole}/`)
+        }
+    } else {
+        window.location.assign("/login.html")
+    }
+
+   
 })

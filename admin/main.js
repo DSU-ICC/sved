@@ -286,25 +286,25 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    popupCreateUserCheckbox.addEventListener("click", function(e) {
-        if (this.previousElementSibling.hasAttribute("checked")) {
-            this.previousElementSibling.removeAttribute("checked")
-        } else {
-            this.previousElementSibling.setAttribute("checked", "checked")
-        }
+    // popupCreateUserCheckbox.addEventListener("click", function(e) {
+    //     if (this.previousElementSibling.hasAttribute("checked")) {
+    //         this.previousElementSibling.removeAttribute("checked")
+    //     } else {
+    //         this.previousElementSibling.setAttribute("checked", "checked")
+    //     }
         
-        this.previousElementSibling.classList.toggle("checked")
-    })
+    //     this.previousElementSibling.classList.toggle("checked")
+    // })
 
-    popupEditUserCheckbox.addEventListener("click", function(e) {
-        if (this.previousElementSibling.hasAttribute("checked")) {
-            this.previousElementSibling.removeAttribute("checked")
-        } else {
-            this.previousElementSibling.setAttribute("checked", "checked")
-        }
+    // popupEditUserCheckbox.addEventListener("click", function(e) {
+    //     if (this.previousElementSibling.hasAttribute("checked")) {
+    //         this.previousElementSibling.removeAttribute("checked")
+    //     } else {
+    //         this.previousElementSibling.setAttribute("checked", "checked")
+    //     }
         
-        this.previousElementSibling.classList.toggle("checked")
-    })
+    //     this.previousElementSibling.classList.toggle("checked")
+    // })
 
     //получение всех пользователей
     const getAllUsers = async () => {
@@ -450,25 +450,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     
     })
 
-    //кнопка выхода из аккаунта
-    logoutBtn.addEventListener("click", function() {
-        logout()
-    })
-
-    //выход из аккаунта
-    const logout = async () => {
-        let response = await fetch(`${URL}/Account/Logout`, {
-            credentials: "include"
-        }) 
-
-        if (response.ok) {
-            localStorage.removeItem("userName")
-            localStorage.removeItem("userRole")
-            localStorage.removeItem("persDepartmentId")
-            window.location.assign("/login.html")
-        }
-    }
-
     //получение всех статусов дисциплин
     const getAllRemovableStatusDiscipline = async () => {
         let response = await fetch(`${URL}/StatusDiscipline/GetRemovableStatusDiscipline`, {
@@ -493,19 +474,49 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     //функция, которая создает ссылку на панель администратора если пользователем является админ
-    const setUserName = (userName, userRole = "") => {
-        if (userName) {
-            let actionText = document.querySelector(".header .action__text")
+    const setUserName = (userName) => {
+        let actionText = document.querySelector(".header .action__text")
+        actionText.textContent = userName
+    }
 
-            if (userRole.toLowerCase() == "admin") {
-                actionText.outerHTML = `<a href="/admin/admin.html" class="action__text">${userName}</a>`
-            } else {
-                actionText.textContent = userName
-            }
+    //выход подьзователя из аккаунта
+    const logout = async () => {
+        let response = await fetch(`${URL}/Account/Logout`, {
+            credentials: "include"
+        }) 
+
+        if (response.ok) {
+            localStorage.clear()
+            window.location.assign("/login.html")
         }
     }
 
-    setUserName(localStorage.getItem("userName"), localStorage.getItem("userRole"))
+    const isAuthorize = () => localStorage.getItem("userId") != null
 
-    getAllKafedra().then(_ => getAllUsers()).then(_ => getAllRemovableStatusDiscipline())
+    //нажатие на кнопку выхода из аккаунта пользователя
+    logoutBtn.addEventListener("click", function() {
+        logout()
+    })
+
+    const hasUserAccessToRole = () => userRole == "admin"
+
+    if (isAuthorize()) {
+        userId = localStorage.getItem("userId")
+        userRole = localStorage.getItem("userRole")
+
+        let hasAccess = hasUserAccessToRole()
+        if (hasAccess) {
+            userName = localStorage.getItem("userName")
+
+            setUserName(userName)
+            getAllKafedra().then(_ => getAllUsers()).then(_ => getAllRemovableStatusDiscipline())
+        } else {
+            let redirectPage = userRole !== "null" ? userRole : "metodist"
+            window.location.assign(`/${redirectPage}/`)
+        }
+    } else {
+        window.location.assign("/login.html")
+    }
 })
+
+    

@@ -1305,3 +1305,71 @@ td[colspan] {
 .request-table .reject__btn::before {
     background: url("../img/delete.svg") no-repeat;
 }
+
+.tab {
+    display: inline-block;
+    padding: 20px;
+}
+
+.tab--active {
+    border: 1px solid #0050cf;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom: 0;
+    margin-bottom: -1px;
+    background: #fff;
+}
+
+.tab--active::after {
+    content: '';
+    width: 1px;
+    height: 1px;
+    display: block;
+}
+
+.tabs-content {
+    display: none;
+}
+
+.tabs-container {
+    border: 1px solid #0050cf;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 20px;
+}
+
+.tabs-content--active {
+    display: block;   
+}
+
+.radio__item [type='radio'] {
+   display: none;
+}
+.radio__item {
+   list-style: none;
+   color: #000;
+   width: max-content;
+}
+.radio__item label {
+   display: flex;
+   align-items: center;
+   cursor: pointer;
+}
+.radio__item label::before {
+   content: '';
+   width: 7px;
+   height: 7px;
+   display: inline-block;
+   border-radius: 50%;
+   border: 3px solid #fff;
+   outline: 1px solid #524eee;
+   background-color: #fff;
+   margin-right: 5px;
+}
+.radio__item [type='radio']:checked ~ label {
+   border-color: #524eee;
+}
+.radio__item [type='radio']:checked ~ label:before {
+   border-color: #fff;
+   background-color: #524eee;
+}

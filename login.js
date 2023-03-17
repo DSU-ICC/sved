@@ -57,10 +57,10 @@ document.addEventListener("DOMContentLoaded", function() {
             loginBtn.disabled = false
 
             let user = await response.json()
+            localStorage.setItem("userId", user.userId)
             localStorage.setItem("userName", user.userName)
             localStorage.setItem("userRole", user.role)
             localStorage.setItem("persDepartmentId", user.persDepartmentId)
-
             
             redirectByRole(user)
         } else {
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const redirectByRole = (user) => {
         if (user.persDepartmentId != null) {
             window.location.assign("/metodist/")
-        } else if (user.role == "UMU") {
+        } else if (user.role == "UMU") {   
             window.location.assign("/umu/")
         } else if (user.role == "admin") {
             window.location.assign("/admin/")

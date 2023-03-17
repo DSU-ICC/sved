@@ -19,9 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupEditText = document.querySelector("#popup-editText")
     let popupEditTextBtn = document.querySelector("#popup-editText .popup-form__btn")
     let dataUchPlanFinal;
-    let profiles;
-    let kafedra_id;
+    let profiles
+    let kafedra_id
     let fileTypes
+    let userName
+    let userRole
 
 
     let pageTable = document.querySelector("table")
@@ -90,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //функция заполнение модального окна данными полученными при парсинге учебного плана 
     const fillUchPlanData = (data) => {
+        console.log(data)
         document.body.classList.add("no-scroll")
         modalUchPlan.classList.add("open")
         dataUchPlanFinal = data
@@ -162,16 +165,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dataUchPlanFinal = data.profile
 
-        for (let discipline of dataUchPlanFinal.disciplines) {
-            discipline.statusDiscipline = null
-        }
+        // for (let discipline of dataUchPlanFinal.disciplines) {
+        //     discipline.statusDiscipline = null
+        // }
         dataUchPlanFinal.persDepartmentId = kafedra_id
         dataUchPlanFinal.levelEdu = null
-        dataUchPlanFinal.levelEduId = selectedLevelEduItem.dataset.id 
+        dataUchPlanFinal.levelEduId = parseInt(selectedLevelEduItem.dataset.id)
         dataUchPlanFinal.year = yearInput.value.trim()
         dataUchPlanFinal.profileName = profileInput.value.trim()
-        dataUchPlanFinal.caseSDepartmentId = selectedDeptItem.dataset.id
-        dataUchPlanFinal.caseCEdukindId = selectedEduFormItem.dataset.id
+        dataUchPlanFinal.caseSDepartmentId = parseInt(selectedDeptItem.dataset.id)
+        dataUchPlanFinal.caseCEdukindId = parseInt(selectedEduFormItem.dataset.id)
 
         let response = await fetch(`${URL}/Profiles/CreateProfile`, {
             method: "POST",
@@ -725,7 +728,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //генерация разметки для файловых элементов таблицы
     const generateMarkupFileModelByFileTypeId = (profile, fileTypeId) => {
-        console.log(profile)
         let fileModels = new Set(profile.profile.fileModels.filter(e => e.fileTypeId == fileTypeId))
         let markup = "";
 
@@ -805,17 +807,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получить профили по айди кафедры
     const getProfilesById = async () => {
-        kafedra_id = localStorage.getItem("persDepartmentId");
-        let userName = localStorage.getItem("userName")
-        let userRole = localStorage.getItem("userRole")
+        
         if (kafedra_id && userName) {
             let response = await fetch(`${URL}/Profiles/GetDataById?kafedraId=${kafedra_id}`, {
                 credentials: "include"
             })
         
             if (response.ok) {
-                setUserName(userName, userRole)
-
                 profiles = await response.json()
                 showProfiles(profiles)
             } else if (response.status == 405) {
@@ -825,6 +823,8 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.assign("/login.html")
         }
     }
+
+   
 
     //отображение пользователю всех профилей кафедры
     const showProfiles = (profiles) => {
@@ -938,16 +938,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //функция, которая создает ссылку на панель администратора если пользователем является админ
-    const setUserName = (userName, userRole = "") => {
-        if (userName) {
-            let actionText = document.querySelector(".header .action__text")
-
-            if (userRole.toLowerCase() == "admin") {
-                actionText.outerHTML = `<a href="/admin/admin.html" class="action__text">${userName}</a>`
-            } else {
-                actionText.textContent = userName
-            }
-        }
+    const setUserName = (userName) => {
+        let actionText = document.querySelector(".header .action__text")
+        actionText.textContent = userName
     }
 
     //удалить профиль
@@ -1074,18 +1067,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }) 
 
         if (response.ok) {
-            localStorage.removeItem("userName")
-            localStorage.removeItem("userRole")
-            localStorage.removeItem("persDepartmentId")
+            localStorage.clear()
             window.location.assign("/login.html")
         }
     }
+
+    const isAuthorize = () => localStorage.getItem("userId") != null
 
     //нажатие на кнопку выхода из аккаунта пользователя
     logoutBtn.addEventListener("click", function() {
         logout()
     })
 
+    const hasUserAccessToRole = () => userRole === "null"
 
-   getProfilesById().then(_ => getCaseSDepartments()).then(_ => getLevelEdues()).then(_ => getEduForms()).then(_ => getFileTypes())
+    if (isAuthorize()) {
+        userId = localStorage.getItem("userId")
+        kafedra_id = localStorage.getItem("persDepartmentId")
+        userRole = localStorage.getItem("userRole")
+
+        let hasAccess = hasUserAccessToRole()
+        console.log(hasAccess, kafedra_id)
+        if (hasAccess) {
+            userName = localStorage.getItem("userName")
+
+            setUserName(userName)
+            getProfilesById().then(_ => getCaseSDepartments()).then(_ => getLevelEdues()).then(_ => getEduForms()).then(_ => getFileTypes())
+        } else {
+            window.location.assign(`/${userRole}/`)
+        }
+    } else {
+        window.location.assign("/login.html")
+    }
+
 })

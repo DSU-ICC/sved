@@ -27,31 +27,55 @@
                 <div class="page__container container">
                     <div class="page__table request-table">
                         <h1 class="page__title">Список запросов</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Тип запроса</th>
-                                    <th>Название</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Удаление дисциплины</td>
-                                    <td>Педагогика высшей школы</td>
-                                    <td>
-                                        <div class="wrapper">
-                                            <button type="button" class="approve">
-                                                <span class="approve__btn btn"></span>
-                                            </button>
-                                            <button type="button" class="reject">
-                                                <span class="reject__btn btn"></span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        
+                        <div class="tabs-wrapper page__tabs-wrapper">
+                           <div class="tabs page__tabs">
+                               <a href="#page-tab-1" class="tab tab--active page__tab">Дисциплины</a>
+                               <a href="#page-tab-2" class="tab page__tab">Статусы дисциплины</a>
+                           </div>
+                        </div>
+                        <div class="tabs-container page__tabs-container">
+                            <div id="page-tab-1" class="tabs-content tabs-content--active page__tabs-content disciplines">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Тип запроса</th>
+                                            <th>Название</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Удаление дисциплины</td>
+                                            <td>Педагогика высшей школы</td>
+                                            <td>
+                                                <div class="wrapper">
+                                                    <button type="button" class="approve">
+                                                        <span class="approve__btn btn"></span>
+                                                    </button>
+                                                    <button type="button" class="reject">
+                                                        <span class="reject__btn btn"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="page-tab-2" class="tabs-content page__tabs-content status-disciplines">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Тип запроса</th>
+                                            <th>Название</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,6 +117,38 @@
                     <img src="../img/close.svg" alt="">
                 </button>
                 <input type="hidden" id="disciplineId">
+                <h2 class="popup__title title">Вы действительно отклоняете удаление дисциплины?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-approveStatusDiscipline" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="statusDisciplineId">
+                <h2 class="popup__title title">Вы действительно подтверждаете удаление дисциплины?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-rejectStatusDiscipline" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <input type="hidden" id="statusDisciplineId">
                 <h2 class="popup__title title">Вы действительно отклоняете удаление дисциплины?</h2>
                 <div class="confirm-buttons">
                     <button class="confirm-button confirm-button--yes"><span>Да</span></button>

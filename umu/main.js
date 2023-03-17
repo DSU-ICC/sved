@@ -19,8 +19,12 @@ document.addEventListener("DOMContentLoaded", function() {
     let popupRejectStatusDisciplineYesBtn = document.querySelector("#popup-rejectStatusDiscipline .confirm-button--yes")
     let popupRejectStatusDisciplineNoBtn = document.querySelector("#popup-rejectStatusDiscipline .confirm-button--no")
 
-    const getRemovableForDiscipline = async (statusDisciplineId, el) => {
-        let response = await fetch(`${URL}/Discipline/GetRemovableDiscipline`, {
+    let logoutBtn = document.querySelector(".header .action__btn")
+    let userId
+    let userRole
+
+    const getRemovableDisciplines = async (statusDisciplineId, el) => {
+        let response = await fetch(`${URL}/Discipline/GetRemovableDiscipline?userId=${userId}`, {
             credentials: "include"
         })
 
@@ -36,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
             res += `
                 <tr>
                     <td>Удаление дисциплины</td>
-                    <td>Педагогика высшей школы</td>
+                    <td>${discipline.disciplineName}</td>
                     <td>
                         <div class="wrapper">
                             <button type="button" class="approve approve-discipline">
@@ -51,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
             `
         }
 
-        document.querySelector("tbody").innerHTML = res
+        document.querySelector(".disciplines tbody").innerHTML = res
 
         let approveDeleteDiscipline = document.querySelectorAll(".approve-discipline .btn")
         approveDeleteDiscipline.forEach(approveDisciplineItem => {
@@ -74,14 +78,14 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
-    const getRemovableStatusDiscipline = async () => {
+    const getRemovableStatusDisciplines = async () => {
         let response = await fetch(`${URL}/StatusDiscipline/GetRemovableStatusDiscipline`, {
             credentials: "include"
         })
 
         if (response.ok) {
             statusDisciplineList = await response.json()
-
+            console.log(statusDisciplineList)
             showRemovableStatusDisciplines(statusDisciplineList)
         }
     }
@@ -93,14 +97,14 @@ document.addEventListener("DOMContentLoaded", function() {
             res += `
                 <tr>
                     <td>Удаление статуса дисциплины</td>
-                    <td>Педагогика высшей школы</td>
+                    <td>${statusDiscipline.name}</td>
                     <td>
                         <div class="wrapper">
                             <button type="button" class="approve approve-status">
                                 <span data-statusDisciplineId=${statusDiscipline.id} class="approve__btn btn"></span>
                             </button>
                             <button type="button" class="reject reject-status">
-                                <span class="reject__btn btn"></span>
+                                <span data-statusDisciplineId=${statusDiscipline.id} class="reject__btn btn"></span>
                             </button>
                         </div>
                     </td>
@@ -108,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
             `
         }
 
-        document.querySelector("tbody").innerHTML = res
+        document.querySelector(".status-disciplines tbody").innerHTML = res
 
         let approveDeleteStatusDiscipline = document.querySelectorAll(".approve-status .btn")
         approveDeleteStatusDiscipline.forEach(approveStatusDisciplineItem => {
@@ -120,9 +124,9 @@ document.addEventListener("DOMContentLoaded", function() {
             })
         })
 
-        let rejectDeleteStatusDiscipline = document.querySelectorAll(".reject-discipline .btn")
+        let rejectDeleteStatusDiscipline = document.querySelectorAll(".reject-status .btn")
         rejectDeleteStatusDiscipline.forEach(rejectStatusDisciplineItem => {
-            rejectsStatusDisciplineItem.addEventListener("click", function(e) {
+            rejectStatusDisciplineItem.addEventListener("click", function(e) {
                 popupRejectStatusDiscipline.classList.add("open")
                 document.body.classList.add("no-scroll")
 
@@ -131,21 +135,21 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
-    //кнопка удаления статуса дисциплины
-    deleteStatusBtn.addEventListener("click", function() {
-        let selectedStatusDiscipline = document.querySelector("[data-selectfield=statusDiscipline] .select__text")
+    // //кнопка удаления статуса дисциплины
+    // deleteStatusBtn.addEventListener("click", function() {
+    //     let selectedStatusDiscipline = document.querySelector("[data-selectfield=statusDiscipline] .select__text")
 
-        if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
-            selectedStatusDiscipline.closest(".select").classList.add("invalid")
-        } else {
-            selectedStatusDiscipline.closest(".select").classList.remove("invalid")
-            popupDeleteStatus.classList.add("open")
-            document.body.classList.add("no-scroll")
+    //     if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
+    //         selectedStatusDiscipline.closest(".select").classList.add("invalid")
+    //     } else {
+    //         selectedStatusDiscipline.closest(".select").classList.remove("invalid")
+    //         popupDeleteStatus.classList.add("open")
+    //         document.body.classList.add("no-scroll")
 
-            let statusDisciplineId = selectedStatusDiscipline.dataset.id
-            popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
-        }
-    })
+    //         let statusDisciplineId = selectedStatusDiscipline.dataset.id
+    //         popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
+    //     }
+    // })
 
 
     //функционал выпадающих списков
@@ -193,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function() {
             el.classList.remove("loading")
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
-            getRequestsForDiscipline()
+            getRemovableDisciplines()
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -230,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
             el.classList.remove("loading")
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
-            getRequestsForDiscipline()
+            getRemovableStatusDisciplines()
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -265,11 +269,51 @@ document.addEventListener("DOMContentLoaded", function() {
         })
 
         if (response.ok) {
+            alert("Отклонение удаления дисциплины прошло успешно")
+            el.classList.remove("loading")
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getRemovableDisciplines()
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось отклонить удаление дисциплины. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+
+            el.classList.remove("loading")
+            el.disabled = false
+        }
+    }
+
+    popupRejectStatusDisciplineYesBtn.addEventListener("click", function(e) {
+        let statusDisciplineId = parseInt(popupRejectStatusDiscipline.querySelector("#statusDisciplineId").value)
+        console.log(statusDisciplineId)
+        let rejectedStatusDiscipline = statusDisciplineList[statusDisciplineList.map(e => e.id).indexOf(statusDisciplineId)]
+        rejectedStatusDiscipline.isDeletionRequest = false
+        sendRejectDeleteStatusDiscipline(rejectedStatusDiscipline, e.target)
+    })
+
+    const sendRejectDeleteStatusDiscipline = async (rejectedStatusDiscipline, el) => {
+        el.classList.add("loading")
+        el.disabled = true
+
+        let response = await fetch(`${URL}/StatusDiscipline/UpdateStatusDiscipline`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(rejectedStatusDiscipline)
+        })
+
+        if (response.ok) {
             alert("Отклонение удаления статуса дисциплины прошло успешно")
             el.classList.remove("loading")
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
-            getRequestsForDiscipline()
+            getRemovableStatusDiscipline()
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -281,5 +325,70 @@ document.addEventListener("DOMContentLoaded", function() {
             el.classList.remove("loading")
             el.disabled = false
         }
+    }
+
+    let tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            for (let sibling of e.target.parentNode.children) {
+                sibling.classList.remove('tab--active');
+            }
+            for (let sibling of e.target.closest('.tabs-wrapper').parentNode.children) {
+                if (sibling.classList.contains('tabs-container')) {
+                    sibling.querySelectorAll('.tabs-content').forEach(content => {
+                        content.classList.remove('tabs-content--active');
+                    });
+                }
+            }
+            e.target.classList.add('tab--active');
+            document.querySelector(e.target.getAttribute('href')).classList.add('tabs-content--active');
+        });
+    });
+
+    //функция, которая создает ссылку на панель администратора если пользователем является админ
+    const setUserName = (userName) => {
+        let actionText = document.querySelector(".header .action__text")
+        actionText.textContent = userName
+    }
+
+    //выход подьзователя из аккаунта
+    const logout = async () => {
+        let response = await fetch(`${URL}/Account/Logout`, {
+            credentials: "include"
+        }) 
+
+        if (response.ok) {
+            localStorage.clear()
+            window.location.assign("/login.html")
+        }
+    }
+
+    const isAuthorize = () => localStorage.getItem("userId") != null
+
+    //нажатие на кнопку выхода из аккаунта пользователя
+    logoutBtn.addEventListener("click", function() {
+        logout()
+    })
+
+    const hasUserAccessToRole = () => userRole == "UMU"
+
+    if (isAuthorize()) {
+        userId = localStorage.getItem("userId")
+        userRole = localStorage.getItem("userRole")
+
+        let hasAccess = hasUserAccessToRole()
+        if (hasAccess) {
+            userName = localStorage.getItem("userName")
+
+            setUserName(userName)
+            getRemovableDisciplines()
+            getRemovableStatusDisciplines()
+        } else {        
+            let redirectPage = userRole !== "null" ? userRole : "metodist"
+            window.location.assign(`/${redirectPage}/`)
+        }
+    } else {
+        window.location.assign("/login.html")
     }
 })
