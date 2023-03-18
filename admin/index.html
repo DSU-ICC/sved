@@ -64,8 +64,7 @@
                 </button>
                 <h2 class="popup__title title">Создание пользователя</h2>
                 <form class="popup__form popup-form" action="" method="post">
-                    <div class="popup-form__file-item">
-                        
+                    <div class="popup-form__file-item"> 
                         <label class="popup-form__label">
                             <span class="popup-form__text">Логин</span>
                             <input type="text" id="login" class="popup-form__input">
@@ -108,7 +107,15 @@
                                 <ul class="select__options"></ul>
                             </div>
                         </label>
-                        
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Факультет</span>
+                            <div data-selectField="faculty" data-multiple class="popup-form__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите факультет">Выберите факультет</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
+                        </label>
                     </div>
                     <button type="button" class="popup-form__btn btn">Создать</button>
                 </form>
@@ -143,34 +150,47 @@
                             </div>
                         </label>
                         <label class="popup-form__label">
-                            <div class="checkbox">
-                                <input type="checkbox">
-                                <label>Предоставить пользователю роль админа</label>
-                            </div>
                             <div class="radio">
                                 <ul class="radio__list">
                                     <li class="radio__item">
-                                        <input type="radio" name="radio1" id="radio1">
+                                        <input type="radio" name="radio2" id="radio4">
                                         <label for="radio1">
-                                            <span>Accounting & financial</span>
+                                            <span>Методист</span>
                                         </label>
                                     </li>
                                     <li class="radio__item">
-                                        <input type="radio" name="radio1" id="radio2">
+                                        <input type="radio" name="radio2" id="radio5">
                                         <label for="radio2">
-                                            <span>Art & design</span>
+                                            <span>Сотрудник УМУ</span>
                                         </label>
                                     </li>
                                     <li class="radio__item">
-                                          <input type="radio" name="radio1" id="radio3">
+                                          <input type="radio" name="radio2" id="radio6">
                                         <label for="radio3">
-                                            <span>Business & consulting</span>
+                                            <span>Админ</span>
                                         </label>
                                     </li>             
                                 </ul>
                             </div>
+                        </label> 
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Кафедра</span>
+                            <div data-selectField="kafedra" class="popup-form__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите кафедру">Выберите кафедру</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
                         </label>
-                           
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Факультет</span>
+                            <div data-selectField="faculty" data-multiple class="popup-form__select select">
+                                <div class="select__btn">
+                                    <span class="select__text" data-placeholder="Выберите факультет">Выберите факультет</span>
+                                </div>
+                                <ul class="select__options"></ul>
+                            </div>
+                        </label>
                     </div>
                     <button type="button" class="popup-form__btn btn">Сохранить изменения</button>
                 </form>

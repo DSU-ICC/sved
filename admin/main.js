@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let popupEditUserCheckbox = document.querySelector("#popup-editUser .checkbox label")
 
     let closeModalBtns = document.querySelectorAll(".popup__close")
+    let users
     let kafedras
 
     //закрытие модального окна
@@ -59,9 +60,40 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     //кнопка создания пользователя
-    createUserBtn.addEventListener("click", function() {
+    createUserBtn.addEventListener("click", function() {  
+        let metodistRoleRadioBtn = popupCreateUser.querySelector(".radio__item:nth-child(1) label")
+        metodistRoleRadioBtn.click()
+        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+
+        let facultySelect = popupCreateUser.querySelector(".select[data-selectField=faculty]")
+        facultySelect.closest(".popup-form__label").style.display = "none"
+
         popupCreateUser.classList.add("open")
         document.body.classList.add("no-scroll")
+
+        const radioBtns = popupCreateUser.querySelectorAll(".radio__item label")
+        radioBtns.forEach((radioItem) => {
+            radioItem.addEventListener("click", function(e) {
+                for (let radioEl of radioBtns) {
+                    radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+                }
+
+                let kafedraSelect = popupCreateUser.querySelector(".select[data-selectField=kafedra]").closest(".popup-form__label")
+                kafedraSelect.style.display = "none"
+        
+                let facultySelect = popupCreateUser.querySelector(".select[data-selectField=faculty]").closest(".popup-form__label")
+                facultySelect.style.display = "none"
+
+                e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
+
+                let selectedRole = e.target.textContent.trim()
+                if (selectedRole == "Методист") {                    
+                    kafedraSelect.style.display = "flex"
+                } else if (selectedRole == "Сотрудник УМУ") {
+                    facultySelect.style.display = "flex"
+                }
+            })
+        })
     })
 
     //кнопка создания пользователя в модальном окне
@@ -69,10 +101,6 @@ document.addEventListener("DOMContentLoaded", function() {
         let loginInput = popupCreateUser.querySelector("#login")
         let passwordInput = popupCreateUser.querySelector("#password")
 
-        let selectedKafedra = popupCreateUser.querySelector("[data-selectfield=kafedra] .select__text")
-        let selectedKafedraName = selectedKafedra.textContent
-        let selectedKafedraId = selectedKafedra.dataset.id
-        
         let isValidForm = true
         if (loginInput.value.trim() == "") {
             isValidForm = false
@@ -88,28 +116,53 @@ document.addEventListener("DOMContentLoaded", function() {
             passwordInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
-        if (selectedKafedraName == "Выберите кафедру") {
-            selectedKafedraId = 0
+        let newUser = {}
+
+        let selectedRole = popupCreateUser.querySelector("input[data-checked=true] + label")?.textContent.trim()
+        if (selectedRole == "Методист") {
+            let selectedKafedra = popupCreateUser.querySelector("[data-selectField=kafedra] .select__text")
+            if (selectedKafedra.textContent.trim() == "Выберите кафедру") {
+                isValidForm = false
+                selectedKafedra.closest(".popup-form__label").classList.add("invalid")
+            } else {
+                selectedKafedra.closest(".popup-form__label").classList.remove("invalid")
+                newUser.persDepartmentId = parseInt(selectedKafedra.dataset.id)
+                newUser.role = null
+                newUser.faculties = []
+            }
+        }
+
+        if (selectedRole == "Сотрудник УМУ") {
+            let selectedFaculty = popupCreateUser.querySelector("[data-selectField=faculty] .select__text")
+            if (selectedFaculty.textContent.trim() == "Выберите факультет") {
+                isValidForm = false
+                selectedFaculty.closest(".popup-form__label").classList.add("invalid")
+            } else {
+                selectedFaculty.closest(".popup-form__label").classList.remove("invalid")
+
+                let selectedFacultiesId = [...selectedFaculty.dataset.id.split(", ")].map(id => parseInt(id))
+                newUser.faculties = selectedFacultiesId
+                newUser.role = "UMU"
+                newUser.persDepartmentId = null
+            }
+        }
+        
+        if (selectedRole == "Админ") {
+            newUser.persDepartmentId = null
+            newUser.role = "admin"
+            newUser.faculties = []
         }
 
         if (isValidForm) {
-            let newUser = {
-                persDepartmentId: selectedKafedraId,
-                login: loginInput.value,
-                password: passwordInput.value,
-            }
+            newUser.login = loginInput.value
+            newUser.password = passwordInput.value
 
-            let isAdmin = false
-            if (popupCreateUserCheckbox.previousElementSibling.classList.contains("checked")) {
-                newUser.role = "admin"
-            }
-
-            createUser(newUser, isAdmin)
+            createUser(newUser)
         }
     })
 
     //создания пользователя
-    const createUser = async (newUser, isAdmin) => {
+    const createUser = async (newUser) => {
         popupCreateUserBtn.classList.add("loading")
         popupCreateUserBtn.textContent = "Создание..."
         popupCreateUserBtn.disabled = true
@@ -149,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function() {
         let userId = popupEditUser.querySelector("#userId").value
         let userLoginInput = popupEditUser.querySelector("#userLogin")
         let userPasswordInput = popupEditUser.querySelector("#userPassword")
-        let selectedKafedra = popupEditUser.querySelector("[data-selectfield=kafedra] .select__text")
 
         let isValidForm = true
         
@@ -167,28 +219,57 @@ document.addEventListener("DOMContentLoaded", function() {
             userPasswordInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
-        if (isValidForm) {
-            let isAdmin = false
-            if (popupEditUserCheckbox.previousElementSibling.classList.contains("checked")) {
-                isAdmin = true
+        let userEdited = {id: userId}
+
+        let selectedRole = popupCreateUser.querySelector("input[data-checked=true] + label")?.textContent.trim()
+        if (selectedRole == "Методист") {
+            let selectedKafedra = popupCreateUser.querySelector("[data-selectField=kafedra] .select__text")
+            if (selectedKafedra.textContent.trim() == "Выберите кафедру") {
+                isValidForm = false
+                selectedKafedra.closest(".popup-form__label").classList.add("invalid")
+            } else {
+                selectedKafedra.closest(".popup-form__label").classList.remove("invalid")
+                userEdited.persDepartmentId = parseInt(selectedKafedra.dataset.id)
+                userEdited.role = null
+                userEdited.faculties = []
             }
-            editUser(userId, userLoginInput.value, userPasswordInput.value, selectedKafedra.dataset.id, isAdmin)
+        }
+
+        if (selectedRole == "Сотрудник УМУ") {
+            let selectedFaculty = popupCreateUser.querySelector("[data-selectField=faculty] .select__text")
+            if (selectedFaculty.textContent.trim() == "Выберите факультет") {
+                isValidForm = false
+                selectedFaculty.closest(".popup-form__label").classList.add("invalid")
+            } else {
+                selectedFaculty.closest(".popup-form__label").classList.remove("invalid")
+
+                let selectedFacultiesId = [...selectedFaculty.dataset.id.split(", ")].map(id => parseInt(id))
+                userEdited.faculties = selectedFacultiesId
+                userEdited.role = "UMU"
+                userEdited.persDepartmentId = null
+            }
+        }
+        
+        if (selectedRole == "Админ") {
+            userEdited.persDepartmentId = null
+            userEdited.role = "admin"
+            userEdited.faculties = []
+        }
+
+        if (isValidForm) {
+            userEdited.login = userLoginInput.value
+            userEdited.password = userPasswordInput.value
+
+            editUser(userEdited)
         }
 
     })
 
     //изменение пользователя
-    const editUser = async (userId, userLogin, userPassword, kafedraId, isAdmin) => {
+    const editUser = async (userEdited) => {
         popupEditUserBtn.classList.add("loading")
         popupEditUserBtn.textContent = "Сохранение..."
         popupEditUserBtn.disabled = true
-
-        let user = {
-            id: userId,
-            login: userLogin,
-            password: userPassword, 
-            persDepartmentId: kafedraId,
-        }
 
         let response = await fetch(`${URL}/User/EditUser`, {
             method: "PUT",
@@ -196,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 "Content-Type": "application/json"
             },
             credentials: "include",
-            body: JSON.stringify(user)
+            body: JSON.stringify(userEdited)
         })
 
         if (response.ok) {
@@ -286,26 +367,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // popupCreateUserCheckbox.addEventListener("click", function(e) {
-    //     if (this.previousElementSibling.hasAttribute("checked")) {
-    //         this.previousElementSibling.removeAttribute("checked")
-    //     } else {
-    //         this.previousElementSibling.setAttribute("checked", "checked")
-    //     }
-        
-    //     this.previousElementSibling.classList.toggle("checked")
-    // })
-
-    // popupEditUserCheckbox.addEventListener("click", function(e) {
-    //     if (this.previousElementSibling.hasAttribute("checked")) {
-    //         this.previousElementSibling.removeAttribute("checked")
-    //     } else {
-    //         this.previousElementSibling.setAttribute("checked", "checked")
-    //     }
-        
-    //     this.previousElementSibling.classList.toggle("checked")
-    // })
-
     //получение всех пользователей
     const getAllUsers = async () => {
         let response = await fetch(`${URL}/User/GetUsers`, {
@@ -313,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
 
         if (response.ok) {
-            let users = await response.json()
+            users = await response.json()
             showAllUsers(users)
         } else if (response.status == 404) {
             window.location.assign("/admin/index.html")
@@ -428,6 +489,32 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     
+    const getAllFaculties = async () => {
+        let response = await fetch(`${URL}/PersonalData/GetAllFaculty`)
+
+        if (response.ok) {
+            faculties = await response.json()
+            fillFacultyList(faculties)
+
+        }
+    }
+
+    //заполнить выпадающий список в поиске данными факультетов для поиска по ним профилей
+    const fillFacultyList = (faculties) => {
+        let res = ""
+        
+        for (let faculty of faculties) {
+            res += `
+                <li class="select__option" data-id=${faculty.divId}>
+                    <span class="select__option-text">${faculty.divName}</span>
+                </li>
+            `
+        }
+
+        popupCreateUser.querySelector("[data-selectfield=faculty] .select__options").innerHTML = res
+        popupEditUser.querySelector("[data-selectfield=faculty] .select__options").innerHTML = res
+    }
+
     //функционал выпадающих списков
     const select = document.querySelectorAll('.select');
     select.forEach(selectItem => {
@@ -437,13 +524,48 @@ document.addEventListener("DOMContentLoaded", function() {
         let options = selectItem.querySelector('.select__options');
         options.addEventListener("click", function(e) {
             if (e.target.closest(".select__option")) {
-                options.querySelectorAll(".select__option").forEach(optionItem => {
-                    optionItem.classList.remove("selected")
-                })
-                e.target.closest(".select__option").classList.add("selected")
-                let selectedOption = e.target.closest(".select__option").querySelector('.select__option-text').innerText;
-                selectItem.querySelector('.select__text').innerText = selectedOption;
-                selectItem.querySelector('.select__text').dataset.id = e.target.closest(".select__option").dataset.id
+                let selectedOption = e.target.closest(".select__option")
+                let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
+                let selectText = selectItem.querySelector('.select__text')
+                let selectedElemId = parseInt(selectedOption.dataset.id)
+
+                if (!selectItem.hasAttribute("data-multiple")) {
+                    if (!selectedOption.classList.contains("selected")) {
+                        options.querySelectorAll(".select__option").forEach(optionItem => {
+                            optionItem.classList.remove("selected")
+                        })
+
+                        selectedOption.classList.add("selected")
+                        selectText.innerText = selectedOptionText;
+                        selectText.dataset.id = selectedElemId
+                    } else {
+                        selectText.innerText = selectText.dataset.placeholder
+                        selectText.removeAttribute("data-id")
+                    }
+                } else {
+                    if (!selectedOption.classList.contains("selected")) {
+                        selectedOption.classList.add("selected")
+                        if (selectText.textContent != selectText.dataset.placeholder) {
+                            selectText.innerText += `, ${selectedOptionText}`;
+                            selectText.dataset.id += `, ${selectedElemId}`
+                        } else {
+                            selectText.innerText = selectedOptionText;
+                            selectText.dataset.id = selectedElemId
+                        }
+                    } else {
+                        selectedOption.classList.remove("selected")
+                        let arrayId = [...selectText.dataset.id.split(", ")]
+                        let listElem = selectText.innerText.split(", ")
+                        if (arrayId.length > 1) {
+                            selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+                            selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
+                        } else {
+                            selectText.innerText = selectText.dataset.placeholder
+                            selectText.removeAttribute("data-id")
+                        }
+                    }
+                }
+                
                 selectItem.classList.remove('active');
             }
         })
@@ -479,6 +601,7 @@ document.addEventListener("DOMContentLoaded", function() {
         actionText.textContent = userName
     }
 
+
     //выход подьзователя из аккаунта
     const logout = async () => {
         let response = await fetch(`${URL}/Account/Logout`, {
@@ -509,7 +632,7 @@ document.addEventListener("DOMContentLoaded", function() {
             userName = localStorage.getItem("userName")
 
             setUserName(userName)
-            getAllKafedra().then(_ => getAllUsers()).then(_ => getAllRemovableStatusDiscipline())
+            getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllUsers()).then(_ => getAllRemovableStatusDiscipline())
         } else {
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`/${redirectPage}/`)
@@ -517,6 +640,4 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         window.location.assign("/login.html")
     }
-})
-
-    
+})  
