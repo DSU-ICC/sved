@@ -221,9 +221,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         let userEdited = {id: userId}
 
-        let selectedRole = popupCreateUser.querySelector("input[data-checked=true] + label")?.textContent.trim()
+        let selectedRole = popupEditUser.querySelector("input[data-checked=true] + label")?.textContent.trim()
         if (selectedRole == "Методист") {
-            let selectedKafedra = popupCreateUser.querySelector("[data-selectField=kafedra] .select__text")
+            let selectedKafedra = popupEditUser.querySelector("[data-selectField=kafedra] .select__text")
             if (selectedKafedra.textContent.trim() == "Выберите кафедру") {
                 isValidForm = false
                 selectedKafedra.closest(".popup-form__label").classList.add("invalid")
@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (selectedRole == "Сотрудник УМУ") {
-            let selectedFaculty = popupCreateUser.querySelector("[data-selectField=faculty] .select__text")
+            let selectedFaculty = popupEditUser.querySelector("[data-selectField=faculty] .select__text")
             if (selectedFaculty.textContent.trim() == "Выберите факультет") {
                 isValidForm = false
                 selectedFaculty.closest(".popup-form__label").classList.add("invalid")
@@ -281,38 +281,12 @@ document.addEventListener("DOMContentLoaded", function() {
         })
 
         if (response.ok) {
-            let role = ""
-            if (isAdmin) {
-                role = "&role=admin"
-            } 
-
-            let roleResponse = await fetch(`${URL}/Role/EditRole?userId=${userId}${role}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include"
-            })
-
-            if (roleResponse.ok) {
-                alert("Изменение данных пользователя прошло успешно")
-                popupEditUserBtn.classList.remove("loading")
-                popupEditUserBtn.textContent = "Сохранить изменения"
-                popupEditUserBtn.disabled = false
-                popupEditUserBtn.closest(".popup__content").querySelector(".popup__close").click()
-                getAllUsers()
-            } else {
-                let error = await response.text()
-                if (error.startsWith("{")) {
-                    alert("Не удалось изменить профиль. Попробуйте еще раз")
-                } else {
-                    alert(error)
-                }
-                
-                popupEditUserBtn.classList.remove("loading")
-                popupEditUserBtn.textContent = "Сохранить изменения"
-                popupEditUserBtn.disabled = false
-            }
+            alert("Изменение данных пользователя прошло успешно")
+            popupEditUserBtn.classList.remove("loading")
+            popupEditUserBtn.textContent = "Сохранить изменения"
+            popupEditUserBtn.disabled = false
+            popupEditUserBtn.closest(".popup__content").querySelector(".popup__close").click()
+            getAllUsers()
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -376,10 +350,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (response.ok) {
             users = await response.json()
             showAllUsers(users)
-        } else if (response.status == 404) {
-            window.location.assign("/admin/index.html")
-        } else if (response.status == 405) {
-            window.location.assign("/login.html")
         } 
     }
 
@@ -390,7 +360,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 <thead>
                     <tr>
                         <th>Имя пользователя</th>
-                        <th>Роль</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -398,12 +367,9 @@ document.addEventListener("DOMContentLoaded", function() {
         `
         
         for (let user of users) {
-            let userKafedraName = kafedras[kafedras.map(e => e.depId).indexOf(user.persDepartmentId)]?.depName
-
             markup +=  `
                     <tr>
                         <td>${user.userName}</td>
-                        <td>${userKafedraName ?? ""}</td>
                         <td>
                             <div class="wrapper">
                                 <button type="button" class="edit">
@@ -433,23 +399,53 @@ document.addEventListener("DOMContentLoaded", function() {
                 popupEditUser.querySelector("#userId").value = userId
                 popupEditUser.querySelector("#userLogin").value = userName
 
-                let selectedRole = users[users.map(e => e.id).indexOf(userId)].role
 
-                let kafedraName = e.target.closest("tr").children[1].textContent
-                if (kafedraName != "") {
-                    let kafedraSelectOptions = document.querySelectorAll("#popup-editUser [data-selectfield=kafedra] .select__option") 
+                let metodistRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(1) label")
+                metodistRoleRadioBtn.click()
+                metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+        
+                let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]")
+                facultySelect.closest(".popup-form__label").style.display = "none"
 
-                    kafedraSelectOptions.forEach(kafedraOption => {
-                        if (kafedraOption.textContent.trim().toLowerCase() == kafedraName.trim().toLowerCase()) {
-                            kafedraOption.classList.add("selected")
-                            kafedraOption.closest(".select").querySelector(".select__text").textContent = kafedraName
-                            kafedraOption.closest(".select").querySelector(".select__text").setAttribute("data-id", kafedraOption.dataset.id)   
-                        }
-                    })
-                }
+                // let kafedraName = e.target.closest("tr").children[1].textContent
+                // if (kafedraName != "") {
+                //     let kafedraSelectOptions = document.querySelectorAll("#popup-editUser [data-selectfield=kafedra] .select__option") 
+
+                //     kafedraSelectOptions.forEach(kafedraOption => {
+                //         if (kafedraOption.textContent.trim().toLowerCase() == kafedraName.trim().toLowerCase()) {
+                //             kafedraOption.classList.add("selected")
+                //             kafedraOption.closest(".select").querySelector(".select__text").textContent = kafedraName
+                //             kafedraOption.closest(".select").querySelector(".select__text").setAttribute("data-id", kafedraOption.dataset.id)   
+                //         }
+                //     })
+                // }
 
                 popupEditUser.classList.add("open")
                 document.body.classList.add("no-scroll")
+
+                const radioBtns = popupEditUser.querySelectorAll(".radio__item label")
+                radioBtns.forEach((radioItem) => {
+                    radioItem.addEventListener("click", function(e) {
+                        for (let radioEl of radioBtns) {
+                            radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+                        }
+
+                        let kafedraSelect = popupEditUser.querySelector(".select[data-selectField=kafedra]").closest(".popup-form__label")
+                        kafedraSelect.style.display = "none"
+                
+                        let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]").closest(".popup-form__label")
+                        facultySelect.style.display = "none"
+
+                        e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
+
+                        let selectedRole = e.target.textContent.trim()
+                        if (selectedRole == "Методист") {                    
+                            kafedraSelect.style.display = "flex"
+                        } else if (selectedRole == "Сотрудник УМУ") {
+                            facultySelect.style.display = "flex"
+                        }
+                    })
+                })
             })
         })
 
@@ -483,11 +479,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             popupCreateUser.querySelector("[data-selectfield=kafedra] .select__options").innerHTML = res
             popupEditUser.querySelector("[data-selectfield=kafedra] .select__options").innerHTML = res
-        } else if (response.status == 404) {
-            window.location.assign("/admin/index.html")
-        } else if (response.status == 405) {
-            window.location.assign("/login.html")
-        }
+        } 
     }
     
     const getAllFaculties = async () => {
@@ -573,35 +565,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     
     })
 
-    //получение всех статусов дисциплин
-    const getAllRemovableStatusDiscipline = async () => {
-        let response = await fetch(`${URL}/StatusDiscipline/GetRemovableStatusDiscipline`, {
-            credentials: "include"
-        })
-
-        if (response.ok) {
-            let statusDisciplines = await response.json()
-            let res = ""
-            for (let elem of statusDisciplines) {
-                res += `
-                    <li class="select__option" data-id=${elem.id}>
-                        <span class="select__option-text">${elem.name}</span>
-                    </li>
-                `
-            }
-            document.querySelector("[data-selectfield=statusDiscipline] .select__options").innerHTML = res
-        } else {
-            let error = await response.text()
-            alert(error)
-        }
-    }
-
     //функция, которая создает ссылку на панель администратора если пользователем является админ
     const setUserName = (userName) => {
         let actionText = document.querySelector(".header .action__text")
         actionText.textContent = userName
     }
-
 
     //выход подьзователя из аккаунта
     const logout = async () => {
@@ -633,7 +601,7 @@ document.addEventListener("DOMContentLoaded", function() {
             userName = localStorage.getItem("userName")
 
             setUserName(userName)
-            getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllUsers()).then(_ => getAllRemovableStatusDiscipline())
+            getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllUsers())
         } else {
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`/${redirectPage}/`)
