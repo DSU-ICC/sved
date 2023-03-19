@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const URL = "https://localhost:44370"
     let disciplineList
     let statusDisciplineList
-
+    let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupApproveDiscipline = document.querySelector("#popup-approveDiscipline")
     let popupApproveDisciplineYesBtn = document.querySelector("#popup-approveDiscipline .confirm-button--yes")
     let popupApproveDisciplineNoBtn = document.querySelector("#popup-approveDiscipline .confirm-button--no")
@@ -23,12 +23,52 @@ document.addEventListener("DOMContentLoaded", function() {
     let userId
     let userRole
 
+    //закрытие модального окна
+    closeModalBtns.forEach(closeItem => {
+        closeItem.addEventListener("click", function(e) {
+            let popupClosed = e.target.closest(".popup")
+            
+            //очищение всех полей и выпадающих списков закрываемого модального окна
+            let popupLabels = popupClosed.querySelectorAll(".popup-form__label")
+            if (popupLabels) {
+                popupLabels.forEach(popupLabel => {
+                    popupLabel.classList.remove("invalid")
+                    let popupLabelInput = popupLabel.querySelector(".popup-form__input")
+                    let popupLabelSelect = popupLabel.querySelector(".select")
+                    if (popupLabelInput) {
+                        popupLabelInput.value = ""
+                    } else if (popupLabelSelect) {
+                        let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
+                        popupLabelSelect.classList.remove("invalid")
+                        popupLabelSelectText.removeAttribute("data-id")
+                        popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
+
+                        let popupLabelSelectedEl = popupLabelSelect.querySelector(".select__option.selected")
+                        if (popupLabelSelectedEl) {
+                            popupLabelSelectedEl.classList.remove("selected")
+                        }
+                    } else {
+                        let popupLabelCheckbox = popupLabel.querySelector("input[type=checkbox]")
+                        if (popupLabelCheckbox.classList.contains("checked")) {
+                            popupLabelCheckbox.click()
+                        }
+                    }
+                })
+            } 
+
+            popupClosed.classList.remove("open")
+            document.body.classList.remove("no-scroll")
+            
+        })
+    })
+
     const getRemovableDisciplines = async (statusDisciplineId, el) => {
-        let response = await fetch(`${URL}/Discipline/GetRemovableDiscipline?userId=${userId}`, {
+        let response = await fetch(`${URL}/Discipline/GetRemovableDisciplines?userId=${userId}`, {
             credentials: "include"
         })
 
         if (response.ok) {
+            disciplineList = await response.json()
             showRemovableDisciplines(disciplineList)
         }
     }
@@ -47,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <span data-disciplineid=${discipline.id} class="approve__btn btn"></span>
                             </button>
                             <button type="button" class="reject reject-discipline">
-                                <span class="reject__btn btn"></span>
+                                <span data-disciplineid=${discipline.id} class="reject__btn btn"></span>
                             </button>
                         </div>
                     </td>
@@ -251,6 +291,8 @@ document.addEventListener("DOMContentLoaded", function() {
     popupRejectDisciplineYesBtn.addEventListener("click", function(e) {
         let disciplineId = parseInt(popupRejectDiscipline.querySelector("#disciplineId").value)
         let rejectedDiscipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
+        console.log(disciplineId)
+        console.log(rejectedDiscipline)
         rejectedDiscipline.isDeletionRequest = false
         sendRejectDeleteDiscipline(rejectedDiscipline, e.target)
     })
@@ -289,7 +331,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     popupRejectStatusDisciplineYesBtn.addEventListener("click", function(e) {
         let statusDisciplineId = parseInt(popupRejectStatusDiscipline.querySelector("#statusDisciplineId").value)
-        console.log(statusDisciplineId)
         let rejectedStatusDiscipline = statusDisciplineList[statusDisciplineList.map(e => e.id).indexOf(statusDisciplineId)]
         rejectedStatusDiscipline.isDeletionRequest = false
         sendRejectDeleteStatusDiscipline(rejectedStatusDiscipline, e.target)

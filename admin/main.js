@@ -390,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <thead>
                     <tr>
                         <th>Имя пользователя</th>
-                        <th>Кафедра</th>
+                        <th>Роль</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -430,11 +430,12 @@ document.addEventListener("DOMContentLoaded", function() {
             editUserItem.addEventListener("click", function(e) {
                 let userId = e.target.dataset.id
                 let userName = e.target.closest("tr").firstElementChild.textContent
-                let kafedraName = e.target.closest("tr").children[1].textContent 
-
                 popupEditUser.querySelector("#userId").value = userId
                 popupEditUser.querySelector("#userLogin").value = userName
 
+                let selectedRole = users[users.map(e => e.id).indexOf(userId)].role
+
+                let kafedraName = e.target.closest("tr").children[1].textContent
                 if (kafedraName != "") {
                     let kafedraSelectOptions = document.querySelectorAll("#popup-editUser [data-selectfield=kafedra] .select__option") 
 
