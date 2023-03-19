@@ -45,10 +45,9 @@ document.addEventListener("DOMContentLoaded", function() {
                             popupLabelSelectedEl.classList.remove("selected")
                         }
                     } else {
-                        let popupLabelCheckbox = popupLabel.querySelector("input[type=checkbox]")
-                        if (popupLabelCheckbox.classList.contains("checked")) {
-                            popupLabelCheckbox.click()
-                        }
+                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                        metodistRoleRadioBtn.click()
+                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
