@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isValidForm) {
             userEdited.login = userLoginInput.value
             userEdited.password = userPasswordInput.value
-
+            
             editUser(userEdited)
         }
 
@@ -412,15 +412,52 @@ document.addEventListener("DOMContentLoaded", function() {
                 popupEditUser.querySelector("#userId").value = userId
                 popupEditUser.querySelector("#userLogin").value = userName
 
-                //ставим роль по умолчанию (методист)
-                let metodistRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(1) label")
-                metodistRoleRadioBtn.click()
-                metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
-        
-                //скрываем выбор факультетов
                 let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]")
-                facultySelect.closest(".popup-form__label").style.display = "none"
+                let kafedraSelect = popupEditUser.querySelector(".select[data-selectField=kafedra]")
+                
+                let userEdited = users[users.map(e => e.user.id).indexOf(userId)]
+                if (userEdited.department != null) {
+                    let metodistRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(1) label")
+                    metodistRoleRadioBtn.click()
+                    metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
 
+                    //скрываем выбор факультетов
+                    facultySelect.closest(".popup-form__label").style.display = "none"
+
+                    let kafedraSelectOptions = kafedraSelect.querySelectorAll(".select__option")
+                    kafedraSelectOptions.forEach(optionItem => {
+                        if (optionItem.textContent.trim() == userEdited.department.depName) {
+                            optionItem.click()
+                            return
+                        }
+                    })
+                } else if (userEdited.faculties.length > 0) {
+                    let umuRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(2) label")
+                    umuRoleRadioBtn.click()
+                    umuRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+
+                    //скрываем выбор кафедр
+                    kafedraSelect.closest(".popup-form__label").style.display = "none"
+
+                    let userFacultiesName = userEdited.faculties.map(e => e.divName)
+                    let facultySelectOptions = facultySelect.querySelectorAll(".select__option")
+                    facultySelectOptions.forEach(facultyItem => {
+                        if (userFacultiesName.includes(facultyItem.textContent.trim())) {
+                            facultyItem.click()
+                        }
+                    })
+                } else {
+                    let adminRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(3) label")
+                    adminRoleRadioBtn.click()
+                    adminRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+
+                    //скрываем выбор кафедр
+                    kafedraSelect.closest(".popup-form__label").style.display = "none"
+                     
+                    //скрываем выбор факультетов
+                    facultySelect.closest(".popup-form__label").style.display = "none"
+                }
+                
                 popupEditUser.classList.add("open")
                 document.body.classList.add("no-scroll")
 
