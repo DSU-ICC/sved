@@ -14,15 +14,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
         //расставление тегов
         let propItem = ""
-        if (fileTypeId == 1) { //тег для фгос
+        if (fileTypeId == 2) { //тег для опоп
             propItem += `itemprop="opMain"`
-        } else if (fileTypeId == 2) { //тег для учебного плана
+        } else if (fileTypeId == 3) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == 16) { // тег для аннотации к рпд
+        } else if (fileTypeId == 4) { // тег для аннотации к рпд
             propItem += `itemprop="educationAnnotation"`
-        } else if (fileTypeId == 3) { //тег для календарного рабочего графика
+        } else if (fileTypeId == 5) { //тег для календарного рабочего графика
             propItem += `itemprop="educationShedule"`
-        } else if (fileTypeId == 11) { //тег для методического материала
+        } else if (fileTypeId == 8) { //тег для методического материала
             propItem += `itemprop="methodology"`
         }
 

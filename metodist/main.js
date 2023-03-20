@@ -246,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.target.disabled = true
 
             let formData = new FormData()
+            
             let fileName = nameFileInput.querySelector(".popup-form__input").value
             let ecpKey = generateKeyForSignature()
 
@@ -254,10 +255,11 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append("fileType", fileTypeId)
             formData.append("profileId", profileId)
 
-            // все файлы, кроме файлы аннотации к рпд должны иметь эцп
-            if (fileTypeId != 16) {
+            // файлы аннотации к рпд не должны иметь эцп
+            if (fileTypeId != fileTypes[fileTypes.map(e => e.name).indexOf("Аннотации к РПД")].id) {
                 formData.append("ecp", ecpKey)
             }
+
             saveFile(formData, e.target)
 
         } else {
@@ -366,11 +368,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //нажатие на кнопку изменения профиля в модальном окне
     popupEditFileBtn.addEventListener("click", function(e) {
-        validateAndSaveFileOpop(e.target)
+        validateAndEditFileOpop(e.target)
     })
 
     //валидация и отправка формы если валидация прошла успешно
-    const validateAndSaveFileOpop = (el) => {
+    const validateAndEditFileOpop = (el) => {
         let fileId = popupEditFile.querySelector("#fileId").value
         let fileTypeId = popupEditFile.querySelector("#fileTypeId").value
         let profileId = popupEditFile.querySelector("#profileId").value
@@ -392,16 +394,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isUploadFile) {
                 formData.append("uploadedFile", uploadInput.files[0])
 
-                if (fileTypeId != 16) {
+                //файлы аннотации к РПД не должны иметь эцп
+                if (fileTypeId != fileTypes[fileTypes.map(e => e.name).indexOf("Аннотации к РПД")].id) {
                     formData.append("ecp", generateKeyForSignature())
                 }
             }
             formData.append("fileName", fileName)                    
             formData.append("fileId", fileId)
             formData.append("profileId", profileId)
-
-            // все файлы, кроме файлы аннотации к рпд должны иметь эцп
-            
 
             editFile(formData, el)
         }
@@ -733,7 +733,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //расставление тегов
         let propItem = ""
-        if (fileTypeId == 2) { //тег для фгос
+        if (fileTypeId == 2) { //тег для опоп
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == 3) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`

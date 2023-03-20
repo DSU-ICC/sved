@@ -32,9 +32,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
                     let popupLabelSelect = popupLabel.querySelector(".select")
+
+                    //очистка текстового поля
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
-                    } else if (popupLabelSelect) {
+                    } else if (popupLabelSelect) { // сброс значений выпадоющего списка
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (popupLabelSelectedEl) {
                             popupLabelSelectedEl.classList.remove("selected")
                         }
-                    } else {
+                    } else { // ставим значение роли по умолчанию (методист)
                         let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
                         metodistRoleRadioBtn.click()
                         metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
@@ -52,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
             } 
 
+            //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
             document.body.classList.remove("no-scroll")
             
@@ -60,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //кнопка создания пользователя
     createUserBtn.addEventListener("click", function() {  
+        //ставим в модальном окне значение роли по умолчанию (методист) и скрываем выбор факультетов
         let metodistRoleRadioBtn = popupCreateUser.querySelector(".radio__item:nth-child(1) label")
         metodistRoleRadioBtn.click()
         metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
@@ -70,25 +74,31 @@ document.addEventListener("DOMContentLoaded", function() {
         popupCreateUser.classList.add("open")
         document.body.classList.add("no-scroll")
 
+        //обработчик событий выбора роли
         const radioBtns = popupCreateUser.querySelectorAll(".radio__item label")
         radioBtns.forEach((radioItem) => {
             radioItem.addEventListener("click", function(e) {
+                //очищаем все радио кнопки
                 for (let radioEl of radioBtns) {
                     radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
                 }
 
+                //скрываем выбор кафедры и факультетов
                 let kafedraSelect = popupCreateUser.querySelector(".select[data-selectField=kafedra]").closest(".popup-form__label")
                 kafedraSelect.style.display = "none"
         
                 let facultySelect = popupCreateUser.querySelector(".select[data-selectField=faculty]").closest(".popup-form__label")
                 facultySelect.style.display = "none"
 
+                //помечаем нажатую кнопку как выбранную
                 e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
 
+                
                 let selectedRole = e.target.textContent.trim()
+                //если выбранная роль - методист, то даем возможность выбрать кафедру
                 if (selectedRole == "Методист") {                    
                     kafedraSelect.style.display = "flex"
-                } else if (selectedRole == "Сотрудник УМУ") {
+                } else if (selectedRole == "Сотрудник УМУ") { //если выбранная роль - сотрудник УМУ, то даем возможность выбрать факультеты
                     facultySelect.style.display = "flex"
                 }
             })
@@ -100,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let loginInput = popupCreateUser.querySelector("#login")
         let passwordInput = popupCreateUser.querySelector("#password")
 
+        //валидация формы
         let isValidForm = true
         if (loginInput.value.trim() == "") {
             isValidForm = false
@@ -202,17 +213,18 @@ document.addEventListener("DOMContentLoaded", function() {
         let userLoginInput = popupEditUser.querySelector("#userLogin")
         let userPasswordInput = popupEditUser.querySelector("#userPassword")
 
+        //валидация формы
         let isValidForm = true
         
         if (userLoginInput.value.trim() == "") {
-            isValidForm == false
+            isValidForm = false
             userLoginInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             userLoginInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
         if (userPasswordInput.value.trim() == "") {
-            isValidForm == false
+            isValidForm = false
             userPasswordInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             userPasswordInput.closest(".popup-form__label").classList.remove("invalid")
@@ -308,6 +320,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //нажатие на кнопку нет в модальном окне удаления пользователя
     popupDeleteUserNoBtn.addEventListener("click", function(e) {
+        //закрываем модальное окно
         e.target.closest(".popup").querySelector(".popup__close").click()
     })
 
@@ -390,6 +403,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.querySelector(".users__table").innerHTML = markup
 
+        //получаем все кнопки изменения пользователя
         let editUserBtns = document.querySelectorAll(".users__table .edit__btn")
         editUserBtns.forEach(editUserItem => {
             editUserItem.addEventListener("click", function(e) {
@@ -398,49 +412,44 @@ document.addEventListener("DOMContentLoaded", function() {
                 popupEditUser.querySelector("#userId").value = userId
                 popupEditUser.querySelector("#userLogin").value = userName
 
-
+                //ставим роль по умолчанию (методист)
                 let metodistRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(1) label")
                 metodistRoleRadioBtn.click()
                 metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
         
+                //скрываем выбор факультетов
                 let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]")
                 facultySelect.closest(".popup-form__label").style.display = "none"
-
-                // let kafedraName = e.target.closest("tr").children[1].textContent
-                // if (kafedraName != "") {
-                //     let kafedraSelectOptions = document.querySelectorAll("#popup-editUser [data-selectfield=kafedra] .select__option") 
-
-                //     kafedraSelectOptions.forEach(kafedraOption => {
-                //         if (kafedraOption.textContent.trim().toLowerCase() == kafedraName.trim().toLowerCase()) {
-                //             kafedraOption.classList.add("selected")
-                //             kafedraOption.closest(".select").querySelector(".select__text").textContent = kafedraName
-                //             kafedraOption.closest(".select").querySelector(".select__text").setAttribute("data-id", kafedraOption.dataset.id)   
-                //         }
-                //     })
-                // }
 
                 popupEditUser.classList.add("open")
                 document.body.classList.add("no-scroll")
 
+                //получаем все кнопки выбора роли
                 const radioBtns = popupEditUser.querySelectorAll(".radio__item label")
                 radioBtns.forEach((radioItem) => {
+                    //обработчик для каждой кнопки
                     radioItem.addEventListener("click", function(e) {
+                        //очищаем все радио кнопки
                         for (let radioEl of radioBtns) {
                             radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
                         }
 
+                        //скрываем выбор кафедр и факультетов
                         let kafedraSelect = popupEditUser.querySelector(".select[data-selectField=kafedra]").closest(".popup-form__label")
                         kafedraSelect.style.display = "none"
                 
                         let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]").closest(".popup-form__label")
                         facultySelect.style.display = "none"
 
+                        //помечаем нажатую кнопку как выбранную
                         e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
 
                         let selectedRole = e.target.textContent.trim()
+
+                        //если выбранная роль - методист, то даем возможность выбрать кафедру
                         if (selectedRole == "Методист") {                    
                             kafedraSelect.style.display = "flex"
-                        } else if (selectedRole == "Сотрудник УМУ") {
+                        } else if (selectedRole == "Сотрудник УМУ") {//если выбранная роль - методист, то даем возможность выбрать кафедру
                             facultySelect.style.display = "flex"
                         }
                     })
@@ -515,26 +524,30 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         let options = selectItem.querySelector('.select__options');
         options.addEventListener("click", function(e) {
-            if (e.target.closest(".select__option")) {
+            if (e.target.closest(".select__option")) { 
                 let selectedOption = e.target.closest(".select__option")
                 let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
                 let selectText = selectItem.querySelector('.select__text')
                 let selectedElemId = parseInt(selectedOption.dataset.id)
 
+                //если выпадающий список предусматривает выбор нескольких элементов
                 if (!selectItem.hasAttribute("data-multiple")) {
+                    //если мы нажали на не выбранный элемент списка
                     if (!selectedOption.classList.contains("selected")) {
+                        //помечаем все элементы списка как не выбранные
                         options.querySelectorAll(".select__option").forEach(optionItem => {
                             optionItem.classList.remove("selected")
                         })
 
+                        //помечаем выбранный нами элемент как выбранный
                         selectedOption.classList.add("selected")
                         selectText.innerText = selectedOptionText;
                         selectText.dataset.id = selectedElemId
-                    } else {
+                    } else { //если же мы выбрали уже выбранный элемент списка, 
                         selectText.innerText = selectText.dataset.placeholder
                         selectText.removeAttribute("data-id")
                     }
-                } else {
+                } else { //если в выпадающем списке можно выбрать только один элемент  
                     if (!selectedOption.classList.contains("selected")) {
                         selectedOption.classList.add("selected")
                         if (selectText.textContent != selectText.dataset.placeholder) {
