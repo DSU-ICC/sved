@@ -378,17 +378,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 <tbody>
         `
         
-        for (let user of users) {
+        for (let userData of users) {
             markup +=  `
                     <tr>
-                        <td>${user.userName}</td>
+                        <td>${userData.user.userName}</td>
                         <td>
                             <div class="wrapper">
                                 <button type="button" class="edit">
-                                    <span data-id="${user.id}"  class="edit__btn btn"></span>
+                                    <span data-id="${userData.user.id}"  class="edit__btn btn"></span>
                                 </button> 
                                 <button type="button" class="delete">
-                                    <span data-id="${user.id}" class="delete__btn btn"></span>
+                                    <span data-id="${userData.user.id}" class="delete__btn btn"></span>
                                 </button> 
                             </div>
                         </td>

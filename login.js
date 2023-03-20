@@ -56,13 +56,12 @@ document.addEventListener("DOMContentLoaded", function() {
             loginBtn.textContent = "Войти"
             loginBtn.disabled = false
 
-            let user = await response.json()
-            localStorage.setItem("userId", user.userId)
-            localStorage.setItem("userName", user.userName)
-            localStorage.setItem("userRole", user.role)
-            localStorage.setItem("persDepartmentId", user.persDepartmentId)
-            
-            redirectByRole(user)
+            let userData = await response.json()
+            localStorage.setItem("userId", userData.user.id)
+            localStorage.setItem("userName", userData.user.userName)
+            localStorage.setItem("userRole", userData.role)
+            localStorage.setItem("persDepartmentId", userData.user.persDepartmentId)
+            redirectByRole(userData)
         } else {
             let error = await response.text()
             alert(error)
@@ -79,12 +78,12 @@ document.addEventListener("DOMContentLoaded", function() {
         validateLoginForm()
     })
 
-    const redirectByRole = (user) => {
-        if (user.persDepartmentId != null) {
+    const redirectByRole = (userData) => {
+        if (userData.user.persDepartmentId != null) {
             window.location.assign("/metodist/")
-        } else if (user.role == "UMU") {   
+        } else if (userData.role == "UMU") {   
             window.location.assign("/umu/")
-        } else if (user.role == "admin") {
+        } else if (userData.role == "admin") {
             window.location.assign("/admin/")
         }
     }

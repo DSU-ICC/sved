@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let fileName = nameFileInput.querySelector(".popup-form__input").value
             let ecpKey = generateKeyForSignature()
 
-            formData.append("uploadedFile", uploadInput.files[0])
+            formData.append("formFile", uploadInput.files[0])
             formData.append("fileName", fileName)                    
             formData.append("fileType", fileTypeId)
             formData.append("profileId", profileId)
@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let popupEditFileInput = popupEditFile.querySelector(".popup-form__input")
         popupEditFileInput.value = outputFileName
 
-        popupEditFileInput.setAttribute("placeholder", fileTypes[fileTypeId])
+        popupEditFileInput.setAttribute("placeholder", fileTypes[fileTypes.map(e => e.id).indexOf(fileTypeId)].name)
 
         //вывод названия файла
         let fileNameField = popupEditFile.querySelector(".popup-form__file-name")
@@ -392,7 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let fileName = nameFileInput.querySelector(".popup-form__input").value
 
             if (isUploadFile) {
-                formData.append("uploadedFile", uploadInput.files[0])
+                formData.append("formFile", uploadInput.files[0])
 
                 //файлы аннотации к РПД не должны иметь эцп
                 if (fileTypeId != fileTypes[fileTypes.map(e => e.name).indexOf("Аннотации к РПД")].id) {
@@ -1087,7 +1087,6 @@ document.addEventListener("DOMContentLoaded", () => {
         userRole = localStorage.getItem("userRole")
 
         let hasAccess = hasUserAccessToRole()
-        console.log(hasAccess, kafedra_id)
         if (hasAccess) {
             userName = localStorage.getItem("userName")
 
