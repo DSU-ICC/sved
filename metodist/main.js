@@ -15,7 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupDeleteNoBtn = document.querySelector("#popup-delete .confirm-button--no")
     let popupEditFile = document.querySelector("#popup-editFile")
     let popupEditFileBtn = document.querySelector("#popup-editFile .popup-form__btn")
+    
     let popupDeleteFileBtn = document.querySelector("#popup-editFile .delete__btn")
+    let popupDeleteFile = document.querySelector("#popup-deleteFile")
+    let popupDeleteFileYesBtn = document.querySelector("#popup-deleteFile .confirm-button--yes")
+    let popupDeleteFileNoBtn = document.querySelector("#popup-deleteFile .confirm-button--no")
+
     let popupEditText = document.querySelector("#popup-editText")
     let popupEditTextBtn = document.querySelector("#popup-editText .popup-form__btn")
     let dataUchPlanFinal;
@@ -60,8 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let formData = new FormData()
         formData.append("uploadedFile", el.files[0])
 
-        // "https://localhost:44370/Files/AddFile?fileTypeId=2&profileId=0"
-
         let response = await fetch(`${URL}/Profiles/ParsingProfileByFile`, {
             method: "POST",
             credentials: "include",
@@ -92,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //функция заполнение модального окна данными полученными при парсинге учебного плана 
     const fillUchPlanData = (data) => {
-        console.log(data)
         document.body.classList.add("no-scroll")
         modalUchPlan.classList.add("open")
         dataUchPlanFinal = data
@@ -162,12 +164,12 @@ document.addEventListener("DOMContentLoaded", () => {
         let selectedEduFormItem = modalUchPlan.querySelector("[data-selectfield='eduForm'] .select__text")
         let yearInput = modalUchPlan.querySelector("#year")
         let profileInput = modalUchPlan.querySelector("#profile")
+        let eduLangInput = modalUchPlan.querySelector("#eduLang")
+        let accredInput = modalUchPlan.querySelector("#periodAccredistation")
+        let linkToEduDistanceInput = modalUchPlan.querySelector("#linkToEduDistance")
 
         dataUchPlanFinal = data.profile
 
-        // for (let discipline of dataUchPlanFinal.disciplines) {
-        //     discipline.statusDiscipline = null
-        // }
         dataUchPlanFinal.persDepartmentId = kafedra_id
         dataUchPlanFinal.levelEdu = null
         dataUchPlanFinal.levelEduId = parseInt(selectedLevelEduItem.dataset.id)
@@ -175,6 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dataUchPlanFinal.profileName = profileInput.value.trim()
         dataUchPlanFinal.caseSDepartmentId = parseInt(selectedDeptItem.dataset.id)
         dataUchPlanFinal.caseCEdukindId = parseInt(selectedEduFormItem.dataset.id)
+        dataUchPlanFinal.educationLanguage = eduLangInput.value
+        dataUchPlanFinal.validityPeriodOfStateAccreditasion = accredInput.value
+        dataUchPlanFinal.linkToDistanceEducation = linkToEduDistanceInput.value ?? ""
 
         let response = await fetch(`${URL}/Profiles/CreateProfile`, {
             method: "POST",
@@ -325,6 +330,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let yearInput = modalWindow.querySelector("#year")
         let profileInput = modalWindow.querySelector("#profile")
+        let eduLangInput = modalWindow.querySelector("#eduLang")
+        let accredInput = modalWindow.querySelector("#periodAccredistation")
 
         let isValidForm = true
 
@@ -361,6 +368,20 @@ document.addEventListener("DOMContentLoaded", () => {
             profileInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             profileInput.closest(".popup-form__label").classList.remove("invalid")
+        }
+
+        if (eduLangInput.value.trim() == "") {
+            isValidForm = false 
+            eduLangInput.closest(".popup-form__label").classList.add("invalid")
+        } else {
+            eduLangInput.closest(".popup-form__label").classList.remove("invalid")
+        }
+
+        if (accredInput.value.trim() == "") {
+            isValidForm = false 
+            accredInput.closest(".popup-form__label").classList.add("invalid")
+        } else {
+            accredInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
         return isValidForm
@@ -400,6 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
             formData.append("fileName", fileName)                    
+            formData.append("fileType", fileTypeId)                    
             formData.append("fileId", fileId)
             formData.append("profileId", profileId)
 
@@ -445,14 +467,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //нажатие на кнопку удаления файла в модальном окне изменения файла
-    popupDeleteFileBtn.addEventListener("click", function(e) {      
-        let result = confirm("Вы действительно хотите удалить файл?")
-        if (result) {
-            e.target.classList.add("loading")
-            e.target.textContent = "Удаление..."
-            e.target.disabled = true
-            deleteFile(popupEditFile.querySelector("#fileId").value, e.target)
-        }
+    popupDeleteFileBtn.addEventListener("click", function(e) {  
+        popupEditFile.classList.remove("open")
+
+        let fileId = popupEditFile.querySelector("#fileId").value
+        popupDeleteFile.querySelector("#fileId").value = fileId
+
+        popupDeleteFile.classList.add("open")
+    })
+
+    popupDeleteFileYesBtn.addEventListener("click", function(e) {
+        e.target.classList.add("loading")
+        e.target.disabled = true
+
+        let fileId = popupEditFile.querySelector("#fileId").value
+        deleteFile(fileId, e.target)
+    })
+
+    popupDeleteFileNoBtn.addEventListener("click", function(e) {
+        popupDeleteFile.classList.remove("open")
+        document.body.classList.remove("no-scroll")
     })
 
     //функция заполнения данными модального окна для редактирования текстовой информации профиля
@@ -461,12 +495,15 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("no-scroll")
 
         let tdElements = el.closest("tr")          
-
-        let year = tdElements.children[0].textContent.trim()
-        let profile = tdElements.children[4].textContent.trim()
-        let level = tdElements.children[3].textContent.trim()
-        let deptName = tdElements.children[2].textContent.trim()
-        let eduForm = tdElements.children[7].textContent.trim()
+        let profileEdited = profiles[profiles.map(e => e.profile.id).indexOf(+tdElements.dataset.profileid)]
+        let year = profileEdited.profile.year
+        let profile = profileEdited.profile.profileName
+        let level = profileEdited.profile.levelEdu.name
+        let deptName = profileEdited.caseSDepartment.deptName
+        let eduForm = profileEdited.caseCEdukind.edukind
+        let lang = profileEdited.profile.educationLanguage
+        let accred = profileEdited.profile.validityPeriodOfStateAccreditasion
+        let linkToEduDistance = profileEdited.profile.linkToDistanceEducation
 
         let profileIdInput = popupEditText.querySelector("#profileId")
         profileIdInput.value = tdElements.dataset.profileid
@@ -475,6 +512,12 @@ document.addEventListener("DOMContentLoaded", () => {
         yearInp.value = year
         let profileInp = popupEditText.querySelector("#profile")
         profileInp.value = profile
+        let langInput = popupEditText.querySelector("#eduLang")
+        langInput.value = lang
+        let accredInput = popupEditText.querySelector("#periodAccredistation")
+        accredInput.value = accred
+        let linkToDistanceInput = popupEditText.querySelector("#linkToEduDistance")
+        linkToDistanceInput.value = linkToEduDistance
 
         let deptSelectOptions = popupEditText.querySelectorAll("[data-selectfield=dept] .select__option")
         let levelSelectOptions = popupEditText.querySelectorAll("[data-selectfield=levelEdu] .select__option")
@@ -530,6 +573,9 @@ document.addEventListener("DOMContentLoaded", () => {
             profileItem.profile.caseSDepartmentId = selectedDeptItem.dataset.id
             profileItem.profile.caseCEdukindId = selectedEduFormItem.dataset.id
             profileItem.profile.levelEduId = levelEduId
+            profileItem.profile.educationLanguage = popupEditText.querySelector("#eduLang").value
+            profileItem.profile.validityPeriodOfStateAccreditasion = popupEditText.querySelector("#periodAccredistation").value
+            profileItem.profile.linkToDistanceEducation = popupEditText.querySelector("#linkToEduDistance").value
             editProfile(profileItem.profile, popupEditTextBtn)
         }
     })
@@ -673,7 +719,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ecpCode += `&ecp=${formData.get("ecp")}`
         }
 
-        let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${ecpCode}`, {
+        let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${ecpCode}`, {
             method: "PUT",
             credentials: "include",
             body: formData
@@ -708,7 +754,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
            alert("Файл успешно удален")
            el.classList.remove("loading")
-           el.textContent = "Удалить файл"
            el.disabled = false
            el.closest(".popup__content").querySelector(".popup__close").click()
            getProfilesById(kafedra_id)
@@ -883,6 +928,44 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </td>
             `
+
+            res += `
+                <td itemprop="language">
+                    <span>${el.profile.educationLanguage}</span>
+                    <div class="actions">
+                        <button type="button" class="edit edit-item--text">
+                        <span class="edit__btn btn"></span>
+                        </button>
+                    </div>
+                </td>
+            `
+
+            res += `
+                <td itemprop="language">
+                    <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
+                    <div class="actions">
+                        <button type="button" class="edit edit-item--text">
+                        <span class="edit__btn btn"></span>
+                        </button>
+                    </div>
+                </td>
+            `
+
+            res += `
+                <td itemprop="language">
+                    ${
+                        el.profile.linkToDistanceEducation != "" 
+                        ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                        : "<span>не используется</span>"
+                    }
+                    <div class="actions">
+                        <button type="button" class="edit edit-item--text">
+                        <span class="edit__btn btn"></span>
+                        </button>
+                    </div>
+                </td>
+            `
+
             res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
 
             res += generateMarkupFileModelByFileTypeId(el, 4) // аннотации к рпд
@@ -992,9 +1075,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 modalUchPlan.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
                 popupEditText.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
             }
-            // } else if (response.status == 405) {
-            //     window.location.assign("/login.html")
-            // }
         } else {
             window.location.assign("/login.html")
         }

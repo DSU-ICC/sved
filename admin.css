@@ -442,7 +442,7 @@ tr td:not(:last-child) button.file-upload__item {
     background-position-y: 1px;
 }
 
-.page__table th:nth-child(1){
+/* .page__table th:nth-child(1){
     width: 76px;
     padding-left: 8px;
     padding-right: 5px;
@@ -513,6 +513,11 @@ tr td:not(:last-child) button.file-upload__item {
     width: 141px;
     padding-left: 11px;
     padding-right: 4px;
+} */
+
+.page__table th {
+    width: 80px;
+    padding: 14px 7px;
 }
 
 td a {

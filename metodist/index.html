@@ -47,6 +47,9 @@
                                     <th>ФГОС</th>
                                     <th>ОПОП</th>
                                     <th>Форма обучения</th>
+                                    <th>Язык обучения</th>
+                                    <th>Срок действия государственной аккредитации</th>
+                                    <th>Дистанционное обучение</th>
                                     <th>Учебный план</th>
                                     <th>Аннотации к рабочим программам дисциплин</th>
                                     <th>Рабочие программы дисциплин</th>
@@ -364,7 +367,6 @@
                     </label>
                     <label class="popup-form__label">
                         <span class="popup-form__text">Направление</span>
-                        <!-- <input type="text" id="eduForm" class="popup-form__input"> -->
                         <div data-selectField="dept" class="popup-form__select select">
                             <div class="select__btn">
                                 <span class="select__text" data-placeholder="Выберите направление">Выберите направление</span>
@@ -395,6 +397,18 @@
                             <ul class="select__options">
                             </ul>
                         </div>
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Язык обучения</span>
+                        <input type="text" id="eduLang" class="popup-form__input">
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Срок действия гос аккредитации</span>
+                        <input type="text" id="periodAccredistation" class="popup-form__input">
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Дистанционное обучение</span>
+                        <input type="text" id="linkToEduDistance" placeholder="Ссылка" class="popup-form__input">
                     </label>
                     <button type="button" class="popup-form__btn btn">Завершить редактирование</button>
                 </form>
@@ -474,18 +488,21 @@
                             <div class="select__btn">
                                 <span class="select__text" data-placeholder="Выберите форму обучения">Выберите форму обучения</span>
                             </div>
-                            <ul class="select__options">
-                                <li class="select__option">
-                                    <span class="select__option-text">Очная</span>
-                                </li>
-                                <li class="select__option">
-                                    <span class="select__option-text">Заочная</span>
-                                </li>  
-                                <li class="select__option">
-                                    <span class="select__option-text">Очно-заочная</span>
-                                </li>                         
+                            <ul class="select__options">                    
                             </ul>
                         </div>
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Язык обучения</span>
+                        <input type="text" id="eduLang" class="popup-form__input">
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Срок действия гос аккредитации</span>
+                        <input type="text" id="periodAccredistation" class="popup-form__input">
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Дистанционное обучение</span>
+                        <input type="text" id="linkToEduDistance" placeholder="Ссылка" class="popup-form__input">
                     </label>
                     <button type="button" class="popup-form__btn btn">Завершить редактирование</button>
                 </form>
@@ -542,51 +559,18 @@
         </div>
     </div>
 
-    <div id="popup-createLink" class="popup">
+    <div id="popup-deleteFile" class="popup">
         <div class="popup__body">
             <div class="popup__content">
                 <button type="button" class="popup__close">
                     <img src="../img/close.svg" alt="">
                 </button>
-                <h2 class="popup__title title">Создание ссылки</h2>
-                <form class="popup__form popup-form" action="" method="post">
-                    <input type="hidden" id="fileTypeId">
-                    <input type="hidden" id="profileId">
-                    <div class="popup-form__file-item">
-                        <!-- <label class="popup-form__label">
-                            <span class="popup-form__text">Тип ссылки</span>
-                            <div data-selectField="linkType" class="popup-form__select select">
-                                <div class="select__btn">
-                                    <span class="select__text">Ссылка</span>
-                                </div>
-                                <ul class="select__options">
-                                    <li class="select__option selected">
-                                        <span class="select__option-text">Ссылка</span>
-                                    </li>
-                                    <li class="select__option">
-                                        <span class="select__option-text">Ссылка на файл</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </label> -->
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Отображаемый текст</span>
-                            <input type="text" class="popup-form__input">
-                        </label>     
-                        <label class="popup-form__label">
-                            <span class="popup-form__text">Ссылка</span>
-                            <input type="text" class="popup-form__input">
-                        </label>  
-                        <!-- <div class="popup-form__actions">
-                            <label class="popup-form__file-upload file-upload">
-                                <input type="file" aria-invalid="true">
-                                <span class="file-upload__btn btn">Выбрать файл</span>     
-                            </label>
-                        </div> -->
-                        <div class="popup-form__file-name"></div>
-                    </div>
-                    <button type="button" class="popup-form__btn btn">Создать ссылку</button>
-                </form>
+                <input type="hidden" id="fileId">
+                <h2 class="popup__title title">Вы действительно хотите удалить файл?</h2>
+                <div class="confirm-buttons">
+                    <button class="confirm-button confirm-button--yes"><span>Да</span></button>
+                    <button class="confirm-button confirm-button--no">Нет</button>
+                </div>
             </div>
         </div>
     </div>

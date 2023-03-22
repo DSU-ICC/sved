@@ -121,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function() {
         let res = ""
 
         for (let departmentIdItem of departmentsId) {
-            
             //находим все профили, которые принадлежат кафедре
             let depIdProfiles = profiles.filter(e => e.profile.persDepartmentId == departmentIdItem)
 
@@ -170,6 +169,29 @@ document.addEventListener("DOMContentLoaded", function() {
                         <span>${el.caseCEdukind.edukind}</span>
                     </td>
                 `
+
+                res += `
+                    <td itemprop="language">
+                        <span>${el.profile.educationLanguage}</span>
+                    </td>
+                `
+
+                res += `
+                    <td itemprop="language">
+                        <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
+                    </td>
+                `
+
+                res += `
+                    <td itemprop="language">
+                        ${
+                            el.profile.linkToDistanceEducation != "" 
+                            ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                            : "<span>не используется</span>"
+                        }
+                    </td>
+                `
+
                 res += generateMarkupFileModelByFileTypeId(el, 2) // учебный план
         
                 res += generateMarkupFileModelByFileTypeId(el, 16) // аннотации к рпд
@@ -182,8 +204,8 @@ document.addEventListener("DOMContentLoaded", function() {
         
                 res += generateMarkupFileModelByFileTypeId(el, 3) // календарный учебный график
         
-                let fileModelsRpp = el.practics // рабочие программы практик
-                if (fileModelsRpp.size != 0) {
+                let fileModelsRpp = el.disciplines // рабочие программы практик
+                if (fileModelsRpp.length > 0) {
                     let rpp = `<td itemprop="eduPr">`
                     for (let fileModelRPPItem of fileModelsRpp) {
                         rpp += `
