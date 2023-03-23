@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //генерация разметки для файловых элементов таблицы
     const generateMarkupFileModelByFileTypeId = (profile, fileTypeId) => {
-        let fileModels = new Set(profile.profile.fileModels.filter(e => e.type == fileTypeId))
+        let fileModels = new Set(profile.profile.fileModels.filter(e => e.fileTypeId == fileTypeId))
         let markup = "";
 
         //расставление тегов
@@ -159,10 +159,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             <span>${el.profile.profileName}</span>
                         </td>                    
                 ` 
-                
-                res += generateMarkupFileModelByFileTypeId(el, 0) // фгос
         
-                res += generateMarkupFileModelByFileTypeId(el, 1) // опоп
+                res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
                 
                 res += `
                     <td itemprop="eduForm">
@@ -170,31 +168,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                 `
 
-                res += `
-                    <td itemprop="language">
-                        <span>${el.profile.educationLanguage}</span>
-                    </td>
-                `
-
-                res += `
-                    <td itemprop="language">
-                        <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
-                    </td>
-                `
-
-                res += `
-                    <td itemprop="language">
-                        ${
-                            el.profile.linkToDistanceEducation != "" 
-                            ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
-                            : "<span>не используется</span>"
-                        }
-                    </td>
-                `
-
-                res += generateMarkupFileModelByFileTypeId(el, 2) // учебный план
+                res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
         
-                res += generateMarkupFileModelByFileTypeId(el, 16) // аннотации к рпд
+                res += generateMarkupFileModelByFileTypeId(el, 4) // аннотации к рпд
         
                 res += `
                     <td itemprop="educationRpd">
@@ -202,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                 ` 
         
-                res += generateMarkupFileModelByFileTypeId(el, 3) // календарный учебный график
+                res += generateMarkupFileModelByFileTypeId(el, 5) // календарный учебный график
         
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length > 0) {
@@ -222,11 +198,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     `
                 }
         
-                res += generateMarkupFileModelByFileTypeId(el, 4) // гиа
-        
-                res += generateMarkupFileModelByFileTypeId(el, 6) // матрицы
-        
-                res += generateMarkupFileModelByFileTypeId(el, 11) // методические материалы
+                res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
         
             }
 

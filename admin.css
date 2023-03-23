@@ -1147,6 +1147,13 @@ td[colspan] {
     pointer-events: none;
 }
 
+datalist option:hover::before {
+    content: attr(data-tooltip);
+    width: 100px;
+    height: 40px;
+    display: block;
+}
+
 /* Страница входа в личный кабинет */
 
 .login-form {

@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
             let data = await response.json()
             disciplineList = data.disciplines 
-
+            console.log(disciplineList)
             //вывод пользователю названия направления профиля
             let headerTitle = document.querySelector(".page__title")
             headerTitle.textContent = `Направление: ${data.caseSDepartment.code} ${data.caseSDepartment.deptName}`
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             selectedAuthor.closest(".popup-form__label").classList.remove("invalid")
 
-            let author = authors[authors.map(e => e.фио).indexOf(selectedAuthor.value)]
+            let author = authors[authors.map(e => e.fio).indexOf(selectedAuthor.value)]
             if (author) {
                 //console.log(popupUploadFileRpd.querySelector("#uploadedFile").files[0])
                 let formData = new FormData()
@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //let fileToBinary = fileReader.readAsBinaryString(uploadedFile)
                 formData.append("uploadedFile", uploadedFile)
 
-                formData.append("authorId", author.idСотрудника)
+                formData.append("authorId", author.id)
                 uploadFileRpd(formData, e.target) 
             } else {
                 alert("Такого автора нет в списке!")
@@ -852,7 +852,7 @@ document.addEventListener("DOMContentLoaded", () => {
             authors = await response.json() 
             for (let author of authors) {
                 res += `
-                    <option data-id=${author.idСотрудника} value="${author.фио}">${author.фио}</option>
+                    <option data-tooltip="${author.kafedra}" data-id=${author.id} value="${author.fio}">${author.fio}</option>
                 `
             }
             popupUploadFileRpd.querySelector("datalist").innerHTML = res
