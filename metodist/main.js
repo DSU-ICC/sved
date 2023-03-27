@@ -253,17 +253,11 @@ document.addEventListener("DOMContentLoaded", () => {
             let formData = new FormData()
             
             let fileName = nameFileInput.querySelector(".popup-form__input").value
-            let ecpKey = generateKeyForSignature()
 
             formData.append("formFile", uploadInput.files[0])
             formData.append("fileName", fileName)                    
             formData.append("fileType", fileTypeId)
             formData.append("profileId", profileId)
-
-            // файлы аннотации к рпд не должны иметь эцп
-            if (fileTypeId != fileTypes[fileTypes.map(e => e.name).indexOf("Аннотации к РПД")].id) {
-                formData.append("ecp", ecpKey)
-            }
 
             saveFile(formData, e.target)
 
@@ -414,12 +408,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (isUploadFile) {
                 formData.append("formFile", uploadInput.files[0])
-
-                //файлы аннотации к РПД не должны иметь эцп
-                if (fileTypeId != fileTypes[fileTypes.map(e => e.name).indexOf("Аннотации к РПД")].id) {
-                    formData.append("ecp", generateKeyForSignature())
-                }
             }
+
             formData.append("fileName", fileName)                    
             formData.append("fileType", fileTypeId)                    
             formData.append("fileId", fileId)
@@ -606,20 +596,6 @@ document.addEventListener("DOMContentLoaded", () => {
     popupDeleteNoBtn.addEventListener("click", function() {
         popupDelete.querySelector(".popup__close").click()
     })
-
-    //генерация случайного числа для генерации ключа
-    const randomNumber = (max) => Math.floor(Math.random() * max)
-
-    //генерация ключа для эцп
-    const generateKeyForSignature = () => {
-        let key = ""
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 8) + "-"
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 4) + "-"
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 4) + "-"
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 4)
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 8)
-        return key.toUpperCase()
-    }
 
     //функционал закрытия модального окна
     closeModalBtns.forEach(closeItem => {
@@ -852,7 +828,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получить профили по айди кафедры
     const getProfilesById = async () => {
-        
         if (kafedra_id && userName) {
             let response = await fetch(`${URL}/Profiles/GetDataById?kafedraId=${kafedra_id}`, {
                 credentials: "include"
@@ -868,8 +843,6 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.assign("/login.html")
         }
     }
-
-   
 
     //отображение пользователю всех профилей кафедры
     const showProfiles = (profiles) => {
@@ -917,6 +890,8 @@ document.addEventListener("DOMContentLoaded", () => {
             res += generateMarkupFileModelByFileTypeId(el, 1) // фгос
 
             res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
+
+            res += generateMarkupFileModelByFileTypeId(el, 9) // аопоп
             
             res += `
                 <td itemprop="eduForm">

@@ -66,20 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
-    //генерация случайного числа для генерации ключа
-    const randomNumber = (max) => Math.floor(Math.random() * max)
-
-    //генерация ключа для эцп
-    const generateKeyForSignature = () => {
-        let key = ""
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 8) + "-"
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 4) + "-"
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 4) + "-"
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 4)
-        key += Number(randomNumber(2 ** 32 - 1)).toString(16).toString().substring(0, 8)
-        return key.toUpperCase()
-    }
-
     //получение профилей вместе с их статусами по айди профиля
     const getDisciplinesByProfile = async (profileId) => {
         let response = await fetch(`${URL}/Discipline/GetDisciplineByProfileId?profileId=${profileId}`, {
@@ -240,7 +226,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let btnUpload = e.target.previousElementSibling
     
                 popupUploadFileRpd.querySelector("#disciplineId").value = btnUpload.dataset.disciplineid
-                popupUploadFileRpd.querySelector("#ecp").value = generateKeyForSignature()
 
                 popupUploadFileRpd.querySelector("#uploadedFile").files = e.target.files
                 popupUploadFileRpd.querySelector(".popup-form__file-name").textContent = `Название файла: ${e.target.files[0].name}`
@@ -312,14 +297,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let author = authors[authors.map(e => e.fio).indexOf(selectedAuthor.value)]
             if (author) {
-                //console.log(popupUploadFileRpd.querySelector("#uploadedFile").files[0])
                 let formData = new FormData()
                 formData.append("disciplineId", popupUploadFileRpd.querySelector("#disciplineId").value)
-                formData.append("ecp", popupUploadFileRpd.querySelector("#ecp").value)
 
-                //let fileReader = new FileReader()
                 let uploadedFile = popupUploadFileRpd.querySelector("#uploadedFile").files[0]
-                //let fileToBinary = fileReader.readAsBinaryString(uploadedFile)
                 formData.append("uploadedFile", uploadedFile)
 
                 formData.append("authorId", author.id)
@@ -337,12 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Загрузка..."
         el.disabled = true
 
-        let ecpCode = ""
-        if (formData.has("ecp")) {
-            ecpCode += `&ecp=${formData.get("ecp")}`
-        }
-        
-        let response = await fetch(`${URL}/FileRPD/CreateRPD?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}${ecpCode}`, {
+        let response = await fetch(`${URL}/FileRPD/CreateRPD?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -811,6 +787,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     
     })
 
+
     //получение всех статусов дисциплин
     const getAllStatusDisciplines = async () => {
         let response = await fetch(`${URL}/StatusDiscipline/GetStatusDiscipline`, {
@@ -851,8 +828,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
             authors = await response.json() 
             for (let author of authors) {
+                // res += `
+                //     <li class="search__option" data-id=${author.id}>${author.fio} <span class="search__option-info" title="${author.kafedra}"></span></li>
+                // `
                 res += `
-                    <option data-tooltip="${author.kafedra}" data-id=${author.id} value="${author.fio}">${author.fio}</option>
+                    <option title="${author.kafedra}" data-id=${author.id} value="${author.fio}">${author.kafedra}</option>
                 `
             }
             popupUploadFileRpd.querySelector("datalist").innerHTML = res
@@ -862,6 +842,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
             popupUploadFileRpd.classList.add("open")
             document.body.classList.add("no-scroll")
+
+            // let search = popupUploadFileRpd.querySelector(".search")
+            // let searchInput = popupUploadFileRpd.querySelector(".search__input")
+            // let searchOptions = popupUploadFileRpd.querySelector(".search__options");
+            // let searchElements = popupUploadFileRpd.querySelectorAll(".search__option")
+
+            // searchInput.addEventListener("click", function(e) {
+            //     search.classList.add("active")
+            // })
+            
+            // searchInput.addEventListener("input", function(e) {
+            //     let searchWorld = searchInput.value.toLowerCase()
+                
+            //     searchElements.forEach(searchEl => {
+            //         let searchElText = searchEl.textContent
+            //         if (!searchElText.toLowerCase().includes(searchWorld)) {
+            //             searchEl.style.display = "none"
+            //         } else {
+            //             searchEl.style.display = "flex"
+            //         }
+            //     })
+            // })
+
+
+            // searchElements.forEach((searchEl, _, array) => {
+            //     searchEl.addEventListener("click", function(e) {
+            //         for (let item of array) {
+            //             item.classList.remove("selected")
+            //         }
+
+            //         searchInput.value = searchEl.textContent
+            //         searchInput.dataset.id = searchEl.dataset.id 
+            //         searchEl.classList.add("selected")
+            //         search.classList.remove("active")
+            //     })
+            // })
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -912,6 +928,4 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         window.location.assign("/login.html")
     }
-
-   
 })

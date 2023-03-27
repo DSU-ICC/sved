@@ -1139,6 +1139,8 @@ td[colspan] {
     border-color: #0050cf;
 }
 
+
+
 .delete-discipline span[disabled],
 .delete-discipline:hover span[disabled] {
     border: 1px solid #ec071e;

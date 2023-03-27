@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Образовательные программы</title>
 </head>
 <body>
     <div class="site-wrapper">
@@ -23,25 +26,25 @@
             <div class="page">
                 <div class="page__container container">
                     <div class="page__head">
-                        <h1 class="page__title">Информация о сроке действия государственной аккредитации образовательной 
-                            программы, о языках, на которых осуществляется образование (обучение)</h1>  
+                        <h1 class="page__title">Информация по адаптированным образовательным программам</h1>  
                     </div>
                     <div class="page__table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Год</th>
+                                    <th>Год реал-ии</th>
                                     <th>Код, шифр</th>
                                     <th>Наименование профессии, специальности, направления подготовки, наименование группы научных специальостей</th>
-                                    <th>Профиль</th>
                                     <th>Уровень образования</th>
+                                    <th>Профиль</th>
+                                    <th>АОПОП</th>
                                     <th>Форма обучения</th>
-                                    <th>Нормативный срок обучения</th>
-                                    <th>Срок действия государственной аккредитации ОП</th>
-                                    <th>Язык обучения</th>
-                                    <th>Учебные предметы, курсы, дисциплины (модули)</th>
+                                    <th>Учебный план</th>
+                                    <th>Аннотации к рабочим программам дисциплин</th>
+                                    <th>Рабочие программы дисциплин</th>
+                                    <th>Календарный учебный график</th>
                                     <th>Рабочие программы практик, предусмотренных соответствующей образовательной программой</th>
-                                    <th>Дистанционное обучение</th>
+                                    <th>Методические материалы для обеспечения ОП</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -63,18 +66,7 @@
             </div>
         </footer>
     </div>
-
-    <div id="popup-disciplines" class="popup">
-        <div class="popup__body">
-            <div class="popup__content">
-                <button type="button" class="popup__close">
-                    <img src="../img/close.svg" alt="">
-                </button>
-                <h2 class="popup__title title">Список дисциплин</h2>
-                <ul class="popup__list"></ul>
-            </div>
-        </div>
-    </div>
-    <script src="table.js"></script>
+    <script src="aopop.js"></script>
 </body>
+
 </html>

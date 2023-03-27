@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let loginInput = popupCreateUser.querySelector("#login")
         let passwordInput = popupCreateUser.querySelector("#password")
 
-        //валидация формы
+        //валидация формы и создание объекта пользователя
         let isValidForm = true
         if (loginInput.value.trim() == "") {
             isValidForm = false
@@ -163,6 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
             newUser.faculties = []
         }
 
+        //если форма заполнена, то отправляем запрос на создание пользователя
         if (isValidForm) {
             newUser.login = loginInput.value
             newUser.password = passwordInput.value
@@ -213,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let userLoginInput = popupEditUser.querySelector("#userLogin")
         let userPasswordInput = popupEditUser.querySelector("#userPassword")
 
-        //валидация формы
+        //валидация формы и создание объекта изменяемого пользователя
         let isValidForm = true
         
         if (userLoginInput.value.trim() == "") {
@@ -267,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function() {
             userEdited.faculties = []
         }
 
+        //если форма валидна, то отправляем запрос на изменение данных пользователя
         if (isValidForm) {
             userEdited.login = userLoginInput.value
             userEdited.password = userPasswordInput.value
@@ -403,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.querySelector(".users__table").innerHTML = markup
 
-        //получаем все кнопки изменения пользователя
+        //обработка события нажатия на кнопку изменения пользователя
         let editUserBtns = document.querySelectorAll(".users__table .edit__btn")
         editUserBtns.forEach(editUserItem => {
             editUserItem.addEventListener("click", function(e) {
@@ -415,7 +417,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]")
                 let kafedraSelect = popupEditUser.querySelector(".select[data-selectField=kafedra]")
                 
+                //получаем изменяемого пользователя
                 let userEdited = users[users.map(e => e.user.id).indexOf(userId)]
+
+                
                 if (userEdited.department != null) {
                     let metodistRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(1) label")
                     metodistRoleRadioBtn.click()

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const URL = "https://localhost:44370"
+    let loginBtn = document.querySelector(".header .action__btn")
     let popupDisciplines = document.querySelector("#popup-disciplines")
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let profiles
@@ -141,6 +142,11 @@ document.addEventListener("DOMContentLoaded", function() {
             })
         })
     }
+
+    //кнопка для входа на страницу авторизации
+    loginBtn.addEventListener("click", function() {
+        window.location.assign("/login.html")
+    })
 
     getProfiles()
 })

@@ -278,18 +278,18 @@ document.addEventListener("DOMContentLoaded", function() {
                         </td>                    
                 ` 
                 
-                res += generateMarkupFileModelByFileTypeId(el, 0) // фгос
+                res += generateMarkupFileModelByFileTypeId(el, 1) // фгос
 
-                res += generateMarkupFileModelByFileTypeId(el, 1) // опоп
+                res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
                 
                 res += `
                     <td itemprop="eduForm">
                         <span>${el.caseCEdukind.edukind}</span>
                     </td>
                 `
-                res += generateMarkupFileModelByFileTypeId(el, 2) // учебный план
+                res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
 
-                res += generateMarkupFileModelByFileTypeId(el, 16) // аннотации к рпд
+                res += generateMarkupFileModelByFileTypeId(el, 4) // аннотации к рпд
 
                 //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
                 if (el.profile.linkToRPD != null) {
@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     ` 
                 }
 
-                res += generateMarkupFileModelByFileTypeId(el, 3) // календарный учебный график
+                res += generateMarkupFileModelByFileTypeId(el, 5) // календарный учебный график
 
                 let fileModelsRpp = el.practics // рабочие программы практик
                 if (fileModelsRpp.size != 0) {
