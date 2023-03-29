@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let profiles
 
-    //функционал закрытия модального окна
+    //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
         closeItem.addEventListener("click", function(e) {
             let popupClosed = e.target.closest(".popup")
@@ -16,10 +16,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 popupLabels.forEach(popupLabel => {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
+                    let popupLabelSelect = popupLabel.querySelector(".select")
+
+                    //очистка текстового поля
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
-                    } else {
-                        let popupLabelSelect = popupLabel.querySelector(".select")
+                    } else if (popupLabelSelect) { // сброс значений выпадоющего списка
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
@@ -29,11 +31,15 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (popupLabelSelectedEl) {
                             popupLabelSelectedEl.classList.remove("selected")
                         }
-                        
+                    } else { // ставим значение роли по умолчанию (методист)
+                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                        metodistRoleRadioBtn.click()
+                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
 
+            //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
             document.body.classList.remove("no-scroll")
             

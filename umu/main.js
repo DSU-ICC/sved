@@ -35,9 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
                     let popupLabelSelect = popupLabel.querySelector(".select")
+
+                    //очистка текстового поля
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
-                    } else if (popupLabelSelect) {
+                    } else if (popupLabelSelect) { // сброс значений выпадоющего списка
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
@@ -47,21 +49,22 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (popupLabelSelectedEl) {
                             popupLabelSelectedEl.classList.remove("selected")
                         }
-                    } else {
-                        let popupLabelCheckbox = popupLabel.querySelector("input[type=checkbox]")
-                        if (popupLabelCheckbox.classList.contains("checked")) {
-                            popupLabelCheckbox.click()
-                        }
+                    } else { // ставим значение роли по умолчанию (методист)
+                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                        metodistRoleRadioBtn.click()
+                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
 
+            //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
             document.body.classList.remove("no-scroll")
             
         })
     })
 
+    //получение удаляемых дисциплин
     const getRemovableDisciplines = async (statusDisciplineId, el) => {
         let response = await fetch(`${URL}/Discipline/GetRemovableDisciplines?userId=${userId}`, {
             credentials: "include"
@@ -73,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //функция для вывода удаляемых дисциплин
     const showRemovableDisciplines = (disciplineList) => {
         let res = ""
         
@@ -118,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
+    //функция получения удаляемых статусов дисциплин
     const getRemovableStatusDisciplines = async () => {
         let response = await fetch(`${URL}/StatusDiscipline/GetRemovableStatusDiscipline`, {
             credentials: "include"
@@ -130,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //функция вывода удаляемых статусов дисциплин
     const showRemovableStatusDisciplines = (statusDisciplineList) => {
         let res = ""
         
@@ -175,23 +181,6 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
-    // //кнопка удаления статуса дисциплины
-    // deleteStatusBtn.addEventListener("click", function() {
-    //     let selectedStatusDiscipline = document.querySelector("[data-selectfield=statusDiscipline] .select__text")
-
-    //     if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
-    //         selectedStatusDiscipline.closest(".select").classList.add("invalid")
-    //     } else {
-    //         selectedStatusDiscipline.closest(".select").classList.remove("invalid")
-    //         popupDeleteStatus.classList.add("open")
-    //         document.body.classList.add("no-scroll")
-
-    //         let statusDisciplineId = selectedStatusDiscipline.dataset.id
-    //         popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
-    //     }
-    // })
-
-
     //функционал выпадающих списков
     const select = document.querySelectorAll('.select');
     select.forEach(selectItem => {
@@ -200,29 +189,84 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         let options = selectItem.querySelector('.select__options');
         options.addEventListener("click", function(e) {
-            if (e.target.closest(".select__option")) {
-                options.querySelectorAll(".select__option").forEach(optionItem => {
-                    optionItem.classList.remove("selected")
-                })
-                e.target.closest(".select__option").classList.add("selected")
-                let selectedOption = e.target.closest(".select__option").querySelector('.select__option-text').innerText;
-                selectItem.querySelector('.select__text').innerText = selectedOption;
-                selectItem.querySelector('.select__text').dataset.id = e.target.closest(".select__option").dataset.id
+            if (e.target.closest(".select__option")) { 
+                let selectedOption = e.target.closest(".select__option")
+                let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
+                let selectText = selectItem.querySelector('.select__text')
+                let selectedElemId = parseInt(selectedOption.dataset.id)
+
+                //если выпадающий список не предусматривает выбор нескольких элементов
+                if (!selectItem.hasAttribute("data-multiple")) {
+                    //если мы нажали на не выбранный элемент списка
+                    if (!selectedOption.classList.contains("selected")) {
+                        //помечаем все элементы списка как не выбранные
+                        options.querySelectorAll(".select__option").forEach(optionItem => {
+                            optionItem.classList.remove("selected")
+                        })
+
+                        //помечаем выбранный нами элемент как выбранный
+                        selectedOption.classList.add("selected")
+                        selectText.innerText = selectedOptionText;
+                        selectText.dataset.id = selectedElemId
+                    } else { //если же мы выбрали уже выбранный элемент списка, 
+                        selectText.innerText = selectText.dataset.placeholder
+                        selectText.removeAttribute("data-id")
+                    }
+                } else { //если в выпадающем списке можно выбрать несколько элементов  
+                    //если мы нажимаем на не выбранный элемент
+                    if (!selectedOption.classList.contains("selected")) {
+                        //помечаем его как выбранный элемент
+                        selectedOption.classList.add("selected")
+
+                        //если мы выбрали второй или более элемент списка
+                        if (selectText.textContent != selectText.dataset.placeholder) {
+                            selectText.innerText += `, ${selectedOptionText}`;
+                            selectText.dataset.id += `, ${selectedElemId}`
+                        } else { // если впервые выбрали элемент списка
+                            selectText.innerText = selectedOptionText;
+                            selectText.dataset.id = selectedElemId
+                        }
+                    } else { //логика удаления элемента из списка
+
+                        selectedOption.classList.remove("selected")
+
+                        //создаем массив айди выбранных элементов списка, а также массив их названия
+                        let arrayId = [...selectText.dataset.id.split(", ")]
+                        let listElem = selectText.innerText.split(", ")
+
+                        //если было выбрано больше одного элемента списка
+                        if (arrayId.length > 1) {
+
+                            //создаем строку названий элементов, не включая в него выбранный нами элемент
+                            selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+
+                            //создаем строку айди элементов, не включая в него выбранный нами элемент
+                            selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
+                        } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
+                            selectText.innerText = selectText.dataset.placeholder
+                            selectText.removeAttribute("data-id")
+                        }
+                    }
+                }
+                
                 selectItem.classList.remove('active');
             }
         })
                     
     })
 
+    //нажатие на кнопку да при подтверждении удаления дисциплины
     popupApproveDisciplineYesBtn.addEventListener("click", function(e) {
         let disciplineId = popupApproveDiscipline.querySelector("#disciplineId").value
         deleteDiscipline(disciplineId, e.target)
     })
 
+    //нажатие на кнопку нет при подтверждении удаления дисциплины
     popupApproveDisciplineNoBtn.addEventListener("click", function(e) {
         popupApproveDiscipline.querySelector(".popup__close").click()
     })
 
+    //удаление дисциплины
     const deleteDiscipline = async (disciplineId, el) => {
         el.classList.add("loading")
         el.disabled = true
@@ -251,15 +295,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //нажатие на кнопку да при подтверждении удаления статуса дисциплины
     popupApproveStatusDisciplineYesBtn.addEventListener("click", function(e) {
         let statusDisciplineId = popupApproveStatusDiscipline.querySelector("#statusDisciplineId").value
         deleteStatusDiscipline(statusDisciplineId, e.target)
     })
 
+    //нажатие на кнопку нет при подтверждении удаления статуса дисциплины
     popupApproveStatusDisciplineNoBtn.addEventListener("click", function(e) {
         popupApproveStatusDiscipline.querySelector(".popup__close").click()
     })
 
+    //удаление статуса дисциплины
     const deleteStatusDiscipline = async (statusDisciplineId, el) => {
         el.classList.add("loading")
         el.disabled = true
@@ -288,15 +335,20 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //нажатие на кнопку да при отклонении удаления дисциплины
     popupRejectDisciplineYesBtn.addEventListener("click", function(e) {
         let disciplineId = parseInt(popupRejectDiscipline.querySelector("#disciplineId").value)
         let rejectedDiscipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
-        console.log(disciplineId)
-        console.log(rejectedDiscipline)
         rejectedDiscipline.isDeletionRequest = false
         sendRejectDeleteDiscipline(rejectedDiscipline, e.target)
     })
 
+    //нажатие на кнопку нет при отклонении удаления дисциплины
+    popupRejectDisciplineNoBtn.addEventListener("click", function(e) {
+        popupRejectDiscipline.querySelector(".popup__close").click()
+    })
+
+    //отклонение удаления дисциплины
     const sendRejectDeleteDiscipline = async (rejectedDiscipline, el) => {
         el.classList.add("loading")
         el.disabled = true
@@ -329,6 +381,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //нажатие на кнопку да при отклонении удаления статуса дисциплины
     popupRejectStatusDisciplineYesBtn.addEventListener("click", function(e) {
         let statusDisciplineId = parseInt(popupRejectStatusDiscipline.querySelector("#statusDisciplineId").value)
         let rejectedStatusDiscipline = statusDisciplineList[statusDisciplineList.map(e => e.id).indexOf(statusDisciplineId)]
@@ -336,6 +389,12 @@ document.addEventListener("DOMContentLoaded", function() {
         sendRejectDeleteStatusDiscipline(rejectedStatusDiscipline, e.target)
     })
 
+    //нажатие на кнопку нет при отклонении удаления статуса дисциплины
+    popupRejectStatusDisciplineNoBtn.addEventListener("click", function(e) {
+        popupRejectStatusDiscipline.querySelector(".popup__close").click()
+    })
+
+    //отклонение удаления статуса дисциплины
     const sendRejectDeleteStatusDiscipline = async (rejectedStatusDiscipline, el) => {
         el.classList.add("loading")
         el.disabled = true
@@ -368,6 +427,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //функционал табов (вкладок)
     let tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
         tab.addEventListener('click', function(e) {
@@ -405,6 +465,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //функция проверки авторизаций пользователя
     const isAuthorize = () => localStorage.getItem("userId") != null
 
     //нажатие на кнопку выхода из аккаунта пользователя
@@ -412,6 +473,7 @@ document.addEventListener("DOMContentLoaded", function() {
         logout()
     })
 
+    //функция проверки доступа пользователя по его роли
     const hasUserAccessToRole = () => userRole == "UMU"
 
     if (isAuthorize()) {
@@ -425,7 +487,7 @@ document.addEventListener("DOMContentLoaded", function() {
             setUserName(userName)
             getRemovableDisciplines()
             getRemovableStatusDisciplines()
-        } else {        
+        } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли        
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`/${redirectPage}/`)
         }

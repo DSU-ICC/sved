@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const URL = "https://localhost:44370"
-    let kafedra_id = 6
+
     //функция валидации формы входа
     const validateLoginForm = () => {
         //получаем логин и пароль из формы

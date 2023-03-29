@@ -207,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
     }
 
+    //нажатие на кнопку поиска факультета
     searchBtn.addEventListener("click", function(e) {
         let facultyName = document.querySelector(".search__input").value
         getProfilesByFacultyName(facultyName)
@@ -350,7 +351,6 @@ document.addEventListener("DOMContentLoaded", function() {
     loginBtn.addEventListener("click", function() {
         window.location.assign("/login.html")
     })
-    
     
     getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllProfiles())
 })

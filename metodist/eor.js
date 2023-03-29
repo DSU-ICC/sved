@@ -40,10 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
                     let popupLabelSelect = popupLabel.querySelector(".select")
-                    let popupLabelSearch = popupLabel.querySelector(".search")
+
+                    //очистка текстового поля
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
-                    } else if (popupLabelSelect) {
+                    } else if (popupLabelSelect) { // сброс значений выпадоющего списка
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
@@ -53,13 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (popupLabelSelectedEl) {
                             popupLabelSelectedEl.classList.remove("selected")
                         }
-                    } else if (popupLabelSearch) {
-                        let popupLabelSearchInp = popupLabelSearch.querySelector("input")
-                        popupLabelSearchInp.value = ""
+                    } else { // ставим значение роли по умолчанию (методист)
+                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                        metodistRoleRadioBtn.click()
+                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
 
+            //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
             document.body.classList.remove("no-scroll")
             
@@ -102,17 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
         
     }
 
-    //функция, которая создает ссылку на панель администратора если пользователем является админ
-    const setUserName = (userName, userRole = "") => {
-        if (userName) {
-            let actionText = document.querySelector(".header .action__text")
-
-            if (userRole.toLowerCase() == "admin") {
-                actionText.outerHTML = `<a href="/admin/admin.html" class="action__text">${userName}</a>`
-            } else {
-                actionText.textContent = userName
-            }
-        }
+    //функция, которая устанавливает имя пользователя в шапку страницы
+    const setUserName = (userName) => {
+        let actionText = document.querySelector(".header .action__text")
+        actionText.textContent = userName
     }
 
     //вывод дисциплин пользователю 
@@ -146,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <tr class="discipline">
                             <td>${discipline.code}</td>
                     `
-
+                    //если файл рпд загружен для данной дисциплины, то выводим его вместе с ключом эцп
                     if (discipline.fileRPD != null) {
                         disciplineMarkup += `
                             <td>
@@ -220,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         document.querySelector(".accordeon__list").innerHTML = res
 
+        //обработка нажатия на кнопку загрузки файла РПД
         let uploadFileRpdBtns = document.querySelectorAll(".file-upload input[type=file]")
         uploadFileRpdBtns.forEach(uploadBtn => {
             uploadBtn.addEventListener("change", function(e) {
@@ -235,6 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
 
+        //обработка нажатия на кнопку удаления файла РПД
         let popupDeleteRpdBtns = document.querySelectorAll(".delete-rpd")
         popupDeleteRpdBtns.forEach(popupDeleteRpdBtn => {
             popupDeleteRpdBtn.addEventListener("click", function(e) {
@@ -246,6 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
 
+        //обработка нажатия на кнопку изменения названия дисциплины
         let editDisciplineBtns = document.querySelectorAll(".edit")
         editDisciplineBtns.forEach(editBtn => {
             editBtn.addEventListener("click", function(e) {
@@ -261,6 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
 
+        //обработка нажатия на кнопку изменения названия статуса дисциплины
         let editStatusBtns = document.querySelectorAll(".action-eor--edit-status")
         editStatusBtns.forEach(editStatusBtn => {
             editStatusBtn.addEventListener("click", function(e) {
@@ -275,6 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
 
+        //обработка нажатия на кнопку отправки запроса на удаление дисциплины
         let deleteDisciplineBtns = document.querySelectorAll(".delete-discipline .delete__btn")
         deleteDisciplineBtns.forEach(deleteDisciplineBtn => {
             deleteDisciplineBtn.addEventListener("click", function(e) {
@@ -287,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
+    // логика загрузки файла РПД 
     popupUploadFileRpdBtn.addEventListener("click", function(e) {
         let selectedAuthor = popupUploadFileRpd.querySelector(".search__input")
 
@@ -773,14 +775,66 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         let options = selectItem.querySelector('.select__options');
         options.addEventListener("click", function(e) {
-            if (e.target.closest(".select__option")) {
-                options.querySelectorAll(".select__option").forEach(optionItem => {
-                    optionItem.classList.remove("selected")
-                })
-                e.target.closest(".select__option").classList.add("selected")
-                let selectedOption = e.target.closest(".select__option").querySelector('.select__option-text').innerText;
-                selectItem.querySelector('.select__text').innerText = selectedOption;
-                selectItem.querySelector('.select__text').dataset.id = e.target.closest(".select__option").dataset.id
+            if (e.target.closest(".select__option")) { 
+                let selectedOption = e.target.closest(".select__option")
+                let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
+                let selectText = selectItem.querySelector('.select__text')
+                let selectedElemId = parseInt(selectedOption.dataset.id)
+
+                //если выпадающий список не предусматривает выбор нескольких элементов
+                if (!selectItem.hasAttribute("data-multiple")) {
+                    //если мы нажали на не выбранный элемент списка
+                    if (!selectedOption.classList.contains("selected")) {
+                        //помечаем все элементы списка как не выбранные
+                        options.querySelectorAll(".select__option").forEach(optionItem => {
+                            optionItem.classList.remove("selected")
+                        })
+
+                        //помечаем выбранный нами элемент как выбранный
+                        selectedOption.classList.add("selected")
+                        selectText.innerText = selectedOptionText;
+                        selectText.dataset.id = selectedElemId
+                    } else { //если же мы выбрали уже выбранный элемент списка, 
+                        selectText.innerText = selectText.dataset.placeholder
+                        selectText.removeAttribute("data-id")
+                    }
+                } else { //если в выпадающем списке можно выбрать несколько элементов  
+                    //если мы нажимаем на не выбранный элемент
+                    if (!selectedOption.classList.contains("selected")) {
+                        //помечаем его как выбранный элемент
+                        selectedOption.classList.add("selected")
+
+                        //если мы выбрали второй или более элемент списка
+                        if (selectText.textContent != selectText.dataset.placeholder) {
+                            selectText.innerText += `, ${selectedOptionText}`;
+                            selectText.dataset.id += `, ${selectedElemId}`
+                        } else { // если впервые выбрали элемент списка
+                            selectText.innerText = selectedOptionText;
+                            selectText.dataset.id = selectedElemId
+                        }
+                    } else { //логика удаления элемента из списка
+
+                        selectedOption.classList.remove("selected")
+
+                        //создаем массив айди выбранных элементов списка, а также массив их названия
+                        let arrayId = [...selectText.dataset.id.split(", ")]
+                        let listElem = selectText.innerText.split(", ")
+
+                        //если было выбрано больше одного элемента списка
+                        if (arrayId.length > 1) {
+
+                            //создаем строку названий элементов, не включая в него выбранный нами элемент
+                            selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+
+                            //создаем строку айди элементов, не включая в него выбранный нами элемент
+                            selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
+                        } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
+                            selectText.innerText = selectText.dataset.placeholder
+                            selectText.removeAttribute("data-id")
+                        }
+                    }
+                }
+                
                 selectItem.classList.remove('active');
             }
         })
@@ -828,9 +882,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
             authors = await response.json() 
             for (let author of authors) {
-                // res += `
-                //     <li class="search__option" data-id=${author.id}>${author.fio} <span class="search__option-info" title="${author.kafedra}"></span></li>
-                // `
                 res += `
                     <option title="${author.kafedra}" data-id=${author.id} value="${author.fio}">${author.kafedra}</option>
                 `
@@ -842,42 +893,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             popupUploadFileRpd.classList.add("open")
             document.body.classList.add("no-scroll")
-
-            // let search = popupUploadFileRpd.querySelector(".search")
-            // let searchInput = popupUploadFileRpd.querySelector(".search__input")
-            // let searchOptions = popupUploadFileRpd.querySelector(".search__options");
-            // let searchElements = popupUploadFileRpd.querySelectorAll(".search__option")
-
-            // searchInput.addEventListener("click", function(e) {
-            //     search.classList.add("active")
-            // })
-            
-            // searchInput.addEventListener("input", function(e) {
-            //     let searchWorld = searchInput.value.toLowerCase()
-                
-            //     searchElements.forEach(searchEl => {
-            //         let searchElText = searchEl.textContent
-            //         if (!searchElText.toLowerCase().includes(searchWorld)) {
-            //             searchEl.style.display = "none"
-            //         } else {
-            //             searchEl.style.display = "flex"
-            //         }
-            //     })
-            // })
-
-
-            // searchElements.forEach((searchEl, _, array) => {
-            //     searchEl.addEventListener("click", function(e) {
-            //         for (let item of array) {
-            //             item.classList.remove("selected")
-            //         }
-
-            //         searchInput.value = searchEl.textContent
-            //         searchInput.dataset.id = searchEl.dataset.id 
-            //         searchEl.classList.add("selected")
-            //         search.classList.remove("active")
-            //     })
-            // })
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -900,6 +915,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    //функция проверки авторизаций пользователя
     const isAuthorize = () => localStorage.getItem("userId") != null
 
     //нажатие на кнопку выхода из аккаунта пользователя
@@ -907,6 +923,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logout()
     })
 
+    //функция проверки доступа пользователя по его роли
     const hasUserAccessToRole = () => userRole === "null"
 
     if (isAuthorize()) {
@@ -917,13 +934,13 @@ document.addEventListener("DOMContentLoaded", () => {
         let hasAccess = hasUserAccessToRole()
         if (hasAccess) {
             userName = localStorage.getItem("userName")
-            userRole = localStorage.getItem("userRole")
 
             setUserName(userName)
             getDisciplinesByProfile(profileId)
             getAllStatusDisciplines()
-        } else {
-            window.location.assign(`/${userRole}/`)
+        } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
+            let redirectPage = userRole !== "null" ? userRole : "metodist"
+            window.location.assign(`/${redirectPage}/`)
         }
     } else {
         window.location.assign("/login.html")

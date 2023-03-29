@@ -499,6 +499,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
         })
 
+        //обработка событий нажатий на кнопку удаления пользователя
         let deleteUserBtns = document.querySelectorAll(".users__table .delete__btn")
         deleteUserBtns.forEach(deleteUserItem => {
             deleteUserItem.addEventListener("click", function(e) {
@@ -572,7 +573,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 let selectText = selectItem.querySelector('.select__text')
                 let selectedElemId = parseInt(selectedOption.dataset.id)
 
-                //если выпадающий список предусматривает выбор нескольких элементов
+                //если выпадающий список не предусматривает выбор нескольких элементов
                 if (!selectItem.hasAttribute("data-multiple")) {
                     //если мы нажали на не выбранный элемент списка
                     if (!selectedOption.classList.contains("selected")) {
@@ -589,24 +590,37 @@ document.addEventListener("DOMContentLoaded", function() {
                         selectText.innerText = selectText.dataset.placeholder
                         selectText.removeAttribute("data-id")
                     }
-                } else { //если в выпадающем списке можно выбрать только один элемент  
+                } else { //если в выпадающем списке можно выбрать несколько элементов  
+                    //если мы нажимаем на не выбранный элемент
                     if (!selectedOption.classList.contains("selected")) {
+                        //помечаем его как выбранный элемент
                         selectedOption.classList.add("selected")
+
+                        //если мы выбрали второй или более элемент списка
                         if (selectText.textContent != selectText.dataset.placeholder) {
                             selectText.innerText += `, ${selectedOptionText}`;
                             selectText.dataset.id += `, ${selectedElemId}`
-                        } else {
+                        } else { // если впервые выбрали элемент списка
                             selectText.innerText = selectedOptionText;
                             selectText.dataset.id = selectedElemId
                         }
-                    } else {
+                    } else { //логика удаления элемента из списка
+
                         selectedOption.classList.remove("selected")
+
+                        //создаем массив айди выбранных элементов списка, а также массив их названия
                         let arrayId = [...selectText.dataset.id.split(", ")]
                         let listElem = selectText.innerText.split(", ")
+
+                        //если было выбрано больше одного элемента списка
                         if (arrayId.length > 1) {
+
+                            //создаем строку названий элементов, не включая в него выбранный нами элемент
                             selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+
+                            //создаем строку айди элементов, не включая в него выбранный нами элемент
                             selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
-                        } else {
+                        } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
                             selectText.innerText = selectText.dataset.placeholder
                             selectText.removeAttribute("data-id")
                         }
@@ -619,7 +633,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     
     })
 
-    //функция, которая создает ссылку на панель администратора если пользователем является админ
+    //функция, которая устанавливает имя пользователя в шапку страницы
     const setUserName = (userName) => {
         let actionText = document.querySelector(".header .action__text")
         actionText.textContent = userName
@@ -637,6 +651,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //функция проверки авторизаций пользователя
     const isAuthorize = () => localStorage.getItem("userId") != null
 
     //нажатие на кнопку выхода из аккаунта пользователя
@@ -644,19 +659,22 @@ document.addEventListener("DOMContentLoaded", function() {
         logout()
     })
 
+    //функция проверки доступа пользователя по его роли
     const hasUserAccessToRole = () => userRole == "admin"
 
+    //если пользователь авторизовался
     if (isAuthorize()) {
         userId = localStorage.getItem("userId")
         userRole = localStorage.getItem("userRole")
 
         let hasAccess = hasUserAccessToRole()
+
         if (hasAccess) {
             userName = localStorage.getItem("userName")
 
             setUserName(userName)
             getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllUsers())
-        } else {
+        } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`/${redirectPage}/`)
         }

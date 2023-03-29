@@ -37,9 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (targetItem.closest(".file-upload__btn")) { // кнопка загрузки файлов
             fillDataForUploadFile(targetItem)
-
-            
-
         } else if (targetItem.closest("td:last-child .edit")) { // кнопка внесения изменения в опоп
             targetItem.closest("tr").classList.toggle("editable")
         } else if (targetItem.closest(".delete__btn")) { // кнопка удаления опоп
@@ -466,6 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupDeleteFile.classList.add("open")
     })
 
+    //подтверждение удаления файла
     popupDeleteFileYesBtn.addEventListener("click", function(e) {
         e.target.classList.add("loading")
         e.target.disabled = true
@@ -474,6 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteFile(fileId, e.target)
     })
 
+    //отклонение удаления файла
     popupDeleteFileNoBtn.addEventListener("click", function(e) {
         popupDeleteFile.classList.remove("open")
         document.body.classList.remove("no-scroll")
@@ -847,9 +846,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //отображение пользователю всех профилей кафедры
     const showProfiles = (profiles) => {
         let res = ""
+
+        //здесь происходит создание разметки профилей с их атрибутами 
         for (let el of profiles) {
             res += `
-                <tr data-profileid=${el.profile.id} itemprop="eduOp">
+                <tr data-profileid=${el.profile.id} itemprop="eduOp"> 
                     <td>
                         <span>${el.profile.year}</span>
                         <div class="actions">
@@ -981,6 +982,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
 
+            //кнопки для редактирования и удаления профиля
             res += `
                 <td>
                     <button type="button" class="edit">
@@ -1076,9 +1078,6 @@ document.addEventListener("DOMContentLoaded", () => {
             modalUchPlan.querySelector("[data-selectfield=levelEdu] .select__options").innerHTML = res
             popupEditText.querySelector("[data-selectfield=levelEdu] .select__options").innerHTML = res
         }
-        // } else if (response.status == 405) {
-        //     window.location.assign("/login.html")
-        // }
     }
 
     //получить формы обучения
@@ -1100,9 +1099,6 @@ document.addEventListener("DOMContentLoaded", () => {
             modalUchPlan.querySelector("[data-selectfield=eduForm] .select__options").innerHTML = res
             popupEditText.querySelector("[data-selectfield=eduForm] .select__options").innerHTML = res
         }
-        // } else if (response.status == 405) {
-        //     window.location.assign("/login.html")
-        // }
     }
 
     const getFileTypes = async () => {
@@ -1127,6 +1123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    //функция проверки авторизаций пользователя
     const isAuthorize = () => localStorage.getItem("userId") != null
 
     //нажатие на кнопку выхода из аккаунта пользователя
@@ -1134,6 +1131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logout()
     })
 
+    //функция проверки доступа пользователя по его роли
     const hasUserAccessToRole = () => userRole === "null"
 
     if (isAuthorize()) {
@@ -1147,11 +1145,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setUserName(userName)
             getProfilesById().then(_ => getCaseSDepartments()).then(_ => getLevelEdues()).then(_ => getEduForms()).then(_ => getFileTypes())
-        } else {
-            window.location.assign(`/${userRole}/`)
+        } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
+            let redirectPage = userRole !== "null" ? userRole : "metodist"
+            window.location.assign(`/${redirectPage}/`)
         }
     } else {
         window.location.assign("/login.html")
     }
-
 })
