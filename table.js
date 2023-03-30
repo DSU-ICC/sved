@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <span>${el.caseCEdukind.edukind}</span>
                     </td>  
                     <td itemprop="learningTerm">
-                        <span>${el.profile.termEdu} года</span>
+                        <span>${el.profile.termEdu.includes("год") ? el.profile.termEdu : el.profile.termEdu + " года"}</span>
                     </td>    
                     <td itemprop="dateEnd">
                         <span>${el.profile.validityPeriodOfStateAccreditasion}</span>

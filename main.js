@@ -139,6 +139,8 @@ document.addEventListener("DOMContentLoaded", function() {
             //получаем имя факультета с помощью его айди
             let facultyName = faculties[faculties.map(e => e.divId).indexOf(facultyId)].divName
 
+            
+
             //вывод названия факультета
             res += `
                 <tr>

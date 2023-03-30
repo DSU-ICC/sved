@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let headerSubTitle = document.querySelector(".page__subtitle")
             headerSubTitle.textContent = `Профиль: ${data.profile.profileName}`
 
-            setUserName(userName, userRole)
+            setUserName(userName)
 
             showDisciplines(disciplineList)
         } else if (response.status == 405) {
