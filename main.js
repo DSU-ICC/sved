@@ -123,100 +123,97 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //показ всех существующих профилей с названиями их факультетов
     const showAllProfiles = () => {
-        //получаем айди кафедр профилей
-        let departmentsId = new Set(profiles.map(e => e.profile.caseSDepartmentId))
+        //получаем айди факультетов профилей
+        let facultiesId = new Set(profiles.map(e => e.caseSDepartment?.facId).filter(e => e !== undefined))
 
         //переменная для хранения разметки таблицы с профилями
         let res = ""
 
-        for (let departmentIdItem of departmentsId) {
-            //находим все профили, которые принадлежат кафедре
-            let depIdProfiles = profiles.filter(e => e.profile.persDepartmentId == departmentIdItem)
-
-            //находим айди факультета который связан с кафедрой
-            let facultyId = kafedras[kafedras.map(e => e.depId).indexOf(departmentIdItem)].divId
+        for (let facIdItem of facultiesId) {
+            //находим все профили, которые принадлежат факультету
+            let facIdProfiles = profiles.filter(e => e.caseSDepartment?.facId === facIdItem)
 
             //получаем имя факультета с помощью его айди
-            let facultyName = faculties[faculties.map(e => e.divId).indexOf(facultyId)].divName
+            let facultyName = faculties[faculties.map(e => e.divId).indexOf(facIdItem)]?.divName
 
-            
-
-            //вывод названия факультета
-            res += `
-                <tr>
-                    <td colspan="30">
-                        <strong>${facultyName}</strong>
-                    </td>
-                </tr>
-            `
-            
-            //проходимся по всем профилям кафедры и создаем разметку для отображения профиля на страницк
-            for (let el of depIdProfiles) { 
+            if (facultyName) {
+                //вывод названия факультета
                 res += `
-                    <tr itemprop="eduOp">
-                        <td>
-                            <span>${el.profile.year}</span>
+                    <tr>
+                        <td colspan="30">
+                            <strong>${facultyName}</strong>
                         </td>
-                        <td itemprop="eduCode">
-                            <span>${el.caseSDepartment.code}</span>
-                        </td>
-                        <td itemprop="eduName">
-                            <span>${el.caseSDepartment.deptName}</span>
-                        </td>
-                        <td itemprop="eduLevel">
-                            <span>${el.profile.levelEdu.name}</span>
-                        </td>
-                        <td itemprop="eduProf">
-                            <span>${el.profile.profileName}</span>
-                        </td>                    
-                ` 
-        
-                res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
-                
-                res += `
-                    <td itemprop="eduForm">
-                        <span>${el.caseCEdukind.edukind}</span>
-                    </td>
+                    </tr>
                 `
-
-                res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
-        
-                res += generateMarkupFileModelByFileTypeId(el, 10) // аннотации к рпд
-        
-                res += `
-                    <td itemprop="educationRpd">
-                        <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
-                    </td>
-                ` 
-        
-                res += generateMarkupFileModelByFileTypeId(el, 4) // календарный учебный график
-        
-                let fileModelsRpp = el.disciplines // рабочие программы практик
-                if (fileModelsRpp.length > 0) {
-                    let rpp = `<td itemprop="eduPr">`
-                    for (let fileRPP of fileModelsRpp) {
-                        rpp += `
-                            <div class="item-file">
-                            ${
-                                filRPP.fileRPD != null
-                                ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
-                                : `<span>${fileRPP.disciplineName}</span>`
-                            }
-                               
-                            </div>
-                        `
-                    }                
-                    res += rpp
-                } else {
+            
+                //проходимся по всем профилям и создаем разметку для отображения профиля на страницк
+                for (let el of facIdProfiles) { 
                     res += `
-                        <td itemprop="eduPr">
+                        <tr itemprop="eduOp">
+                            <td>
+                                <span>${el.profile.year}</span>
+                            </td>
+                            <td itemprop="eduCode">
+                                <span>${el.caseSDepartment.code}</span>
+                            </td>
+                            <td itemprop="eduName">
+                                <span>${el.caseSDepartment.deptName}</span>
+                            </td>
+                            <td itemprop="eduLevel">
+                                <span>${el.profile.levelEdu.name}</span>
+                            </td>
+                            <td itemprop="eduProf">
+                                <span>${el.profile.profileName}</span>
+                            </td>                    
+                    ` 
+            
+                    res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
+                    
+                    res += `
+                        <td itemprop="eduForm">
+                            <span>${el.caseCEdukind ? el.caseCEdukind.edukind : ""}</span>
                         </td>
                     `
-                }
-        
-                res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
-        
-            }    
+
+                    res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
+            
+                    res += generateMarkupFileModelByFileTypeId(el, 10) // аннотации к рпд
+            
+                    res += `
+                        <td itemprop="educationRpd">
+                            <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+            
+                    res += generateMarkupFileModelByFileTypeId(el, 4) // календарный учебный график
+            
+                    let fileModelsRpp = el.disciplines // рабочие программы практик
+                    if (fileModelsRpp.length > 0) {
+                        let rpp = `<td itemprop="eduPr">`
+                        for (let fileRPP of fileModelsRpp) {
+                            rpp += `
+                                <div class="item-file">
+                                ${
+                                    fileRPP.fileRPD != null
+                                    ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
+                                    : `<span>${fileRPP.disciplineName}</span>`
+                                }
+                                
+                                </div>
+                            `
+                        }                
+                        res += rpp
+                    } else {
+                        res += `
+                            <td itemprop="eduPr">
+                            </td>
+                        `
+                    }
+            
+                    res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
+            
+                }    
+            }
         }
         document.querySelector("tbody").innerHTML = res
         
@@ -293,47 +290,42 @@ document.addEventListener("DOMContentLoaded", function() {
                             <span>${el.profile.profileName}</span>
                         </td>                    
                 ` 
-                
-                res += generateMarkupFileModelByFileTypeId(el, 1) // фгос
-
+        
                 res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
                 
                 res += `
                     <td itemprop="eduForm">
-                        <span>${el.caseCEdukind.edukind}</span>
+                        <span>${el.caseCEdukind ? el.caseCEdukind.edukind : ""}</span>
                     </td>
                 `
+
                 res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
-
-                res += generateMarkupFileModelByFileTypeId(el, 4) // аннотации к рпд
-
-                //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
-                if (el.profile.linkToRPD != null) {
-                    res += `
-                        <td itemprop="educationRpd">
-                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
-                        </td>
-                    ` 
-                } else {
-                    res += `
-                        <td itemprop="educationRpd">
-                            <a href="/admin/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
-                        </td>
-                    ` 
-                }
-
-                res += generateMarkupFileModelByFileTypeId(el, 5) // календарный учебный график
-
-                let fileModelsRpp = el.practics // рабочие программы практик
-                if (fileModelsRpp.size != 0) {
+        
+                res += generateMarkupFileModelByFileTypeId(el, 10) // аннотации к рпд
+        
+                res += `
+                    <td itemprop="educationRpd">
+                        <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                    </td>
+                ` 
+        
+                res += generateMarkupFileModelByFileTypeId(el, 4) // календарный учебный график
+        
+                let fileModelsRpp = el.disciplines // рабочие программы практик
+                if (fileModelsRpp.length > 0) {
                     let rpp = `<td itemprop="eduPr">`
-                    for (let fileModelRPPItem of fileModelsRpp) {
+                    for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
-                                <a href="${fileModelRPPItem.fileRPD?.name}">${fileModelRPPItem.disciplineName}</a>
+                            ${
+                                fileRPP.fileRPD != null
+                                ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
+                                : `<span>${fileRPP.disciplineName}</span>`
+                            }
+                            
                             </div>
                         `
-                    }               
+                    }                
                     res += rpp
                 } else {
                     res += `
@@ -341,13 +333,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         </td>
                     `
                 }
-
-                res += generateMarkupFileModelByFileTypeId(el, 4) // гиа
-
-                res += generateMarkupFileModelByFileTypeId(el, 6) // матрицы
-
-                res += generateMarkupFileModelByFileTypeId(el, 11) // методические материалы
-
+        
+                res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
             }
         } else {
             res += `
