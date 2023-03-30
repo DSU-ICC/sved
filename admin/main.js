@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 let selectedFacultiesId = [...selectedFaculty.dataset.id.split(", ")].map(id => parseInt(id))
                 newUser.faculties = selectedFacultiesId
-                newUser.role = "UMU"
+                newUser.role = "umu"
                 newUser.persDepartmentId = null
             }
         }
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 let selectedFacultiesId = [...selectedFaculty.dataset.id.split(", ")].map(id => parseInt(id))
                 userEdited.faculties = selectedFacultiesId
-                userEdited.role = "UMU"
+                userEdited.role = "umu"
                 userEdited.persDepartmentId = null
             }
         }
@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
 
         if (response.ok) {
-            users = await response.json()
+            users = await response.json()   
             showAllUsers(users)
         } 
     }
@@ -387,7 +387,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td>
                             <div class="wrapper">
                                 <button type="button" class="edit">
-                                    <span data-id="${userData.user.id}"  class="edit__btn btn"></span>
+                                    <span data-id="${userData.user.id}" class="edit__btn btn"></span>
                                 </button> 
                                 <button type="button" class="delete">
                                     <span data-id="${userData.user.id}" class="delete__btn btn"></span>

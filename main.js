@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == 3) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == 4) { // тег для аннотации к рпд
+        } else if (fileTypeId == 10) { // тег для аннотации к рпд
             propItem += `itemprop="educationAnnotation"`
-        } else if (fileTypeId == 5) { //тег для календарного рабочего графика
+        } else if (fileTypeId == 4) { //тег для календарного рабочего графика
             propItem += `itemprop="educationShedule"`
         } else if (fileTypeId == 8) { //тег для методического материала
             propItem += `itemprop="methodology"`
@@ -48,12 +48,17 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <p class="document-key__text">Ключ (SHA-256):</p>
                                 <p class="document-key__text">${fileModel.codeECP}</p>
                             </div>
-                            <a href="file:///C:/Users/User/Downloads/${fileModel.name}">${fileModel.outputFileName}</a>
+                            <a href=${fileModel.linkToFile != null
+                                ? fileModel.linkToFile
+                                : "/Users/User/source/repos/EorDSU/SvedenOop/Files/" + fileModel.name}>${fileModel.outputFileName}</a>
                         </div>
                     `
                 }  else {
                     markup += `
-                        <a href="file:///C:/Users/User/Downloads/${fileModel.name}">${fileModel.outputFileName}</a>
+                    <a href=${fileModel.linkToFile != null
+                        ? fileModel.linkToFile
+                        : "/Users/User/source/repos/EorDSU/SvedenOop/Files/" + fileModel.name}
+                        >${fileModel.outputFileName}</a>
                         
                     `
                 }
@@ -73,8 +78,12 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const getAllProfiles = async () => {
+        document.querySelector("tbody").innerHTML = `
+            <tr><td>Идет загрузка профилей...</td></tr>
+        `
+
         let response = await fetch(`${URL}/Profiles/GetData`)
-        
+
         if (response.ok) {
             profiles = await response.json()
             showAllProfiles()     
@@ -115,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //показ всех существующих профилей с названиями их факультетов
     const showAllProfiles = () => {
         //получаем айди кафедр профилей
-        let departmentsId = new Set(profiles.map(e => e.profile.persDepartmentId))
+        let departmentsId = new Set(profiles.map(e => e.profile.caseSDepartmentId))
 
         //переменная для хранения разметки таблицы с профилями
         let res = ""
@@ -170,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
         
-                res += generateMarkupFileModelByFileTypeId(el, 4) // аннотации к рпд
+                res += generateMarkupFileModelByFileTypeId(el, 10) // аннотации к рпд
         
                 res += `
                     <td itemprop="educationRpd">
@@ -178,18 +187,23 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                 ` 
         
-                res += generateMarkupFileModelByFileTypeId(el, 5) // календарный учебный график
+                res += generateMarkupFileModelByFileTypeId(el, 4) // календарный учебный график
         
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length > 0) {
                     let rpp = `<td itemprop="eduPr">`
-                    for (let fileModelRPPItem of fileModelsRpp) {
+                    for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
-                                <a href="${fileModelRPPItem.fileRPD?.name}">${fileModelRPPItem.disciplineName}</a>
+                            ${
+                                filRPP.fileRPD != null
+                                ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
+                                : `<span>${fileRPP.disciplineName}</span>`
+                            }
+                               
                             </div>
                         `
-                    }               
+                    }                
                     res += rpp
                 } else {
                     res += `
@@ -200,10 +214,9 @@ document.addEventListener("DOMContentLoaded", function() {
         
                 res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
         
-            }
-
-            document.querySelector("tbody").innerHTML = res
+            }    
         }
+        document.querySelector("tbody").innerHTML = res
         
     }
 

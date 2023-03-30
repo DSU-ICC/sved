@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             statusDisciplineList = await response.json()
-            console.log(statusDisciplineList)
             showRemovableStatusDisciplines(statusDisciplineList)
         }
     }
@@ -474,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     //функция проверки доступа пользователя по его роли
-    const hasUserAccessToRole = () => userRole == "UMU"
+    const hasUserAccessToRole = () => userRole == "umu"
 
     if (isAuthorize()) {
         userId = localStorage.getItem("userId")

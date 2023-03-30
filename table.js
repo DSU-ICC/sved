@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 for (let fileModel of fileModelsRpp) {
                     rpp += `
                         <div class="item-file">
-                            <a href="/Files/${fileModel.name}">${fileModel.disciplineName}</a>
+                            <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${discipline.fileRPD.name}">${fileModel.disciplineName}</a>
                         </div>
                     `
                 }               
@@ -126,7 +126,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 let profileId = parseInt(e.target.closest("tr").dataset.profileid)
                 
                 let profileDisciplines = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.disciplines
-                console.log(profileDisciplines)
 
                 let res = ""
                 for (let discipline of profileDisciplines) {

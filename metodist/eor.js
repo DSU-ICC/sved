@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
             let data = await response.json()
             disciplineList = data.disciplines 
-            console.log(disciplineList)
+
             //вывод пользователю названия направления профиля
             let headerTitle = document.querySelector(".page__title")
             headerTitle.textContent = `Направление: ${data.caseSDepartment.code} ${data.caseSDepartment.deptName}`
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
-                                        <a class="discipline-name" href="${discipline.fileRPD.name}">${discipline.disciplineName}</a>
+                                        <a class="discipline-name" href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${discipline.fileRPD.name}">${discipline.disciplineName}</a>
                                     </div>
                                     <div class="actions-rpd">
                                         <button type="button" class="delete delete-rpd">
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         disciplineMarkup += `
                             <button type="button" class="delete delete-discipline">
-                                <span data-disciplineid="${discipline.id}" class="delete__btn btn">Удалить дисциплину</span>
+                                <span data-disciplineid="${discipline.id}" class="delete__btn btn">Пометить на удаление</span>
                             </button> 
                         `
                     }
