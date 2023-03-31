@@ -90,14 +90,6 @@ document.addEventListener("DOMContentLoaded", function() {
         } 
     }
 
-    const getAllKafedra = async () => {
-        let response = await fetch(`${URL}/PersonalData/GetAllKafedra`)
-
-        if (response.ok) {
-            kafedras = await response.json()
-        }
-    }
-
     const getAllFaculties = async () => {
         let response = await fetch(`${URL}/PersonalData/GetAllFaculty`)
 
@@ -230,25 +222,16 @@ document.addEventListener("DOMContentLoaded", function() {
         //получение айди факультета
         let faculty = faculties[faculties.map(e => e.divName).indexOf(facultyName)]
         let facultyId
+        let profilesFaculty
 
         //если факультет был найден
         if (faculty != null) {
             facultyId = faculty.divId
-        }
-        //получение айди кафедр факультета
-        let kafedrasId = kafedras.filter(e => e.divId == facultyId).map(e => e.depId)
 
-        //получение профилей принадлежащих нескольким айди кафедры так как одному факультету могут принадлежать несколько кафедр
-        let profilesFaculty = []
-        for (let itemId of kafedrasId) {
-            let profilesByItemId = profiles.filter(e => e.profile.persDepartmentId == itemId)
-
-            if (profilesByItemId.length != 0) {
-                for (let profileItem of profilesByItemId) {
-                    profilesFaculty.push(profileItem)
-                }
-            }
+            //находим все профили, которые принадлежат факультету
+            profilesFaculty = profiles.filter(e => e.caseSDepartment?.facId === facultyId)   
         }
+        
        
         pageTitle.textContent = `Образовательные программы: ${facultyName}`
         showProfilesByFaculty(facultyName, profilesFaculty)
@@ -354,5 +337,5 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.assign("/login.html")
     })
     
-    getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllProfiles())
+    getAllFaculties().then(_ => getAllProfiles())
 })
