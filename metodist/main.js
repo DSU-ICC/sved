@@ -1010,7 +1010,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 </td>
             `
         }
-        document.querySelector("tbody").innerHTML = res
+        
+        if (res.length > 0) {
+            document.querySelector("tbody").innerHTML = res
+        } else {
+            document.querySelector("tbody").innerHTML = ""
+        } 
     }
 
     //функция, которая создает ссылку на панель администратора если пользователем является админ

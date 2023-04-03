@@ -207,7 +207,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 }    
             }
         }
-        document.querySelector("tbody").innerHTML = res
+        
+        if (res.length > 0) {
+            document.querySelector("tbody").innerHTML = res
+        } else {
+            document.querySelector("tbody").innerHTML = ""
+        } 
         
     }
 
@@ -219,6 +224,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //получение профилей по имени факультета
     const getProfilesByFacultyName = (facultyName) => {
+        document.querySelector("tbody").innerHTML = `
+            <tr><td>Идет загрузка профилей...</td></tr>
+        `
+
         //получение айди факультета
         let faculty = faculties[faculties.map(e => e.divName).indexOf(facultyName)]
         let facultyId
@@ -329,7 +338,11 @@ document.addEventListener("DOMContentLoaded", function() {
             `
         }
 
-        document.querySelector("tbody").innerHTML = res
+        if (res.length > 0) {
+            document.querySelector("tbody").innerHTML = res
+        } else {
+            document.querySelector("tbody").innerHTML = ""
+        } 
     }
 
     //кнопка для входа на страницу авторизации
