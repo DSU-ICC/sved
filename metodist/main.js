@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    var path = window.location.pathname; var host = window.location.hostname;
+    document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     const URL = "https://localhost:44370"
 
     let logoutBtn = document.querySelector(".header .action__btn")
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let dataUchPlanFinal;
     let profiles
     let kafedra_id
+    let listKafedras
     let fileTypes
     let userName
     let userRole
@@ -102,42 +105,43 @@ document.addEventListener("DOMContentLoaded", () => {
         let deptName = data.caseSDepartment.deptName
         let eduForm = data.caseCEdukind.edukind
 
+        let kafedraName = listKafedras.find(x => x.depId == kafedra_id).depName
+
         let yearInp = modalUchPlan.querySelector("#year")
         yearInp.value = year
         let profileInp = modalUchPlan.querySelector("#profile")
         profileInp.value = profile
+        let langInput = modalUchPlan.querySelector("#eduLang")
+        langInput.value = "русский"
 
         let deptSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='dept'] .select__option")
         let levelSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='levelEdu'] .select__option")
         let eduFormSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='eduForm'] .select__option")
+        let kafedraSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='kafedra'] .select__option")
 
         deptSelectOptions.forEach(deptItem => {  
-            if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
-                deptItem.classList.add("selected")
-                deptItem.closest(".select").querySelector(".select__text").textContent = deptName
-                deptItem.closest(".select").querySelector(".select__text").setAttribute("data-id", deptItem.dataset.id)                
+            if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {  
+                deptItem.click()           
             } 
         })
 
         levelSelectOptions.forEach(levelItem => {
-            if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) {
-                levelItem.classList.add("selected")
-                levelItem.closest(".select").querySelector(".select__text").textContent = level
-                levelItem.closest(".select").querySelector(".select__text").setAttribute("data-id", levelItem.dataset.id)   
-            } else {
-                levelItem.classList.remove("selected")
-            }
+            if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) { 
+                levelItem.click()  
+            } 
         })
 
         eduFormSelectOptions.forEach(eduFormItem => {
-            if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) {
-                eduFormItem.classList.add("selected")
-                eduFormItem.closest(".select").querySelector(".select__text").textContent = eduForm
-                eduFormItem.closest(".select").querySelector(".select__text").setAttribute("data-id", eduFormItem.dataset.id)   
-            } else {
-                eduFormItem.classList.remove("selected")
-            }
-        })    
+            if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) { 
+                eduFormItem.click()
+            } 
+        })  
+        
+        kafedraSelectOptions.forEach(kafedraItem => {
+            if (kafedraItem.textContent.trim().toLowerCase() == kafedraName.toLowerCase()) {
+                kafedraItem.click()
+            } 
+        }) 
     }
 
     //кнопка создания профиля в модальном окне
@@ -159,6 +163,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let selectedDeptItem = modalUchPlan.querySelector("[data-selectfield='dept'] .select__text")
         let selectedLevelEduItem = modalUchPlan.querySelector("[data-selectfield='levelEdu'] .select__text")
         let selectedEduFormItem = modalUchPlan.querySelector("[data-selectfield='eduForm'] .select__text")
+        let selectedKafedras = modalUchPlan.querySelector("[data-selectfield='kafedra'] .select__text")
+
         let yearInput = modalUchPlan.querySelector("#year")
         let profileInput = modalUchPlan.querySelector("#profile")
         let eduLangInput = modalUchPlan.querySelector("#eduLang")
@@ -167,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dataUchPlanFinal = data.profile
 
-        dataUchPlanFinal.persDepartmentId = kafedra_id
         dataUchPlanFinal.levelEdu = null
         dataUchPlanFinal.levelEduId = parseInt(selectedLevelEduItem.dataset.id)
         dataUchPlanFinal.year = yearInput.value.trim()
@@ -177,6 +182,19 @@ document.addEventListener("DOMContentLoaded", () => {
         dataUchPlanFinal.educationLanguage = eduLangInput.value
         dataUchPlanFinal.validityPeriodOfStateAccreditasion = accredInput.value
         dataUchPlanFinal.linkToDistanceEducation = linkToEduDistanceInput.value ?? ""
+
+        let listPersDepartmentsId = []
+        let selectedKafedrasId = [...selectedKafedras.dataset.id.split(", ")].map(id => parseInt(id))
+        selectedKafedrasId.forEach(facItem => {
+            listPersDepartmentsId.push({
+                id: 0,
+                profileId: 0,
+                profile: null,
+                persDepartmentId: facItem
+            })
+        })
+
+        dataUchPlanFinal.listPersDepartmentsId = listPersDepartmentsId
 
         let response = await fetch(`${URL}/Profiles/CreateProfile`, {
             method: "POST",
@@ -319,6 +337,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let selectedEduFormItem = modalWindow.querySelector("[data-selectfield='eduForm'] .select__text")
         let eduForm = selectedEduFormItem.textContent
 
+        let selectedKafedras = modalWindow.querySelector("[data-selectfield='kafedra'] .select__text")
+
         let yearInput = modalWindow.querySelector("#year")
         let profileInput = modalWindow.querySelector("#profile")
         let eduLangInput = modalWindow.querySelector("#eduLang")
@@ -346,6 +366,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             selectedEduFormItem.closest(".popup-form__label").classList.remove("invalid")
         }
+
+        if (selectedKafedras.textContent == "Выберите кафедры") {
+            isValidForm = false
+            selectedKafedras.closest(".popup-form__label").classList.add("invalid")
+        } else {
+            selectedKafedras.closest(".popup-form__label").classList.remove("invalid")
+        }
+
 
         if (yearInput.value.trim() == "") {
             isValidForm = false 
@@ -511,33 +539,40 @@ document.addEventListener("DOMContentLoaded", () => {
         let deptSelectOptions = popupEditText.querySelectorAll("[data-selectfield=dept] .select__option")
         let levelSelectOptions = popupEditText.querySelectorAll("[data-selectfield=levelEdu] .select__option")
         let eduFormSelectOptions = popupEditText.querySelectorAll("[data-selectfield=eduForm] .select__option")
+        let kafedraSelectOptions = popupEditText.querySelectorAll("[data-selectfield=kafedra] .select__option")
 
         deptSelectOptions.forEach(deptItem => {  
             if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
-                deptItem.classList.add("selected")
-                deptItem.closest(".select").querySelector(".select__text").textContent = deptName
-                deptItem.closest(".select").querySelector(".select__text").setAttribute("data-id", deptItem.dataset.id)                
+                deptItem.click()          
             } 
         })
 
         levelSelectOptions.forEach(levelItem => {
             if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) {
-                levelItem.classList.add("selected")
-                levelItem.closest(".select").querySelector(".select__text").textContent = level
-                levelItem.closest(".select").querySelector(".select__text").setAttribute("data-id", levelItem.dataset.id)   
-            } else {
-                levelItem.classList.remove("selected")
+                levelItem.click()
             }
         })
 
         eduFormSelectOptions.forEach(eduFormItem => {
             if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) {
-                eduFormItem.classList.add("selected")
-                eduFormItem.closest(".select").querySelector(".select__text").textContent = eduForm
-                eduFormItem.closest(".select").querySelector(".select__text").setAttribute("data-id", eduFormItem.dataset.id)   
-            } else {
-                eduFormItem.classList.remove("selected")
+                eduFormItem.click()
             }
+        })
+
+        //нахождение привязанных к профилю кафедр 
+        let listKafedrasProfileEdited = profileEdited.profile.listPersDepartmentsId
+        let listKafedrasId = listKafedrasProfileEdited.map(x => x.persDepartmentId)
+        let listKafedrasName = []
+
+        listKafedrasId.forEach(kafedraId => {
+            let profileName = listKafedras[listKafedras.map(e => e.depId).indexOf(kafedraId)].depName
+            listKafedrasName.push(profileName.toLowerCase())
+        })
+
+        kafedraSelectOptions.forEach(kafedraItem => {  
+            if (listKafedrasName.includes(kafedraItem.textContent.trim().toLowerCase())) {
+                kafedraItem.click()          
+            } 
         })
     }
 
@@ -554,6 +589,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let levelEduId = selectedLevelItem.dataset.id
 
             let selectedEduFormItem = popupEditText.querySelector("[data-selectfield='eduForm'] .select__text")
+            let selectedKafedras = popupEditText.querySelector("[data-selectfield='kafedra'] .select__text")
+
             let profileId = popupEditText.querySelector("#profileId").value
             let profileItem = profiles[profiles.map(e => e.profile.id).indexOf(+profileId)]
 
@@ -565,6 +602,20 @@ document.addEventListener("DOMContentLoaded", () => {
             profileItem.profile.educationLanguage = popupEditText.querySelector("#eduLang").value
             profileItem.profile.validityPeriodOfStateAccreditasion = popupEditText.querySelector("#periodAccredistation").value
             profileItem.profile.linkToDistanceEducation = popupEditText.querySelector("#linkToEduDistance").value
+
+            let listPersDepartmentsId = []
+            let selectedKafedrasId = [...selectedKafedras.dataset.id.split(", ")].map(id => parseInt(id))
+            selectedKafedrasId.forEach(facItem => {
+                listPersDepartmentsId.push({
+                    id: 0,
+                    profileId: profileItem.profile.id,
+                    profile: null,
+                    persDepartmentId: facItem
+                })
+            })
+
+            profileItem.profile.listPersDepartmentsId = listPersDepartmentsId
+
             editProfile(profileItem.profile, popupEditTextBtn)
         }
     })
@@ -639,19 +690,73 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         let options = selectItem.querySelector('.select__options');
         options.addEventListener("click", function(e) {
-            if (e.target.closest(".select__option")) {
-                options.querySelectorAll(".select__option").forEach(optionItem => {
-                    optionItem.classList.remove("selected")
-                })
-                e.target.closest(".select__option").classList.add("selected")
-                let selectedOption = e.target.closest(".select__option").querySelector('.select__option-text').innerText;
-                selectItem.querySelector('.select__text').innerText = selectedOption;
-                selectItem.querySelector('.select__text').dataset.id = e.target.closest(".select__option").dataset.id
+            if (e.target.closest(".select__option")) { 
+                let selectedOption = e.target.closest(".select__option")
+                let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
+                let selectText = selectItem.querySelector('.select__text')
+                let selectedElemId = parseInt(selectedOption.dataset.id)
+
+                //если выпадающий список не предусматривает выбор нескольких элементов
+                if (!selectItem.hasAttribute("data-multiple")) {
+                    //если мы нажали на не выбранный элемент списка
+                    if (!selectedOption.classList.contains("selected")) {
+                        //помечаем все элементы списка как не выбранные
+                        options.querySelectorAll(".select__option").forEach(optionItem => {
+                            optionItem.classList.remove("selected")
+                        })
+                        console.log(e.target)
+                        console.log(selectedOption)
+                        //помечаем выбранный нами элемент как выбранный
+                        selectedOption.classList.add("selected")
+                        selectText.innerText = selectedOptionText;
+                        selectText.dataset.id = selectedElemId
+                    } else { //если же мы выбрали уже выбранный элемент списка, 
+                        selectText.innerText = selectText.dataset.placeholder
+                        selectText.removeAttribute("data-id")
+                    }
+                } else { //если в выпадающем списке можно выбрать несколько элементов  
+                    //если мы нажимаем на не выбранный элемент
+                    if (!selectedOption.classList.contains("selected")) {
+                        //помечаем его как выбранный элемент
+                        selectedOption.classList.add("selected")
+
+                        //если мы выбрали второй или более элемент списка
+                        if (selectText.textContent != selectText.dataset.placeholder) {
+                            selectText.innerText += `, ${selectedOptionText}`;
+                            selectText.dataset.id += `, ${selectedElemId}`
+                        } else { // если впервые выбрали элемент списка
+                            selectText.innerText = selectedOptionText;
+                            selectText.dataset.id = selectedElemId
+                        }
+                    } else { //логика удаления элемента из списка
+
+                        selectedOption.classList.remove("selected")
+
+                        //создаем массив айди выбранных элементов списка, а также массив их названия
+                        let arrayId = [...selectText.dataset.id.split(", ")]
+                        let listElem = selectText.innerText.split(", ")
+
+                        //если было выбрано больше одного элемента списка
+                        if (arrayId.length > 1) {
+
+                            //создаем строку названий элементов, не включая в него выбранный нами элемент
+                            selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+
+                            //создаем строку айди элементов, не включая в него выбранный нами элемент
+                            selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
+                        } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
+                            selectText.innerText = selectText.dataset.placeholder
+                            selectText.removeAttribute("data-id")
+                        }
+                    }
+                }
+                
                 selectItem.classList.remove('active');
             }
         })
                     
     })
+
     
     //создать файл профиля
     const saveFile = async (formData, el) => {
@@ -753,15 +858,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //расставление тегов
         let propItem = ""
-        if (fileTypeId == 2) { //тег для опоп
+        if (fileTypeId == getFileTypeIdByName("ОПОП")) { //тег для опоп
             propItem += `itemprop="opMain"`
-        } else if (fileTypeId == 3) { //тег для учебного плана
+        } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == 10) { // тег для аннотации к рпд
+        } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) { // тег для аннотации к рпд
             propItem += `itemprop="educationAnnotation"`
-        } else if (fileTypeId == 4) { //тег для календарного рабочего графика
+        } else if (fileTypeId == getFileTypeIdByName("Календарный график")) { //тег для календарного учебного графика
             propItem += `itemprop="educationShedule"`
-        } else if (fileTypeId == 8) { //тег для методического материала
+        } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
             propItem += `itemprop="methodology"`
         }
 
@@ -838,7 +943,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <tr><td>Идет загрузка профилей...</td></tr>
             `
 
-            let response = await fetch(`${URL}/Profiles/GetDataById?kafedraId=${kafedra_id}`, {
+            let response = await fetch(`${URL}/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
                 credentials: "include"
             })
         
@@ -899,11 +1004,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     </td>                    
             ` 
             
-            res += generateMarkupFileModelByFileTypeId(el, 1) // фгос
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ФГОС")) // фгос
 
-            res += generateMarkupFileModelByFileTypeId(el, 2) // опоп
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ОПОП")) // опоп
 
-            res += generateMarkupFileModelByFileTypeId(el, 7) // аопоп
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
             
             res += `
                 <td itemprop="eduForm">
@@ -928,7 +1033,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `
 
             res += `
-                <td itemprop="language">
+                <td itemprop="dateEnd">
                     <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
                     <div class="actions">
                         <button type="button" class="edit edit-item--text">
@@ -939,7 +1044,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `
 
             res += `
-                <td itemprop="language">
+                <td itemprop="eduEl">
                     ${
                         el.profile.linkToDistanceEducation != "" 
                         ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
@@ -953,9 +1058,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </td>
             `
 
-            res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
 
-            res += generateMarkupFileModelByFileTypeId(el, 10) // аннотации к рпд
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
 
             //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
             if (el.profile.linkToRPD != null) {
@@ -972,7 +1077,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ` 
             }
 
-            res += generateMarkupFileModelByFileTypeId(el, 4) // календарный учебный график
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
 
             let fileModelsRpp = el.disciplines // рабочие программы практик
             if (fileModelsRpp.length != 0) {
@@ -981,7 +1086,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     rpp += `
                         <div class="item-file">
                         ${
-                            filRPP.fileRPD != null
+                            fileRPP.fileRPD != null
                             ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
                             : `<span>${fileRPP.disciplineName}</span>`
                         }
@@ -990,13 +1095,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     `
                 }               
                 res += rpp
+            } else {
+                res += '<td itemprop="eduPr"></td>'
             }
 
-            res += generateMarkupFileModelByFileTypeId(el, 5) // гиа
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Программа ГИА")) // гиа
 
-            res += generateMarkupFileModelByFileTypeId(el, 6) // матрицы
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Матрицы компетенций")) // матрицы
 
-            res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // Методические материалы для обеспечения ОП
 
             //кнопки для редактирования и удаления профиля
             res += `
@@ -1046,7 +1153,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert(error)
             }
             
-            popupDeleteBtn.classList.remove("loading")
+            popupDeleteYesBtn.classList.remove("loading")
             popupDeleteYesBtn.disabled = false
             popupDeleteNoBtn.disabled = false
         }
@@ -1055,7 +1162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //получить направления кафедры
     const getCaseSDepartments = async () => {
         if (kafedra_id) {
-            let response = await fetch(`${URL}/DekanatData/GetCaseSDepartmentByKafedraId?kafedraId=${kafedra_id}`, {
+            let response = await fetch(`${URL}/DekanatData/GetCaseSDepartments`, {
                 credentials: "include"
             })
         
@@ -1122,6 +1229,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    const getAllKafedra = async () => {
+        let response = await fetch(`${URL}/PersonalData/GetAllKafedra`, {
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            listKafedras = await response.json()
+            let res = ""
+
+            for (let el of listKafedras) {
+                res += `
+                    <li class="select__option" data-id=${el.depId}>
+                        <span class="select__option-text">${el.depName}</span>
+                    </li>
+                `
+            }
+            modalUchPlan.querySelector("[data-selectfield=kafedra] .select__options").innerHTML = res
+            popupEditText.querySelector("[data-selectfield=kafedra] .select__options").innerHTML = res
+        }
+    }
+
     const getFileTypes = async () => {
         let response = await fetch(`${URL}/FileType/GetFileTypes`, {
             credentials: "include"
@@ -1130,6 +1258,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok) {
             fileTypes = await response.json()
         }
+    }
+
+    const getFileTypeIdByName = (nameFileType) => {
+        let fileType = fileTypes.find(x => x.name.toLowerCase() == nameFileType.toLowerCase())
+        return fileType.id
     }
 
     //выход подьзователя из аккаунта
@@ -1165,7 +1298,14 @@ document.addEventListener("DOMContentLoaded", () => {
             userName = localStorage.getItem("userName")
 
             setUserName(userName)
-            getProfilesById().then(_ => getCaseSDepartments()).then(_ => getLevelEdues()).then(_ => getEduForms()).then(_ => getFileTypes())
+            getFileTypes().
+                then(_ => getAllKafedra()).
+                then(_ => getProfilesById()).
+                then(_ => getCaseSDepartments()).
+                then(_ => getLevelEdues()).
+                then(_ => getEduForms()).
+                then(_ => getFileTypes())
+
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`/${redirectPage}/`)

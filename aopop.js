@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
+    var path = window.location.pathname; var host = window.location.hostname;
+    document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
+
     const URL = "https://localhost:44370"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
@@ -6,6 +9,17 @@ document.addEventListener("DOMContentLoaded", function() {
     let profiles;
     let kafedras;
     let faculties;
+    let fileTypes;
+
+    const getFileTypes = async () => {
+        let response = await fetch(`${URL}/FileType/GetFileTypes`, {
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            fileTypes = await response.json()
+        }
+    }
 
    //генерация разметки для файловых элементов таблицы
    const generateMarkupFileModelByFileTypeId = (profile, fileTypeId) => {
@@ -14,15 +28,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
         //расставление тегов
         let propItem = ""
-        if (fileTypeId == 2) { //тег для опоп
+        if (fileTypeId == getFileTypeIdByName("ОПОП")) { //тег для опоп
             propItem += `itemprop="opMain"`
-        } else if (fileTypeId == 3) { //тег для учебного плана
+        } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == 10) { // тег для аннотации к рпд
+        } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) { // тег для аннотации к рпд
             propItem += `itemprop="educationAnnotation"`
-        } else if (fileTypeId == 4) { //тег для календарного рабочего графика
+        } else if (fileTypeId == getFileTypeIdByName("Календарный график")) { //тег для календарного рабочего графика
             propItem += `itemprop="educationShedule"`
-        } else if (fileTypeId == 8) { //тег для методического материала
+        } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
             propItem += `itemprop="methodology"`
         }
 
@@ -78,12 +92,21 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const getAllProfiles = async () => {
+        document.querySelector("tbody").innerHTML = `
+            <tr><td>Идет загрузка профилей...</td></tr>
+        `
+        
         let response = await fetch(`${URL}/Profiles/GetData`)
         
         if (response.ok) {
             profiles = await response.json()
             showAllProfiles()     
         } 
+    }
+
+    const getFileTypeIdByName = (nameFileType) => {
+        let fileType = fileTypes.find(x => x.name.toLowerCase() == nameFileType.toLowerCase())
+        return fileType.id
     }
 
     //показ всех существующих профилей с названиями их факультетов
@@ -112,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>                    
             ` 
     
-            res += generateMarkupFileModelByFileTypeId(el, 7) // аопоп
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
             
             res += `
                 <td itemprop="eduForm">
@@ -120,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </td>
             `
 
-            res += generateMarkupFileModelByFileTypeId(el, 3) // учебный план
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
     
             res += generateMarkupFileModelByFileTypeId(el, 10) // аннотации к рпд
     
@@ -130,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </td>
             ` 
     
-            res += generateMarkupFileModelByFileTypeId(el, 4) // календарный учебный график
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
     
             let fileModelsRpp = el.disciplines // рабочие программы практик
             if (fileModelsRpp.length > 0) {
@@ -150,11 +173,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 `
             }
     
-            res += generateMarkupFileModelByFileTypeId(el, 8) // методические материалы
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
     
         }
 
-        document.querySelector("tbody").innerHTML = res
+        if (res.length > 0) {
+            document.querySelector("tbody").innerHTML = res
+        } else {
+            document.querySelector("tbody").innerHTML = ""
+        } 
         
     }
 
@@ -164,5 +191,5 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     
     
-    getAllProfiles()
+    getFileTypes().then(_ => getAllProfiles())
 })

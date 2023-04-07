@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
+    var path = window.location.pathname; var host = window.location.hostname;
+    document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     const URL = "https://localhost:44370"
     let logoutBtn = document.querySelector(".header .action__btn")
 
@@ -12,9 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let popupDeleteUser = document.querySelector("#popup-deleteUser")
     let popupDeleteUserYesBtn = document.querySelector("#popup-deleteUser .confirm-button--yes")
     let popupDeleteUserNoBtn = document.querySelector("#popup-deleteUser .confirm-button--no")
-
-    let popupCreateUserCheckbox = document.querySelector("#popup-createUser .checkbox label")
-    let popupEditUserCheckbox = document.querySelector("#popup-editUser .checkbox label")
 
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let users

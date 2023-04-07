@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
+    var path = window.location.pathname; var host = window.location.hostname;
+    document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
+
     const URL = "https://localhost:44370"
     let loginBtn = document.querySelector(".header .action__btn")
     let popupDisciplines = document.querySelector("#popup-disciplines")
@@ -47,6 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     const getProfiles = async () => {
+        document.querySelector("tbody").innerHTML = `
+            <tr><td>Идет загрузка профилей...</td></tr>
+        `
+
         let response = await fetch(`${URL}/Profiles/GetData`, {
             credentials: "include"
         })
@@ -60,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const showProfiles = (profiles) => {
         let res = ""
         for (let el of profiles) {
+            console.log(el)
             res += `
                 <tr data-profileid=${el.profile.id} itemprop="eduAccred">
                     <td>
@@ -94,18 +102,25 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>    
                 ` 
 
-            let fileModelsRpp = el.disciplines // рабочие программы практик
-            if (fileModelsRpp.size != 0) {
-                let rpp = `<td itemprop="eduPrac">`
-                for (let fileModel of fileModelsRpp) {
-                    rpp += `
-                        <div class="item-file">
-                            <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${discipline.fileRPD.name}">${fileModel.disciplineName}</a>
-                        </div>
-                    `
-                }               
-                res += rpp
-            }
+                let fileModelsRpp = el.disciplines // рабочие программы практик
+                if (fileModelsRpp.length != 0) {
+                    let rpp = `<td itemprop="eduPrac">`
+                    for (let fileRPP of fileModelsRpp) {
+                        rpp += `
+                            <div class="item-file">
+                            ${
+                                fileRPP.fileRPD != null
+                                ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
+                                : `<span>${fileRPP.disciplineName}</span>`
+                            }
+                               
+                            </div>
+                        `
+                    }               
+                    res += rpp
+                } else {
+                    res += '<td itemprop="eduPrac"></td>'
+                }
 
             res += `
                 <td itemprop="eduEl">
@@ -118,7 +133,11 @@ document.addEventListener("DOMContentLoaded", function() {
             </tr>
             `
         }
-        document.querySelector("tbody").innerHTML = res
+        if (res.length > 0) {
+            document.querySelector("tbody").innerHTML = res
+        } else {
+            document.querySelector("tbody").innerHTML = ""
+        } 
 
         let showDisciplinesBtns = document.querySelectorAll(".show-disciplines")
         showDisciplinesBtns.forEach(btnItem => {
