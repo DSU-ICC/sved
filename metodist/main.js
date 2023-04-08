@@ -306,10 +306,19 @@ document.addEventListener("DOMContentLoaded", () => {
         popupEditFile.querySelector("#fileTypeId").value = fileTypeId
         popupEditFile.querySelector("#profileId").value = profileId
 
-        //получить и отобразить в текстовом поле название ссылки с файлом
+        //получить и отобразить в текстовом поле название ссылки из файла
         let linkToFile = el.closest(".item-file").querySelector("a")
         let outputFileName = linkToFile.textContent
-        let fileName = linkToFile.getAttribute("href").split("/")[7]
+
+        //получаем название файла из профиля
+        let fileModelsProfile = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.fileModels
+        let fileName = "";
+        fileModelsProfile.forEach(fileModel => {
+            if (fileModel.outputFileName == outputFileName) {
+                fileName = fileModel.name
+            }
+        })
+
         let popupEditFileInput = popupEditFile.querySelector(".popup-form__input")
         popupEditFileInput.value = outputFileName
 
@@ -569,8 +578,11 @@ document.addEventListener("DOMContentLoaded", () => {
             listKafedrasName.push(profileName.toLowerCase())
         })
 
+        console.log(listKafedrasName)
+
         kafedraSelectOptions.forEach(kafedraItem => {  
             if (listKafedrasName.includes(kafedraItem.textContent.trim().toLowerCase())) {
+                console.log(kafedraItem)
                 kafedraItem.click()          
             } 
         })
@@ -647,7 +659,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupDelete.querySelector(".popup__close").click()
     })
 
-    //функционал закрытия модального окна
+    //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
         closeItem.addEventListener("click", function(e) {
             let popupClosed = e.target.closest(".popup")
@@ -658,24 +670,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupLabels.forEach(popupLabel => {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
+                    let popupLabelSelect = popupLabel.querySelector(".select")
+
+                    //очистка текстового поля
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
-                    } else {
-                        let popupLabelSelect = popupLabel.querySelector(".select")
+                    } else if (popupLabelSelect) { // сброс значений выпадоющего списка
+                        let popupLabelSelectedEl = popupLabelSelect.querySelectorAll(".select__option.selected")
+                        if (popupLabelSelectedEl) {
+                            popupLabelSelectedEl.forEach(selectedItem => {
+                                selectedItem.classList.remove("selected")
+                            })
+                        }
+
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
                         popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
 
-                        let popupLabelSelectedEl = popupLabelSelect.querySelector(".select__option.selected")
-                        if (popupLabelSelectedEl) {
-                            popupLabelSelectedEl.classList.remove("selected")
-                        }
-                        
+                    } else { // ставим значение роли по умолчанию (методист)
+                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                        metodistRoleRadioBtn.click()
+                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
 
+            //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
             document.body.classList.remove("no-scroll")
             
@@ -692,7 +713,7 @@ document.addEventListener("DOMContentLoaded", () => {
         options.addEventListener("click", function(e) {
             if (e.target.closest(".select__option")) { 
                 let selectedOption = e.target.closest(".select__option")
-                let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
+                let selectedOptionText = selectedOption.querySelector('.select__option-text').textContent;
                 let selectText = selectItem.querySelector('.select__text')
                 let selectedElemId = parseInt(selectedOption.dataset.id)
 
@@ -704,14 +725,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         options.querySelectorAll(".select__option").forEach(optionItem => {
                             optionItem.classList.remove("selected")
                         })
-                        console.log(e.target)
-                        console.log(selectedOption)
+
+                        
+
                         //помечаем выбранный нами элемент как выбранный
                         selectedOption.classList.add("selected")
-                        selectText.innerText = selectedOptionText;
+                        selectText.textContent = selectedOptionText;
                         selectText.dataset.id = selectedElemId
                     } else { //если же мы выбрали уже выбранный элемент списка, 
-                        selectText.innerText = selectText.dataset.placeholder
+                        selectedOption.classList.remove("selected")
+                        selectText.textContent = selectText.dataset.placeholder
                         selectText.removeAttribute("data-id")
                     }
                 } else { //если в выпадающем списке можно выбрать несколько элементов  
@@ -722,10 +745,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         //если мы выбрали второй или более элемент списка
                         if (selectText.textContent != selectText.dataset.placeholder) {
-                            selectText.innerText += `, ${selectedOptionText}`;
+                            selectText.textContent += `, ${selectedOptionText}`;
                             selectText.dataset.id += `, ${selectedElemId}`
                         } else { // если впервые выбрали элемент списка
-                            selectText.innerText = selectedOptionText;
+                            selectText.textContent = selectedOptionText;
                             selectText.dataset.id = selectedElemId
                         }
                     } else { //логика удаления элемента из списка
@@ -734,18 +757,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         //создаем массив айди выбранных элементов списка, а также массив их названия
                         let arrayId = [...selectText.dataset.id.split(", ")]
-                        let listElem = selectText.innerText.split(", ")
+                        let listElem = selectText.textContent.split(", ")
 
                         //если было выбрано больше одного элемента списка
                         if (arrayId.length > 1) {
 
                             //создаем строку названий элементов, не включая в него выбранный нами элемент
-                            selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+                            selectText.textContent = listElem.filter(el => el != selectedOptionText).join(", ")
 
                             //создаем строку айди элементов, не включая в него выбранный нами элемент
                             selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
                         } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
-                            selectText.innerText = selectText.dataset.placeholder
+                            selectText.textContent = selectText.dataset.placeholder
                             selectText.removeAttribute("data-id")
                         }
                     }
@@ -1063,7 +1086,7 @@ document.addEventListener("DOMContentLoaded", () => {
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
 
             //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
-            if (el.profile.linkToRPD != null) {
+            if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                 res += `
                     <td itemprop="educationRpd">
                         <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
@@ -1300,8 +1323,8 @@ document.addEventListener("DOMContentLoaded", () => {
             setUserName(userName)
             getFileTypes().
                 then(_ => getAllKafedra()).
-                then(_ => getProfilesById()).
                 then(_ => getCaseSDepartments()).
+                then(_ => getProfilesById()).
                 then(_ => getLevelEdues()).
                 then(_ => getEduForms()).
                 then(_ => getFileTypes())

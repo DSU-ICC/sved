@@ -36,15 +36,18 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
                     } else if (popupLabelSelect) { // сброс значений выпадоющего списка
+                        let popupLabelSelectedEl = popupLabelSelect.querySelectorAll(".select__option.selected")
+                        if (popupLabelSelectedEl) {
+                            popupLabelSelectedEl.forEach(selectedItem => {
+                                selectedItem.classList.remove("selected")
+                            })
+                        }
+
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
                         popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
 
-                        let popupLabelSelectedEl = popupLabelSelect.querySelector(".select__option.selected")
-                        if (popupLabelSelectedEl) {
-                            popupLabelSelectedEl.classList.remove("selected")
-                        }
                     } else { // ставим значение роли по умолчанию (методист)
                         let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
                         metodistRoleRadioBtn.click()
@@ -568,7 +571,7 @@ document.addEventListener("DOMContentLoaded", function() {
         options.addEventListener("click", function(e) {
             if (e.target.closest(".select__option")) { 
                 let selectedOption = e.target.closest(".select__option")
-                let selectedOptionText = selectedOption.querySelector('.select__option-text').innerText;
+                let selectedOptionText = selectedOption.querySelector('.select__option-text').textContent;
                 let selectText = selectItem.querySelector('.select__text')
                 let selectedElemId = parseInt(selectedOption.dataset.id)
 
@@ -581,12 +584,15 @@ document.addEventListener("DOMContentLoaded", function() {
                             optionItem.classList.remove("selected")
                         })
 
+                        
+
                         //помечаем выбранный нами элемент как выбранный
                         selectedOption.classList.add("selected")
-                        selectText.innerText = selectedOptionText;
+                        selectText.textContent = selectedOptionText;
                         selectText.dataset.id = selectedElemId
                     } else { //если же мы выбрали уже выбранный элемент списка, 
-                        selectText.innerText = selectText.dataset.placeholder
+                        selectedOption.classList.remove("selected")
+                        selectText.textContent = selectText.dataset.placeholder
                         selectText.removeAttribute("data-id")
                     }
                 } else { //если в выпадающем списке можно выбрать несколько элементов  
@@ -597,10 +603,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         //если мы выбрали второй или более элемент списка
                         if (selectText.textContent != selectText.dataset.placeholder) {
-                            selectText.innerText += `, ${selectedOptionText}`;
+                            selectText.textContent += `, ${selectedOptionText}`;
                             selectText.dataset.id += `, ${selectedElemId}`
                         } else { // если впервые выбрали элемент списка
-                            selectText.innerText = selectedOptionText;
+                            selectText.textContent = selectedOptionText;
                             selectText.dataset.id = selectedElemId
                         }
                     } else { //логика удаления элемента из списка
@@ -609,18 +615,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         //создаем массив айди выбранных элементов списка, а также массив их названия
                         let arrayId = [...selectText.dataset.id.split(", ")]
-                        let listElem = selectText.innerText.split(", ")
+                        let listElem = selectText.textContent.split(", ")
 
                         //если было выбрано больше одного элемента списка
                         if (arrayId.length > 1) {
 
                             //создаем строку названий элементов, не включая в него выбранный нами элемент
-                            selectText.innerText = listElem.filter(el => el != selectedOptionText).join(", ")
+                            selectText.textContent = listElem.filter(el => el != selectedOptionText).join(", ")
 
                             //создаем строку айди элементов, не включая в него выбранный нами элемент
                             selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
                         } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
-                            selectText.innerText = selectText.dataset.placeholder
+                            selectText.textContent = selectText.dataset.placeholder
                             selectText.removeAttribute("data-id")
                         }
                     }

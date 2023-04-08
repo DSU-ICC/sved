@@ -25,15 +25,18 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
                     } else if (popupLabelSelect) { // сброс значений выпадоющего списка
+                        let popupLabelSelectedEl = popupLabelSelect.querySelectorAll(".select__option.selected")
+                        if (popupLabelSelectedEl) {
+                            popupLabelSelectedEl.forEach(selectedItem => {
+                                selectedItem.classList.remove("selected")
+                            })
+                        }
+
                         let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
                         popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
 
-                        let popupLabelSelectedEl = popupLabelSelect.querySelector(".select__option.selected")
-                        if (popupLabelSelectedEl) {
-                            popupLabelSelectedEl.classList.remove("selected")
-                        }
                     } else { // ставим значение роли по умолчанию (методист)
                         let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
                         metodistRoleRadioBtn.click()

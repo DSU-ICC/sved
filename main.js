@@ -180,11 +180,19 @@ document.addEventListener("DOMContentLoaded", function() {
             
                     res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
             
-                    res += `
-                        <td itemprop="educationRpd">
-                            <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
-                        </td>
-                    ` 
+                    if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+                        res += `
+                            <td itemprop="educationRpd">
+                                <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                            </td>
+                        ` 
+                    } else {
+                        res += `
+                            <td itemprop="educationRpd">
+                                <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                            </td>
+                        ` 
+                    } 
             
                     res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
             
