@@ -99,11 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
         modalUchPlan.classList.add("open")
         dataUchPlanFinal = data
 
-        let year = data.profile.year
-        let profile = data.profile.profileName
-        let level = data.profile.levelEdu.name
-        let deptName = data.caseSDepartment.deptName
-        let eduForm = data.caseCEdukind.edukind
+        let year = data.profile.year ?? ""
+        let profile = data.profile.profileName ?? ""
+        let level = data.profile.levelEdu?.name 
+        let deptName = data.caseSDepartment?.deptName
+        let eduForm = data.caseCEdukind?.edukind
 
         let kafedraName = listKafedras.find(x => x.depId == kafedra_id).depName
 
@@ -119,23 +119,29 @@ document.addEventListener("DOMContentLoaded", () => {
         let eduFormSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='eduForm'] .select__option")
         let kafedraSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='kafedra'] .select__option")
 
-        deptSelectOptions.forEach(deptItem => {  
-            if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {  
-                deptItem.click()           
-            } 
-        })
+        if (deptName) {
+            deptSelectOptions.forEach(deptItem => {  
+                if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {  
+                    deptItem.click()           
+                } 
+            })
+        }
 
-        levelSelectOptions.forEach(levelItem => {
-            if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) { 
-                levelItem.click()  
-            } 
-        })
+        if (level) {
+            levelSelectOptions.forEach(levelItem => {
+                if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) { 
+                    levelItem.click()  
+                } 
+            })
+        }
 
-        eduFormSelectOptions.forEach(eduFormItem => {
-            if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) { 
-                eduFormItem.click()
-            } 
-        })  
+        if (eduForm) {
+            eduFormSelectOptions.forEach(eduFormItem => {
+                if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) { 
+                    eduFormItem.click()
+                } 
+            })
+        }  
         
         kafedraSelectOptions.forEach(kafedraItem => {
             if (kafedraItem.textContent.trim().toLowerCase() == kafedraName.toLowerCase()) {
