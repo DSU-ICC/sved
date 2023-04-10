@@ -316,7 +316,7 @@ td a {
     background-color: #fff;
     position: absolute;
     top: 26px;
-    z-index: 9;
+    z-index: 99;
     border: 1px solid #000;
     padding: 24px;
     display: none;
@@ -553,7 +553,6 @@ td a {
 .page__accordeon .accordeon__item {
     width: 100%;
     cursor: pointer;
-    overflow: hidden;
     height: max-content;
 }
 .accordeon__control {
@@ -588,7 +587,7 @@ td a {
 .accordeon__content {
     line-height: 1.4;
     color: #192040;
-    opacity: 0;
+    display: none;
     transition: .3s;
     max-height: 0;
 }
@@ -596,7 +595,7 @@ td a {
     transform: translate(-50%, -50%) rotate(180deg);
 }
 .accordeon__item.active .accordeon__content {
-    opacity: 1;
+    display: block;
     max-height: none;
 }
 

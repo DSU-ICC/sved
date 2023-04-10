@@ -775,11 +775,12 @@ document.addEventListener("DOMContentLoaded", () => {
     //функционал аккордеона
     let accordeon = document.querySelector('.accordeon');
     accordeon.addEventListener("click", function(e) {
+        console.log(e.target)
        if (e.target.closest(".accordeon__control")) {
             e.target.closest(".accordeon__item").classList.toggle("active");
        }
     })
-
+    
     //функционал выпадающих списков
     const select = document.querySelectorAll('.select');
     select.forEach(selectItem => {
