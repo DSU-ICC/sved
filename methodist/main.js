@@ -584,11 +584,9 @@ document.addEventListener("DOMContentLoaded", () => {
             listKafedrasName.push(profileName.toLowerCase())
         })
 
-        console.log(listKafedrasName)
 
         kafedraSelectOptions.forEach(kafedraItem => {  
             if (listKafedrasName.includes(kafedraItem.textContent.trim().toLowerCase())) {
-                console.log(kafedraItem)
                 kafedraItem.click()          
             } 
         })
@@ -695,9 +693,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
 
                     } else { // ставим значение роли по умолчанию (методист)
-                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
-                        metodistRoleRadioBtn.click()
-                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+                        let methodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                        methodistRoleRadioBtn.click()
+                        methodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
@@ -994,7 +992,8 @@ document.addEventListener("DOMContentLoaded", () => {
         //здесь происходит создание разметки профилей с их атрибутами 
         for (let el of profiles) {
             
-            res += `
+            if (el.caseSDepartment != null) {
+                res += `
                 <tr data-profileid=${el.profile.id} itemprop="eduOp"> 
                     <td>
                         <span>${el.profile.year}</span>
@@ -1031,120 +1030,121 @@ document.addEventListener("DOMContentLoaded", () => {
                             </button>
                         </div>
                     </td>                    
-            ` 
-            
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ФГОС")) // фгос
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ОПОП")) // опоп
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
-            
-            res += `
-                <td itemprop="eduForm">
-                    <span>${el.caseCEdukind.edukind}</span>
-                    <div class="actions">
-                        <button type="button" class="edit edit-item--text">
-                        <span class="edit__btn btn"></span>
-                        </button>
-                    </div>
-                </td>
-            `
-
-            res += `
-                <td itemprop="language">
-                    <span>${el.profile.educationLanguage}</span>
-                    <div class="actions">
-                        <button type="button" class="edit edit-item--text">
-                        <span class="edit__btn btn"></span>
-                        </button>
-                    </div>
-                </td>
-            `
-
-            res += `
-                <td itemprop="dateEnd">
-                    <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
-                    <div class="actions">
-                        <button type="button" class="edit edit-item--text">
-                        <span class="edit__btn btn"></span>
-                        </button>
-                    </div>
-                </td>
-            `
-
-            res += `
-                <td itemprop="eduEl">
-                    ${
-                        el.profile.linkToDistanceEducation != "" 
-                        ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
-                        : "<span>не используется</span>"
-                    }
-                    <div class="actions">
-                        <button type="button" class="edit edit-item--text">
-                        <span class="edit__btn btn"></span>
-                        </button>
-                    </div>
-                </td>
-            `
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
-
-            //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
-            if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
-                res += `
-                    <td itemprop="educationRpd">
-                        <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
-                    </td>
                 ` 
-            } else {
+                
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ФГОС")) // фгос
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ОПОП")) // опоп
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
+                
                 res += `
-                    <td itemprop="educationRpd">
-                        <a href="/metodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
-                    </td>
-                ` 
-            }
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
-
-            let fileModelsRpp = el.disciplines // рабочие программы практик
-            if (fileModelsRpp.length != 0) {
-                let rpp = `<td itemprop="eduPr">`
-                for (let fileRPP of fileModelsRpp) {
-                    rpp += `
-                        <div class="item-file">
-                        ${
-                            fileRPP.fileRPD != null
-                            ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
-                            : `<span>${fileRPP.disciplineName}</span>`
-                        }
-                           
+                    <td itemprop="eduForm">
+                        <span>${el.caseCEdukind.edukind}</span>
+                        <div class="actions">
+                            <button type="button" class="edit edit-item--text">
+                            <span class="edit__btn btn"></span>
+                            </button>
                         </div>
-                    `
-                }               
-                res += rpp
-            } else {
-                res += '<td itemprop="eduPr"></td>'
+                    </td>
+                `
+
+                res += `
+                    <td itemprop="language">
+                        <span>${el.profile.educationLanguage}</span>
+                        <div class="actions">
+                            <button type="button" class="edit edit-item--text">
+                            <span class="edit__btn btn"></span>
+                            </button>
+                        </div>
+                    </td>
+                `
+
+                res += `
+                    <td itemprop="dateEnd">
+                        <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
+                        <div class="actions">
+                            <button type="button" class="edit edit-item--text">
+                            <span class="edit__btn btn"></span>
+                            </button>
+                        </div>
+                    </td>
+                `
+
+                res += `
+                    <td itemprop="eduEl">
+                        ${
+                            el.profile.linkToDistanceEducation != "" 
+                            ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                            : "<span>не используется</span>"
+                        }
+                        <div class="actions">
+                            <button type="button" class="edit edit-item--text">
+                            <span class="edit__btn btn"></span>
+                            </button>
+                        </div>
+                    </td>
+                `
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
+
+                //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
+                if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+                    res += `
+                        <td itemprop="educationRpd">
+                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                } else {
+                    res += `
+                        <td itemprop="educationRpd">
+                            <a href="/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                }
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
+
+                let fileModelsRpp = el.disciplines // рабочие программы практик
+                if (fileModelsRpp.length != 0) {
+                    let rpp = `<td itemprop="eduPr">`
+                    for (let fileRPP of fileModelsRpp) {
+                        rpp += `
+                            <div class="item-file">
+                            ${
+                                fileRPP.fileRPD != null
+                                ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
+                                : `<span>${fileRPP.disciplineName}</span>`
+                            }
+                            
+                            </div>
+                        `
+                    }               
+                    res += rpp
+                } else {
+                    res += '<td itemprop="eduPr"></td>'
+                }
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Программа ГИА")) // гиа
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Матрицы компетенций")) // матрицы
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // Методические материалы для обеспечения ОП
+
+                //кнопки для редактирования и удаления профиля
+                res += `
+                    <td>
+                        <button type="button" class="edit">
+                            <span class="edit__btn btn"></span>
+                        </button>
+                        <button type="button" class="delete">
+                            <span class="delete__btn btn"></span>
+                        </button>
+                    </td>
+                `
             }
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Программа ГИА")) // гиа
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Матрицы компетенций")) // матрицы
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // Методические материалы для обеспечения ОП
-
-            //кнопки для редактирования и удаления профиля
-            res += `
-                <td>
-                    <button type="button" class="edit">
-                        <span class="edit__btn btn"></span>
-                    </button>
-                    <button type="button" class="delete">
-                        <span class="delete__btn btn"></span>
-                    </button>
-                </td>
-            `
         }
         
         if (res.length > 0) {
@@ -1315,7 +1315,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //функция проверки доступа пользователя по его роли
-    const hasUserAccessToRole = () => userRole === "null"
+    const hasUserAccessToRole = () => userRole === "methodist"
 
     if (isAuthorize()) {
         userId = localStorage.getItem("userId")
@@ -1336,7 +1336,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 then(_ => getFileTypes())
 
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
-            let redirectPage = userRole !== "null" ? userRole : "metodist"
+            let redirectPage = userRole !== "null" ? userRole : "methodist"
             window.location.assign(`/${redirectPage}/`)
         }
     } else {

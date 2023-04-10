@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("userName", userData.user.userName)
             localStorage.setItem("userRole", userData.role)
             localStorage.setItem("persDepartmentId", userData.user.persDepartmentId)
-            redirectByRole(userData)
+            redirectByRole(userData.role)
         } else {
             let error = await response.text()
             alert(error)
@@ -80,13 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
         validateLoginForm()
     })
 
-    const redirectByRole = (userData) => {
-        if (userData.user.persDepartmentId != null) {
-            window.location.assign("/metodist/")
-        } else if (userData.role == "UMU") {   
-            window.location.assign("/umu/")
-        } else if (userData.role == "admin") {
-            window.location.assign("/admin/")
-        }
+    const redirectByRole = (role) => {
+        window.location.assign(`/${role}/`)
     }
 })

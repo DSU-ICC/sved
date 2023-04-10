@@ -70,8 +70,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const showProfiles = (profiles) => {
         let res = ""
         for (let el of profiles) {
-            console.log(el)
-            res += `
+            if (el.caseSDepartment != null) {
+                res += `
                 <tr data-profileid=${el.profile.id} itemprop="eduAccred">
                     <td>
                         <span>${el.profile.year}</span>
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
                                 : `<span>${fileRPP.disciplineName}</span>`
                             }
-                               
+                                
                             </div>
                         `
                     }               
@@ -125,16 +125,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     res += '<td itemprop="eduPrac"></td>'
                 }
 
-            res += `
-                <td itemprop="eduEl">
-                ${
-                    el.profile.linkToDistanceEducation != "" 
-                    ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
-                    : "<span>не используется</span>"
-                }
-            </td>
-            </tr>
-            `
+                res += `
+                    <td itemprop="eduEl">
+                    ${
+                        el.profile.linkToDistanceEducation != "" 
+                        ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                        : "<span>не используется</span>"
+                    }
+                </td>
+                </tr>
+                `
+            }
         }
         if (res.length > 0) {
             document.querySelector("tbody").innerHTML = res
@@ -146,9 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
         showDisciplinesBtns.forEach(btnItem => {
             btnItem.addEventListener("click", function(e) {
                 let profileId = parseInt(e.target.closest("tr").dataset.profileid)
-                
                 let profileDisciplines = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.disciplines
-
                 let res = ""
                 for (let discipline of profileDisciplines) {
                     res += `

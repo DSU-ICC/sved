@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 selectedKafedra.closest(".popup-form__label").classList.remove("invalid")
                 newUser.persDepartmentId = parseInt(selectedKafedra.dataset.id)
-                newUser.role = null
+                newUser.role = "methodist"
                 newUser.faculties = []
             }
         }
@@ -169,7 +169,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isValidForm) {
             newUser.login = loginInput.value
             newUser.password = passwordInput.value
-
             createUser(newUser)
         }
     })
@@ -203,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 alert(error)
             }
-            
+
             popupCreateUserBtn.classList.remove("invalid")
             popupCreateUserBtn.textContent = "Создать"
             popupCreateUserBtn.disabled = false
@@ -244,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 selectedKafedra.closest(".popup-form__label").classList.remove("invalid")
                 userEdited.persDepartmentId = parseInt(selectedKafedra.dataset.id)
-                userEdited.role = null
+                userEdited.role = "methodist"
                 userEdited.faculties = []
             }
         }

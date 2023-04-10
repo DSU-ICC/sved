@@ -116,7 +116,8 @@ document.addEventListener("DOMContentLoaded", function() {
         let res = ""
 
         for (let el of profiles) { 
-            res += `
+            if (el.caseSDepartment != null) {
+                res += `
                 <tr itemprop="eduOp">
                     <td>
                         <span>${el.profile.year}</span>
@@ -133,55 +134,56 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td itemprop="eduProf">
                         <span>${el.profile.profileName}</span>
                     </td>                    
-            ` 
-    
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
-            
-            res += `
-                <td itemprop="eduForm">
-                    <span>${el.caseCEdukind.edukind}</span>
-                </td>
-            `
-
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
-    
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
-    
-            if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
-                res += `
-                    <td itemprop="educationRpd">
-                        <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
-                    </td>
                 ` 
-            } else {
+        
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
+                
                 res += `
-                    <td itemprop="educationRpd">
-                        <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
-                    </td>
-                ` 
-            }
-    
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
-    
-            let fileModelsRpp = el.disciplines // рабочие программы практик
-            if (fileModelsRpp.length > 0) {
-                let rpp = `<td itemprop="eduPr">`
-                for (let fileModelRPPItem of fileModelsRpp) {
-                    rpp += `
-                        <div class="item-file">
-                            <a href="${fileModelRPPItem.fileRPD?.name}">${fileModelRPPItem.disciplineName}</a>
-                        </div>
-                    `
-                }               
-                res += rpp
-            } else {
-                res += `
-                    <td itemprop="eduPr">
+                    <td itemprop="eduForm">
+                        <span>${el.caseCEdukind.edukind}</span>
                     </td>
                 `
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
+        
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
+        
+                if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+                    res += `
+                        <td itemprop="educationRpd">
+                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                } else {
+                    res += `
+                        <td itemprop="educationRpd">
+                            <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                }
+        
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
+        
+                let fileModelsRpp = el.disciplines // рабочие программы практик
+                if (fileModelsRpp.length > 0) {
+                    let rpp = `<td itemprop="eduPr">`
+                    for (let fileModelRPPItem of fileModelsRpp) {
+                        rpp += `
+                            <div class="item-file">
+                                <a href="${fileModelRPPItem.fileRPD?.name}">${fileModelRPPItem.disciplineName}</a>
+                            </div>
+                        `
+                    }               
+                    res += rpp
+                } else {
+                    res += `
+                        <td itemprop="eduPr">
+                        </td>
+                    `
+                }
+        
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
             }
-    
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
     
         }
 

@@ -932,7 +932,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //функция проверки доступа пользователя по его роли
-    const hasUserAccessToRole = () => userRole === "null"
+    const hasUserAccessToRole = () => userRole === "methodist"
 
     if (isAuthorize()) {
         userId = localStorage.getItem("userId")
