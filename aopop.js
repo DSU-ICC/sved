@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка профилей...</td></tr>
         `
         
-        let response = await fetch(`${URL}/Profiles/GetData`)
+        let response = await fetch(`${URL}/Profiles/GetDataForOopDgu`)
         
         if (response.ok) {
             profiles = await response.json()

@@ -76,6 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получение профилей вместе с их статусами по айди профиля
     const getDisciplinesByProfile = async (profileId) => {
+        document.querySelector(".accordeon__list").innerHTML = `
+                <li>Идет загрузка дисциплин...</li>
+            `
+
         let response = await fetch(`${URL}/Discipline/GetDisciplineByProfileId?profileId=${profileId}`, {
             credentials: "include",
         })
@@ -219,7 +223,11 @@ document.addEventListener("DOMContentLoaded", () => {
             </li>
             `
         }
-        document.querySelector(".accordeon__list").innerHTML = res
+        if (res.length > 0) {
+            document.querySelector(".accordeon__list").innerHTML = res
+        } else {
+            document.querySelector(".accordeon__list").innerHTML = ""
+        } 
 
         //обработка нажатия на кнопку загрузки файла РПД
         let uploadFileRpdBtns = document.querySelectorAll(".file-upload input[type=file]")

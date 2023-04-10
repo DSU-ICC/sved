@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //получение дисциплин по айди профиля
     const getDisciplinesByProfile = async (profileId) => {
+        document.querySelector(".accordeon__list").innerHTML = `
+            <li>Идет загрузка дисциплин...</li>
+        `
+        
         profileId = window.location.href.split("=")[1]
         let response = await fetch(`${URL}/Discipline/GetDisciplineByProfileId?profileId=${profileId}`)
 
@@ -97,7 +101,11 @@ document.addEventListener("DOMContentLoaded", function() {
             </li>
             `
         }
-        document.querySelector(".accordeon__list").innerHTML = res
+        if (res.length > 0) {
+            document.querySelector(".accordeon__list").innerHTML = res
+        } else {
+            document.querySelector(".accordeon__list").innerHTML = ""
+        } 
     }
 
     //функционал для открытия и закрытия контента аккордеона

@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка профилей...</td></tr>
         `
 
-        let response = await fetch(`${URL}/Profiles/GetData`, {
+        let response = await fetch(`${URL}/Profiles/GetDataOpop2`, {
             credentials: "include"
         })
 
@@ -92,18 +92,27 @@ document.addEventListener("DOMContentLoaded", function() {
                         <span>${el.caseCEdukind.edukind}</span>
                     </td>  
                     <td itemprop="learningTerm">
-                        <span>${el.profile.termEdu.includes("год") ? el.profile.termEdu : el.profile.termEdu + " года"}</span>
+                        <span>${el.profile.termEdu}</span>
                     </td>    
                     <td itemprop="dateEnd">
                         <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
                     </td>  
                     <td itemprop="language">
                         <span>${el.profile.educationLanguage}</span>
-                    </td>  
-                    <td itemprop="eduPred">
-                        <button class="show-disciplines btn">Показать</button>
-                    </td>    
+                    </td>     
                 ` 
+
+                if (el.profile.disciplines.length > 0) {
+                    res += `
+                        <td itemprop="eduPred">
+                            <button class="show-disciplines btn">Показать</button>
+                        </td> 
+                    `
+                } else {
+                    res += `
+                        <td itemprop="eduPred"></td> 
+                    `
+                }
 
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length != 0) {

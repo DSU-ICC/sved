@@ -631,7 +631,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             profileItem.profile.listPersDepartmentsId = listPersDepartmentsId
-
+            console.log(profileItem.profile)
             editProfile(profileItem.profile, popupEditTextBtn)
         }
     })
@@ -699,6 +699,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 })
             } 
+
+            let fileNameField = popupClosed.querySelector(".popup-form__file-name")
+            if (fileNameField) {
+                fileNameField.textContent = ""
+            }
 
             //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
@@ -1106,7 +1111,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
-
+                console.log(el)
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length != 0) {
                     let rpp = `<td itemprop="eduPr">`

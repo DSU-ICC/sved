@@ -1285,7 +1285,7 @@ datalist option:hover::before {
 /* Страница для УМУ*/
 
 .page__status {
-    margin-bottom: 24px;
+    margin: 24px 0;
 }
 
 .request-table th:nth-child(2) {

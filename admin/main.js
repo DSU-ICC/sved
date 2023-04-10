@@ -155,12 +155,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 let selectedFacultiesId = [...selectedFaculty.dataset.id.split(", ")].map(id => parseInt(id))
                 newUser.faculties = selectedFacultiesId
                 newUser.role = "umu"
-                newUser.persDepartmentId = null
+                newUser.persDepartmentId = 0
             }
         }
         
         if (selectedRole == "Админ") {
-            newUser.persDepartmentId = null
+            newUser.persDepartmentId = 0
             newUser.role = "admin"
             newUser.faculties = []
         }
@@ -259,12 +259,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 let selectedFacultiesId = [...selectedFaculty.dataset.id.split(", ")].map(id => parseInt(id))
                 userEdited.faculties = selectedFacultiesId
                 userEdited.role = "umu"
-                userEdited.persDepartmentId = null
+                userEdited.persDepartmentId = 0
             }
         }
         
         if (selectedRole == "Админ") {
-            userEdited.persDepartmentId = null
+            userEdited.persDepartmentId = 0
             userEdited.role = "admin"
             userEdited.faculties = []
         }
