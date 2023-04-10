@@ -631,7 +631,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             profileItem.profile.listPersDepartmentsId = listPersDepartmentsId
-            console.log(profileItem.profile)
+
             editProfile(profileItem.profile, popupEditTextBtn)
         }
     })
@@ -1111,7 +1111,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
-                console.log(el)
+
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length != 0) {
                     let rpp = `<td itemprop="eduPr">`
@@ -1120,8 +1120,24 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="item-file">
                             ${
                                 fileRPP.fileRPD != null
-                                ? ` <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
-                                : `<span>${fileRPP.disciplineName}</span>`
+                                ? `
+                                    <div class="item-file__inner">
+                                        <span class="key-icon"></span>
+                                        <div class="document-key">
+                                            <p class="document-key__text">Документ подписан</p>
+                                            <p class="document-key__text">Простая электронная подпись</p>
+                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                            <p class="document-key__text">Ректор</p>
+                                            <p class="document-key__text">Ключ (SHA-256):</p>
+                                            <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
+                                        </div>
+                                        <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                    </div>
+                                    
+                                `
+                                : `
+                                    <span>${fileRPP.disciplineName}</span>
+                                `
                             }
                             
                             </div>

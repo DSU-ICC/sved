@@ -144,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
             `
             for (let discipline of disciplineList) {
                 if (discipline.statusDiscipline.name == statusItem) {
-
                     let disciplineMarkup = "";
                     disciplineMarkup += 
                         `
@@ -775,7 +774,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //функционал аккордеона
     let accordeon = document.querySelector('.accordeon');
     accordeon.addEventListener("click", function(e) {
-        console.log(e.target)
        if (e.target.closest(".accordeon__control")) {
             e.target.closest(".accordeon__item").classList.toggle("active");
        }

@@ -383,6 +383,8 @@ main {
 .page__head {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
     align-items: center;
     margin-bottom: 61px;
     max-width: 1844px;
@@ -441,79 +443,6 @@ tr td:not(:last-child) button.file-upload__item {
     background-image: url("../img/edit-save.svg");
     background-position-y: 1px;
 }
-
-/* .page__table th:nth-child(1){
-    width: 76px;
-    padding-left: 8px;
-    padding-right: 5px;
-}
-.page__table th:nth-child(2){
-    width: 83px;
-    padding-left: 11px;
-    padding-right: 15px;
-}
-.page__table th:nth-child(3){
-    width: 156px;
-    padding-left: 13px;
-    padding-right: 2px;
-}
-.page__table th:nth-child(4) {
-    width: 111px;
-    padding-left: 9px;
-    padding-right: 8px;
-}
-.page__table th:nth-child(5),
-.page__table th:nth-child(13)  {
-    width: 166px;
-    padding-left: 13px;
-    padding-right: 13px;
-}
-.page__table th:nth-child(6),
-.page__table th:nth-child(7)  {
-    width: 67px;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-.page__table th:nth-child(8) {
-    width: 95px;
-    padding-left: 12px;
-    padding-right: 2px;
-}
-.page__table th:nth-child(9) {
-    width: 82px;
-    padding-left: 11px;
-    padding-right: 2px;
-}
-.page__table th:nth-child(10) {
-    width: 117px;
-    padding-left: 14px;
-    padding-right: 14px;
-}
-.page__table th:nth-child(11) {
-    width: 108px;
-    padding-left: 14px;
-    padding-right: 5px;
-}
-.page__table th:nth-child(12) {
-    width: 124px;
-    padding-left: 13px;
-    padding-right: 13px;
-}
-.page__table th:nth-child(14) {
-    width: 109px;
-    padding-left: 14px;
-    padding-right: 6px;
-}
-.page__table th:nth-child(15) {
-    width: 115px;
-    padding-left: 14px;
-    padding-right: 3px;
-}
-.page__table th:nth-child(16) {
-    width: 141px;
-    padding-left: 11px;
-    padding-right: 4px;
-} */
 
 .page__table th {
     width: 80px;
@@ -776,6 +705,10 @@ td a {
     display: none;
 }
 
+/*перемещаем блок с ключом эцп левее, чтоб его было полностью видно на экране*/
+td[itemprop="methodology"] .document-key {
+    left: -195px;
+}
 .key-icon::before {
     content: '';
     background: url("../img/key-ecp.svg") no-repeat;
@@ -1373,4 +1306,17 @@ datalist option:hover::before {
 
 .tabs-content--active {
     display: block;   
+}
+
+@media (max-width: 768px) {
+    .document-key {
+        width: 310px;
+    }
+}
+
+@media (max-width: 525px) {
+    .document-key {
+        width: 250px;
+        font-size: 14px;
+    }
 }

@@ -110,6 +110,8 @@ main {
 .header__container {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
     align-items: center;
     min-height: 148px;
 }
@@ -220,79 +222,6 @@ td[colspan] {
     text-align: center;
 }
 
-/* .page__table th:nth-child(1){
-    width: 76px;
-    padding-left: 8px;
-    padding-right: 5px;
-}
-.page__table th:nth-child(2){
-    width: 83px;
-    padding-left: 11px;
-    padding-right: 15px;
-}
-.page__table th:nth-child(3){
-    width: 156px;
-    padding-left: 13px;
-    padding-right: 2px;
-}
-.page__table th:nth-child(4) {
-    width: 111px;
-    padding-left: 9px;
-    padding-right: 8px;
-}
-.page__table th:nth-child(5),
-.page__table th:nth-child(13)  {
-    width: 166px;
-    padding-left: 13px;
-    padding-right: 13px;
-}
-.page__table th:nth-child(6),
-.page__table th:nth-child(7)  {
-    width: 67px;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-.page__table th:nth-child(8) {
-    width: 95px;
-    padding-left: 12px;
-    padding-right: 2px;
-}
-.page__table th:nth-child(9) {
-    width: 82px;
-    padding-left: 11px;
-    padding-right: 2px;
-}
-.page__table th:nth-child(10) {
-    width: 117px;
-    padding-left: 14px;
-    padding-right: 14px;
-}
-.page__table th:nth-child(11) {
-    width: 108px;
-    padding-left: 14px;
-    padding-right: 5px;
-}
-.page__table th:nth-child(12) {
-    width: 124px;
-    padding-left: 13px;
-    padding-right: 13px;
-}
-.page__table th:nth-child(14) {
-    width: 109px;
-    padding-left: 14px;
-    padding-right: 6px;
-}
-.page__table th:nth-child(15) {
-    width: 115px;
-    padding-left: 14px;
-    padding-right: 3px;
-}
-.page__table th:nth-child(16) {
-    width: 141px;
-    padding-left: 11px;
-    padding-right: 4px;
-} */
-
 .page__table th {
     width: 80px;
     padding: 14px 7px;
@@ -320,6 +249,11 @@ td a {
     border: 1px solid #000;
     padding: 24px;
     display: none;
+}
+
+/*перемещаем блок с ключом эцп левее, чтоб его было полностью видно на экране*/
+td[itemprop="methodology"] .document-key {
+    left: -195px;
 }
 
 .key-icon::before {
@@ -500,6 +434,7 @@ td a {
 
 .page__header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 37px;
     margin-bottom: 41px;
@@ -646,6 +581,63 @@ td a {
 }
 
 .discipline .wrapper {
-    width: 850px;
+    width: 100%;
+    max-width: 850px;
     padding-left: 16px;
+}
+
+@media (max-width: 768px) {
+    .document-key {
+        width: 310px;
+    }
+    .page__title,
+    .accordeon__title {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 575px) {
+    .accordeon__icon::after {
+        width: 36px;
+        height: 18px;
+        background-size: 36px 18px;
+    }
+}
+
+@media (max-width: 525px) {
+    .document-key {
+        width: 250px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 475px) {
+    .search {
+        flex-direction: column;
+    }
+    .search__icon {
+        top: 14px;
+    }
+    .search__input,
+    .search__btn {
+        width: 100%;
+    }
+    .search__input {
+        border-radius: 5px 5px 0 0;
+    }
+    .search__btn {
+        border-radius: 0 0 5px 5px;
+    }
+}
+
+@media (max-width: 425px) {
+    .page__title,
+    .accordeon__title {
+        font-size: 24px;
+    }
+    .accordeon__icon::after {
+        width: 32px;
+        height: 15px;
+        background-size: 32px 15px;
+    }
 }

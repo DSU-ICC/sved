@@ -167,13 +167,34 @@ document.addEventListener("DOMContentLoaded", function() {
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length > 0) {
                     let rpp = `<td itemprop="eduPr">`
-                    for (let fileModelRPPItem of fileModelsRpp) {
+                    for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
-                                <a href="${fileModelRPPItem.fileRPD?.name}">${fileModelRPPItem.disciplineName}</a>
+                            ${
+                                fileRPP.fileRPD != null
+                                ? `
+                                    <div class="item-file__inner">
+                                        <span class="key-icon"></span>
+                                        <div class="document-key">
+                                            <p class="document-key__text">Документ подписан</p>
+                                            <p class="document-key__text">Простая электронная подпись</p>
+                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                            <p class="document-key__text">Ректор</p>
+                                            <p class="document-key__text">Ключ (SHA-256):</p>
+                                            <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
+                                        </div>
+                                        <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                    </div>
+                                    
+                                `
+                                : `
+                                    <span>${fileRPP.disciplineName}</span>
+                                `
+                            }
+                            
                             </div>
                         `
-                    }               
+                    }                
                     res += rpp
                 } else {
                     res += `
