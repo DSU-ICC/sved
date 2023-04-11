@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://localhost:44370"
+    const URL = "http://oop.icc.dgu.ru"
 
     let logoutBtn = document.querySelector(".header .action__btn")
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
@@ -925,7 +925,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                             <a href=${fileModel.linkToFile != null
                                 ? fileModel.linkToFile
-                                : "/Users/User/source/repos/EorDSU/SvedenOop/Files/" + fileModel.name}
+                                : "http://oop.icc.dgu.ru/Files/" + fileModel.name}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
@@ -933,7 +933,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     markup += `
                     <a href=${fileModel.linkToFile != null
                         ? fileModel.linkToFile
-                        : "/Users/User/source/repos/EorDSU/SvedenOop/Files/" + fileModel.name}
+                        : "http://oop.icc.dgu.ru/Files/" + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -1131,7 +1131,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="/Users/User/source/repos/EorDSU/SvedenOop/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href="http://oop.icc.dgu.ru/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
