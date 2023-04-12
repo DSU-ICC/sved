@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="http://oop.icc.dgu.ru/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href="https://oop.icc.dgu.ru/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `

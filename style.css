@@ -104,7 +104,7 @@ main {
 }
 
 .header {
-    margin-bottom: 57px;
+    margin-bottom: 10px;
 }
 
 .header__container {
@@ -182,12 +182,14 @@ main {
     color: #fff;
 }
 
+.page__head {
+    margin-bottom: 30px;
+}
 
 .page__title {
     font-weight: 700;
     font-size: 32px;
     color: #000;  
-    margin-bottom: 24px;
 }
 
 table, th, td {
@@ -198,6 +200,7 @@ table, th, td {
 
 .page__table {
     overflow-x: auto;
+    height: 500px;
 }
 
 .page__table table {

@@ -104,7 +104,7 @@ main {
 }
 
 .header {
-    margin-bottom: 57px;
+    margin-bottom: 10px;
 }
 
 .header__container {
@@ -386,7 +386,7 @@ main {
     flex-wrap: wrap;
     gap: 15px;
     align-items: center;
-    margin-bottom: 61px;
+    margin-bottom: 30px;
     max-width: 1844px;
 }
 
@@ -404,6 +404,7 @@ table, th, td {
 
 .page__table {
     overflow-x: auto;
+    height: 500px;
 }
 
 .page__table table {
