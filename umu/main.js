@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    const URL = "http://oop.icc.dgu.ru"
+    const URL = "https://oop.icc.dgu.ru"
     let disciplineList
     let statusDisciplineList
     let closeModalBtns = document.querySelectorAll(".popup__close")
@@ -72,6 +72,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //получение удаляемых дисциплин
     const getRemovableDisciplines = async (statusDisciplineId, el) => {
+        document.querySelector(".disciplines tbody").innerHTML = `
+            <tr><td>Идет загрузка удаляемых дисцилин...</td></tr>
+        ` 
+
         let response = await fetch(`${URL}/Discipline/GetRemovableDisciplines?userId=${userId}`, {
             credentials: "include"
         })
@@ -84,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //функция для вывода удаляемых дисциплин
     const showRemovableDisciplines = (disciplineList) => {
+              
         let res = ""
         
         for (let discipline of disciplineList) {
@@ -105,7 +110,11 @@ document.addEventListener("DOMContentLoaded", function() {
             `
         }
 
-        document.querySelector(".disciplines tbody").innerHTML = res
+        if (res.length > 0) {
+            document.querySelector(".disciplines tbody").innerHTML = res
+        } else {
+            document.querySelector(".disciplines tbody").innerHTML = ""
+        } 
 
         let approveDeleteDiscipline = document.querySelectorAll(".approve-discipline .btn")
         approveDeleteDiscipline.forEach(approveDisciplineItem => {
@@ -130,6 +139,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //функция получения удаляемых статусов дисциплин
     const getRemovableStatusDisciplines = async () => {
+        document.querySelector(".status-disciplines tbody").innerHTML = `
+            <tr><td>Идет загрузка удаляемых статусов дисциплин...</td></tr>
+        `
         let response = await fetch(`${URL}/StatusDiscipline/GetRemovableStatusDiscipline`, {
             credentials: "include"
         })
@@ -163,7 +175,12 @@ document.addEventListener("DOMContentLoaded", function() {
             `
         }
 
-        document.querySelector(".status-disciplines tbody").innerHTML = res
+
+        if (res.length > 0) {
+            document.querySelector(".status-disciplines tbody").innerHTML = res
+        } else {
+            document.querySelector(".status-disciplines tbody").innerHTML = ""
+        } 
 
         let approveDeleteStatusDiscipline = document.querySelectorAll(".approve-status .btn")
         approveDeleteStatusDiscipline.forEach(approveStatusDisciplineItem => {

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "http://oop.icc.dgu.ru"
+    const URL = "https://oop.icc.dgu.ru"
     let logoutBtn = document.querySelector(".header .action__btn")
 
     let createUserBtn = document.querySelector(".users__btn")
@@ -358,6 +358,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //получение всех пользователей
     const getAllUsers = async () => {
+        document.querySelector("tbody").innerHTML = `
+            <p>Идет загрузка пользователей...</p>
+        `
+
         let response = await fetch(`${URL}/User/GetUsers`, {
             credentials: "include"
         })
@@ -404,7 +408,11 @@ document.addEventListener("DOMContentLoaded", function() {
             </table>
         `
 
-        document.querySelector(".users__table").innerHTML = markup
+        if (markup.length > 0) {
+            document.querySelector(".users__table").innerHTML = markup
+        } else {
+            document.querySelector(".users__table").innerHTML = ""
+        } 
 
         //обработка события нажатия на кнопку изменения пользователя
         let editUserBtns = document.querySelectorAll(".users__table .edit__btn")
