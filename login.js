@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://localhost:44370"
 
     //функция валидации формы входа
     const validateLoginForm = () => {

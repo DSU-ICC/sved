@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://localhost:44370"
     let disciplineList
     let statusDisciplineList
     let closeModalBtns = document.querySelectorAll(".popup__close")
@@ -83,6 +83,17 @@ document.addEventListener("DOMContentLoaded", function() {
         if (response.ok) {
             disciplineList = await response.json()
             showRemovableDisciplines(disciplineList)
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                document.querySelector(".disciplines tbody").innerHTML = `
+                <tr><td>Ошибка получения данных</td></tr>
+            `
+            } else {
+                document.querySelector(".disciplines tbody").innerHTML = `
+                    <tr><td>${error}</td></tr>
+                `
+            }
         }
     }
 
@@ -148,7 +159,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             statusDisciplineList = await response.json()
-            showRemovableStatusDisciplines(statusDisciplineList)
+            showRemovableStatusDisciplines(statusDisciplineList)  
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                document.querySelector(".status-disciplines tbody").innerHTML = `
+                <tr><td>Ошибка получения данных</td></tr>
+            `
+            } else {
+                document.querySelector(".status-disciplines tbody").innerHTML = `
+                    <tr><td>${error}</td></tr>
+                `
+            }
         }
     }
 

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://localhost:44370"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
     let searchBtn = document.querySelector(".search__btn")
@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             faculties = await response.json()
+            console.log(faculties)
             fillFacultyList(faculties)
 
         }
@@ -126,10 +127,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const showAllProfiles = () => {
         //получаем айди факультетов профилей
         let facultiesId = new Set(profiles.map(e => e.caseSDepartment?.facId).filter(e => e !== undefined))
-
         //переменная для хранения разметки таблицы с профилями
         let res = ""
-
+        
         for (let facIdItem of facultiesId) {
             //находим все профили, которые принадлежат факультету
             let facIdProfiles = profiles.filter(e => e.caseSDepartment?.facId === facIdItem)
@@ -265,11 +265,10 @@ document.addEventListener("DOMContentLoaded", function() {
         let faculty = faculties[faculties.map(e => e.divName).indexOf(facultyName)]
         let facultyId
         let profilesFaculty
-
+        console.log(profiles.filter(e => e.caseSDepartment?.facId == 17))
         //если факультет был найден
         if (faculty != null) {
             facultyId = faculty.divId
-
             //находим все профили, которые принадлежат факультету
             profilesFaculty = profiles.filter(e => e.caseSDepartment?.facId === facultyId)   
         }
