@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://localhost:44370"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
     let searchBtn = document.querySelector(".search__btn")
@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             faculties = await response.json()
+            console.log(faculties)
             fillFacultyList(faculties)
 
         }
@@ -124,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //показ всех существующих профилей с названиями их факультетов
     const showAllProfiles = () => {
+<<<<<<< HEAD
         let res = ""
 
         let facId = 0;
@@ -132,6 +134,16 @@ document.addEventListener("DOMContentLoaded", function() {
             if (el.caseSDepartment.facId !== facId) {
                 //получаем имя факультета с помощью его айди
                 let facultyName = faculties[faculties.map(e => e.facId).indexOf(el.caseSDepartment.facId)]?.facName
+=======
+        //получаем айди факультетов профилей
+        let facultiesId = new Set(profiles.map(e => e.caseSDepartment?.facId).filter(e => e !== undefined))
+        //переменная для хранения разметки таблицы с профилями
+        let res = ""
+        
+        for (let facIdItem of facultiesId) {
+            //находим все профили, которые принадлежат факультету
+            let facIdProfiles = profiles.filter(e => e.caseSDepartment?.facId === facIdItem)
+>>>>>>> 822da63be2554fda526e3e82c96f76fb1e2e0c31
 
                 if (facultyName) {
                     //вывод названия факультета
@@ -363,11 +375,15 @@ document.addEventListener("DOMContentLoaded", function() {
         let faculty = faculties[faculties.map(e => e.facName).indexOf(facultyName)]
         let facultyId
         let profilesFaculty
-
+        console.log(profiles.filter(e => e.caseSDepartment?.facId == 17))
         //если факультет был найден
         if (faculty != null) {
+<<<<<<< HEAD
             facultyId = faculty.facId
 
+=======
+            facultyId = faculty.divId
+>>>>>>> 822da63be2554fda526e3e82c96f76fb1e2e0c31
             //находим все профили, которые принадлежат факультету
             profilesFaculty = profiles.filter(e => e.caseSDepartment?.facId === facultyId)   
         }

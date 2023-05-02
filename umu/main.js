@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://localhost:44370"
     let disciplineList
     let statusDisciplineList
     let closeModalBtns = document.querySelectorAll(".popup__close")
@@ -159,7 +159,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             statusDisciplineList = await response.json()
+<<<<<<< HEAD
             showRemovableStatusDisciplines(statusDisciplineList)
+=======
+            showRemovableStatusDisciplines(statusDisciplineList)  
+>>>>>>> 822da63be2554fda526e3e82c96f76fb1e2e0c31
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
