@@ -32,8 +32,6 @@ document.addEventListener("DOMContentLoaded", function() {
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) { // тег для аннотации к рпд
-            propItem += `itemprop="educationAnnotation"`
         } else if (fileTypeId == getFileTypeIdByName("Календарный график")) { //тег для календарного рабочего графика
             propItem += `itemprop="educationShedule"`
         } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
@@ -146,7 +144,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
         
-                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
+                if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+                    res += `
+                        <td itemprop="educationAnnotation">
+                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                } else {
+                    res += `
+                        <td itemprop="educationAnnotation">
+                            <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                }
         
                 if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                     res += `

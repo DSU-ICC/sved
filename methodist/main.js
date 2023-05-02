@@ -894,8 +894,6 @@ document.addEventListener("DOMContentLoaded", () => {
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) { // тег для аннотации к рпд
-            propItem += `itemprop="educationAnnotation"`
         } else if (fileTypeId == getFileTypeIdByName("Календарный график")) { //тег для календарного учебного графика
             propItem += `itemprop="educationShedule"`
         } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
@@ -1093,7 +1091,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
 
-                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
+                //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
+                if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+                    res += `
+                        <td itemprop="educationAnnotation">
+                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                } else {
+                    res += `
+                        <td itemprop="educationAnnotation">
+                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        </td>
+                    ` 
+                }
 
                 //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
                 if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {

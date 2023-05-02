@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://localhost:44370"
+    const URL = "https://oop.icc.dgu.ru"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
     let searchBtn = document.querySelector(".search__btn")
@@ -27,8 +27,6 @@ document.addEventListener("DOMContentLoaded", function() {
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) { // тег для аннотации к рпд
-            propItem += `itemprop="educationAnnotation"`
         } else if (fileTypeId == getFileTypeIdByName("Календарный график")) { //тег для календарного учебного графика
             propItem += `itemprop="educationShedule"`
         } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
@@ -125,7 +123,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //показ всех существующих профилей с названиями их факультетов
     const showAllProfiles = () => {
-<<<<<<< HEAD
         let res = ""
 
         let facId = 0;
@@ -134,16 +131,6 @@ document.addEventListener("DOMContentLoaded", function() {
             if (el.caseSDepartment.facId !== facId) {
                 //получаем имя факультета с помощью его айди
                 let facultyName = faculties[faculties.map(e => e.facId).indexOf(el.caseSDepartment.facId)]?.facName
-=======
-        //получаем айди факультетов профилей
-        let facultiesId = new Set(profiles.map(e => e.caseSDepartment?.facId).filter(e => e !== undefined))
-        //переменная для хранения разметки таблицы с профилями
-        let res = ""
-        
-        for (let facIdItem of facultiesId) {
-            //находим все профили, которые принадлежат факультету
-            let facIdProfiles = profiles.filter(e => e.caseSDepartment?.facId === facIdItem)
->>>>>>> 822da63be2554fda526e3e82c96f76fb1e2e0c31
 
                 if (facultyName) {
                     //вывод названия факультета
@@ -186,8 +173,20 @@ document.addEventListener("DOMContentLoaded", function() {
             `
 
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
-    
-            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
+
+            if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+                res += `
+                    <td itemprop="educationAnnotation">
+                        <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                    </td>
+                ` 
+            } else {
+                res += `
+                    <td itemprop="educationAnnotation">
+                        <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                    </td>
+                ` 
+            } 
     
             if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                 res += `
@@ -246,101 +245,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
     
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
-
-            if (el.profile.id == 293) {
-                console.log(el.profile)
-                let mak = ""
-                    mak += `
-                    <tr itemprop="eduOp">
-                        <td>
-                            <span>${el.profile.year}</span>
-                        </td>
-                        <td itemprop="eduCode">
-                            <span>${el.caseSDepartment.code}</span>
-                        </td>
-                        <td itemprop="eduName">
-                            <span>${el.caseSDepartment.deptName}</span>
-                        </td>
-                        <td itemprop="eduLevel">
-                            <span>${el.profile.levelEdu.name}</span>
-                        </td>
-                        <td itemprop="eduProf">
-                            <span>${el.profile.profileName}</span>
-                        </td>                    
-                ` 
-        
-                mak += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ОПОП")) // опоп
-                
-                mak += `
-                    <td itemprop="eduForm">
-                        <span>${el.caseCEdukind ? el.caseCEdukind.edukind : ""}</span>
-                    </td>
-                `
-
-                mak += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
-        
-                mak += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // аннотации к рпд
-        
-                if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
-                    mak += `
-                        <td itemprop="educationRpd">
-                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
-                        </td>
-                    ` 
-                } else {
-                    mak += `
-                        <td itemprop="educationRpd">
-                            <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
-                        </td>
-                    ` 
-                } 
-
-        
-                mak += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
-        
-                let fileModelsRpp = el.disciplines // рабочие программы практик
-                if (fileModelsRpp.length > 0) {
-                    let rpp = `<td itemprop="eduPr">`
-                    for (let fileRPP of fileModelsRpp) {
-                        rpp += `
-                            <div class="item-file">
-                            ${
-                                fileRPP.fileRPD != null
-                                ? `
-                                    <div class="item-file__inner">
-                                        <span class="key-icon"></span>
-                                        <div class="document-key">
-                                            <p class="document-key__text">Документ подписан</p>
-                                            <p class="document-key__text">Простая электронная подпись</p>
-                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
-                                            <p class="document-key__text">Ректор</p>
-                                            <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
-                                        </div>
-                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
-                                    </div>
-                                    
-                                `
-                                : `
-                                    <span>${fileRPP.disciplineName}</span>
-                                `
-                            }
-                            
-                            </div>
-                        `
-                    }                
-                    mak += rpp
-                } else {
-                    mak += `
-                        <td itemprop="eduPr">
-                        </td>
-                    `
-                }
-        
-                mak += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
-                console.log(mak)
-            }
-    
         } 
         
         if (res.length > 0) {
@@ -378,12 +282,8 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(profiles.filter(e => e.caseSDepartment?.facId == 17))
         //если факультет был найден
         if (faculty != null) {
-<<<<<<< HEAD
             facultyId = faculty.facId
 
-=======
-            facultyId = faculty.divId
->>>>>>> 822da63be2554fda526e3e82c96f76fb1e2e0c31
             //находим все профили, которые принадлежат факультету
             profilesFaculty = profiles.filter(e => e.caseSDepartment?.facId === facultyId)   
         }
