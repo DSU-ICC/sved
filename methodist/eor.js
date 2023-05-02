@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             showDisciplines(disciplineList)
         } else if (response.status == 405) {
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
-                                        <a class="discipline-name" href="https://oop.icc.dgu.ru/Files/${discipline.fileRPD.name}">${discipline.disciplineName}</a>
+                                        <a class="discipline-name" href="https://oop.icc.dgu.ru/sved/Files/${discipline.fileRPD.name}">${discipline.disciplineName}</a>
                                     </div>
                                     <div class="actions-rpd">
                                         <button type="button" class="delete delete-rpd">
@@ -757,7 +757,7 @@ document.addEventListener("DOMContentLoaded", () => {
             getDisciplinesByProfile(profileId)
             getAllStatusDisciplines()
         } else if (response.status == 405) {
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -875,7 +875,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupCreateDiscipline.querySelector("[data-selectfield=statusDiscipline] .select__options").innerHTML = res
             document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
         } else if (response.status == 405) {
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -926,7 +926,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
     }
 
@@ -955,9 +955,9 @@ document.addEventListener("DOMContentLoaded", () => {
             getAllStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`/${redirectPage}/`)
+            window.location.assign(`/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("/login.html")
+        window.location.assign("/sved/login.html")
     }
 })

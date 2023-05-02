@@ -64,14 +64,14 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                             <a href=${fileModel.linkToFile != null
                                 ? fileModel.linkToFile
-                                : "http://oop.icc.dgu.ru/Files/" + fileModel.name}>${fileModel.outputFileName}</a>
+                                : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}>${fileModel.outputFileName}</a>
                         </div>
                     `
                 }  else {
                     markup += `
                     <a href=${fileModel.linkToFile != null
                         ? fileModel.linkToFile
-                        : "http://oop.icc.dgu.ru/Files/" + fileModel.name}
+                        : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                            <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
                         </td>
                     ` 
                 }
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //кнопка для входа на страницу авторизации
     loginBtn.addEventListener("click", function() {
-        window.location.assign("/login.html")
+        window.location.assign("/sved/login.html")
     })
     
     

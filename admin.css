@@ -1,23 +1,23 @@
 @font-face {
     font-family: "Geometria";
-    src: url('../fonts/Geometria-Regular.woff2') format('woff2'),
-        url('../fonts/Geometria-Regular.woff') format('woff');
+    src: url('fonts/Geometria-Regular.woff2') format('woff2'),
+        url('fonts/Geometria-Regular.woff') format('woff');
     font-weight: 400;
     display: swap;
 }
 
 @font-face {
     font-family: "Geometria";
-    src: url('../fonts/Geometria-Medium.woff2') format('woff2'),
-        url('../fonts/Geometria-Medium.woff') format('woff');
+    src: url('fonts/Geometria-Medium.woff2') format('woff2'),
+        url('fonts/Geometria-Medium.woff') format('woff');
     font-weight: 500;
     display: swap;
 }
 
 @font-face {
     font-family: "Geometria";
-    src: url('../fonts/Geometria-Bold.woff2') format('woff2'),
-        url('../fonts/Geometria-Bold.woff') format('woff');
+    src: url('fonts/Geometria-Bold.woff2') format('woff2'),
+        url('fonts/Geometria-Bold.woff') format('woff');
     font-weight: 700;
     display: swap;
 }
@@ -147,7 +147,7 @@ main {
 }
 .action__btn::before {
     content: '';
-    background: url("../img/logout.svg") no-repeat;
+    background: url("img/logout.svg") no-repeat;
     width: 21px;
     height: 21px;
     display: block;
@@ -226,14 +226,14 @@ main {
 .edit__btn::before,
 .delete__btn::before {
     content: '';
-    background: url("../img/download.svg") no-repeat;
+    background: url("img/download.svg") no-repeat;
     width: 21px;
     height: 22px;
     display: block;
 }
 
 .loading::before {
-    background: url("../img/loading.svg") no-repeat center/cover !important;
+    background: url("img/loading.svg") no-repeat center/cover !important;
     animation: .75s linear infinite loading;
     top: 22px;
 }
@@ -283,7 +283,7 @@ main {
 }
 .select__btn::after {
    content: '';
-   background: url("../img/arrow-down.svg") no-repeat;
+   background: url("img/arrow-down.svg") no-repeat;
    width: 21px;
    height: 21px;
    flex-shrink: 0;
@@ -363,7 +363,7 @@ main {
 }
 
 .edit .edit__btn::before {
-    background: url("../img/edit.svg") no-repeat center;
+    background: url("img/edit.svg") no-repeat center;
     position: relative;
 }
 
@@ -376,7 +376,7 @@ main {
 }
 
 .delete .delete__btn::before {
-    background: url("../img/delete.svg") no-repeat 0 1px;
+    background: url("img/delete.svg") no-repeat 0 1px;
     position: relative;
 }
 
@@ -404,7 +404,7 @@ table, th, td {
 
 .page__table {
     overflow-x: auto;
-    height: 500px;
+    height: 600px;
 }
 
 .page__table table {
@@ -441,7 +441,7 @@ tr td:not(:last-child) button.file-upload__item {
 }
 
 .editable td:last-child .edit__btn::before {
-    background-image: url("../img/edit-save.svg");
+    background-image: url("img/edit-save.svg");
     background-position-y: 1px;
 }
 
@@ -617,7 +617,7 @@ td a {
 
 .popup-form__btn::before {
     content: '';
-    background: url("../img/save.svg") no-repeat;
+    background: url("img/save.svg") no-repeat;
     width: 35px;
     height: 35px;
     display: block;
@@ -674,11 +674,11 @@ td a {
 }
 
 .actions .edit__btn::before {
-    background: url("../img/edit-item.svg") no-repeat;
+    background: url("img/edit-item.svg") no-repeat;
 }
 
 .actions .delete__btn::before {
-    background: url("../img/delete-item.svg") no-repeat;
+    background: url("img/delete-item.svg") no-repeat;
 }
 
 .actions .file-upload {
@@ -686,7 +686,7 @@ td a {
 }
 
 .actions .file-upload__btn::before {
-    background-image: url("../img/download-item.svg");
+    background-image: url("img/download-item.svg");
     background-position-y: -2px;
 }
 
@@ -712,7 +712,7 @@ td[itemprop="methodology"] .document-key {
 }
 .key-icon::before {
     content: '';
-    background: url("../img/key-ecp.svg") no-repeat;
+    background: url("img/key-ecp.svg") no-repeat;
     width: 20px;
     height: 20px;
     display: block;
@@ -738,7 +738,7 @@ td[itemprop="methodology"] .document-key {
 }
 
 #popup-delete .popup-form__btn::before {
-    background-image: url("../img/delete.svg");
+    background-image: url("img/delete.svg");
 }
 
 .delete-file .btn {
@@ -876,7 +876,7 @@ td[colspan] {
 }
 .accordeon__icon::after {
     content: '';
-    background: url("../img/arrow-accordeon.svg") no-repeat;
+    background: url("img/arrow-accordeon.svg") no-repeat;
     width: 41px;
     height: 22px;
     display: block;
@@ -1108,7 +1108,7 @@ datalist option:hover::before {
 
 .login-form__btn.loading::before {
     content: '';
-    background: url("../img/loading.svg") no-repeat center/cover !important;
+    background: url("img/loading.svg") no-repeat center/cover !important;
     width: 21px;
     height: 22px;
     margin-right: 14px;
@@ -1263,14 +1263,14 @@ datalist option:hover::before {
 .approve__btn::before,
 .reject__btn::before {
     content: '';
-    background: url("../img/edit-save.svg") no-repeat;
+    background: url("img/edit-save.svg") no-repeat;
     width: 21px;
     height: 22px;
     display: block;
 }
 
 .request-table .reject__btn::before {
-    background: url("../img/delete.svg") no-repeat;
+    background: url("img/delete.svg") no-repeat;
 }
 
 .tab {

@@ -184,6 +184,10 @@ main {
 
 .page__head {
     margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 
 .page__title {
@@ -200,11 +204,11 @@ table, th, td {
 
 .page__table {
     overflow-x: auto;
-    height: 500px;
+    height: 640px;
 }
 
 .page__table table {
-    width: max-content;
+    width: 100%;
 }
 
 th, td[colspan] {
@@ -256,12 +260,12 @@ td a {
 
 /*перемещаем блок с ключом эцп левее, чтоб его было полностью видно на экране*/
 td[itemprop="methodology"] .document-key {
-    left: -195px;
+    left: -275px;
 }
 
 .key-icon::before {
     content: '';
-    background: url("../img/key-ecp.svg") no-repeat;
+    background: url("img/key-ecp.svg") no-repeat;
     width: 20px;
     height: 20px;
     display: block;
@@ -512,7 +516,7 @@ td[itemprop="methodology"] .document-key {
 }
 .accordeon__icon::after {
     content: '';
-    background: url("../img/arrow-accordeon.svg") no-repeat;
+    background: url("img/arrow-accordeon.svg") no-repeat;
     width: 41px;
     height: 22px;
     display: block;

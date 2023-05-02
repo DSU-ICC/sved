@@ -83,6 +83,17 @@ document.addEventListener("DOMContentLoaded", function() {
         if (response.ok) {
             disciplineList = await response.json()
             showRemovableDisciplines(disciplineList)
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                document.querySelector(".disciplines tbody").innerHTML = `
+                <tr><td>Ошибка получения данных</td></tr>
+            `
+            } else {
+                document.querySelector(".disciplines tbody").innerHTML = `
+                    <tr><td>${error}</td></tr>
+                `
+            }
         }
     }
 
@@ -149,6 +160,17 @@ document.addEventListener("DOMContentLoaded", function() {
         if (response.ok) {
             statusDisciplineList = await response.json()
             showRemovableStatusDisciplines(statusDisciplineList)
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                document.querySelector(".status-disciplines tbody").innerHTML = `
+                <tr><td>Ошибка получения данных</td></tr>
+            `
+            } else {
+                document.querySelector(".status-disciplines tbody").innerHTML = `
+                    <tr><td>${error}</td></tr>
+                `
+            }
         }
     }
 
@@ -486,7 +508,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
     }
 
@@ -514,9 +536,9 @@ document.addEventListener("DOMContentLoaded", function() {
             getRemovableStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли        
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`/${redirectPage}/`)
+            window.location.assign(`/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("/login.html")
+        window.location.assign("/sved/login.html")
     }
 })

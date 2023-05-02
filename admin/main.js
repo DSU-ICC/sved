@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //получение всех пользователей
     const getAllUsers = async () => {
-        document.querySelector("tbody").innerHTML = `
+        document.querySelector(".users__table").innerHTML = `
             <p>Идет загрузка пользователей...</p>
         `
 
@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     const getAllFaculties = async () => {
-        let response = await fetch(`${URL}/PersonalData/GetAllFaculty`)
+        let response = await fetch(`${URL}/DekanatData/GetFaculties`)
 
         if (response.ok) {
             faculties = await response.json()
@@ -659,7 +659,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
     }
 
@@ -688,9 +688,9 @@ document.addEventListener("DOMContentLoaded", function() {
             getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllUsers())
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`/${redirectPage}/`)
+            window.location.assign(`/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("/login.html")
+        window.location.assign("/sved/login.html")
     }
 })  

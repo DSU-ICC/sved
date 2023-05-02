@@ -925,7 +925,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                             <a href=${fileModel.linkToFile != null
                                 ? fileModel.linkToFile
-                                : "http://oop.icc.dgu.ru/Files/" + fileModel.name}
+                                : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
@@ -933,7 +933,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     markup += `
                     <a href=${fileModel.linkToFile != null
                         ? fileModel.linkToFile
-                        : "http://oop.icc.dgu.ru/Files/" + fileModel.name}
+                        : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -983,10 +983,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 profiles = await response.json()
                 showProfiles(profiles)
             } else if (response.status == 405) {
-                window.location.assign("/login.html")
+                window.location.assign("/sved/login.html")
             }
         } else {
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
     }
 
@@ -1105,7 +1105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
                         </td>
                     ` 
                 }
@@ -1131,7 +1131,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
@@ -1231,7 +1231,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupEditText.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
             }
         } else {
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
         
     }
@@ -1323,7 +1323,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
     }
 
@@ -1358,9 +1358,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "methodist"
-            window.location.assign(`/${redirectPage}/`)
+            window.location.assign(`/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("/login.html")
+        window.location.assign("/sved/login.html")
     }
 })
