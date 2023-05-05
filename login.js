@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://localhost:44370"
+    const URL = "https://oop.icc.dgu.ru"
 
     //функция валидации формы входа
     const validateLoginForm = () => {
@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("userName", userData.user.userName)
             localStorage.setItem("userRole", userData.role)
             localStorage.setItem("persDepartmentId", userData.user.persDepartmentId)
+            console.log(userData)
             redirectByRole(userData.role)
         } else {
             let error = await response.text()
@@ -81,6 +82,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     const redirectByRole = (role) => {
-        window.location.assign(`/sved/${role}/`)
+        window.location.assign(`/${role}/`)
     }
 })

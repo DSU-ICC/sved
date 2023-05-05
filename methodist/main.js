@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let logoutBtn = document.querySelector(".header .action__btn")
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
     let modalUchPlan = document.querySelector("#popup-uchplan")
-    
+
     let modalUploadFile = document.querySelector("#popup-uploadFile")
     let popupUploadFileBtn = document.querySelector("#popup-uploadFile .popup-form__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupDeleteNoBtn = document.querySelector("#popup-delete .confirm-button--no")
     let popupEditFile = document.querySelector("#popup-editFile")
     let popupEditFileBtn = document.querySelector("#popup-editFile .popup-form__btn")
-    
+
     let popupDeleteFileBtn = document.querySelector("#popup-editFile .delete__btn")
     let popupDeleteFile = document.querySelector("#popup-deleteFile")
     let popupDeleteFileYesBtn = document.querySelector("#popup-deleteFile .confirm-button--yes")
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     let pageTable = document.querySelector("table")
-    pageTable.addEventListener("click", function(e) {
+    pageTable.addEventListener("click", function (e) {
         let targetItem = e.target
 
         if (targetItem.closest(".file-upload__btn")) { // кнопка загрузки файлов
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-    uploadUchPlan.addEventListener("change", function(e) {
+    uploadUchPlan.addEventListener("change", function (e) {
         parsingUchPlan(e.target)
     })
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-            
+
             el.previousElementSibling.classList.remove("loading")
             el.previousElementSibling.textContent = "Загрузить учебный план"
             el.previousElementSibling.disabled = false;
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let year = data.profile.year ?? ""
         let profile = data.profile.profileName ?? ""
-        let level = data.profile.levelEdu?.name 
+        let level = data.profile.levelEdu?.name
         let deptName = data.caseSDepartment?.deptName
         let eduForm = data.caseCEdukind?.edukind
 
@@ -120,44 +120,44 @@ document.addEventListener("DOMContentLoaded", () => {
         let kafedraSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='kafedra'] .select__option")
 
         if (deptName) {
-            deptSelectOptions.forEach(deptItem => {  
-                if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {  
-                    deptItem.click()           
-                } 
+            deptSelectOptions.forEach(deptItem => {
+                if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
+                    deptItem.click()
+                }
             })
         }
 
         if (level) {
             levelSelectOptions.forEach(levelItem => {
-                if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) { 
-                    levelItem.click()  
-                } 
+                if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) {
+                    levelItem.click()
+                }
             })
         }
 
         if (eduForm) {
             eduFormSelectOptions.forEach(eduFormItem => {
-                if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) { 
+                if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) {
                     eduFormItem.click()
-                } 
+                }
             })
-        }  
-        
+        }
+
         kafedraSelectOptions.forEach(kafedraItem => {
             if (kafedraItem.textContent.trim().toLowerCase() == kafedraName.toLowerCase()) {
                 kafedraItem.click()
-            } 
-        }) 
+            }
+        })
     }
 
     //кнопка создания профиля в модальном окне
     popupSaveUchPlanBtn.addEventListener("click", () => {
         let isFormValid = validateProfileForm(modalUchPlan)
-        
+
         if (isFormValid) {
             saveUchPlanData(dataUchPlanFinal)
         }
-        
+
     })
 
     //создание профиля 
@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-            
+
             popupSaveUchPlanBtn.classList.remove("loading")
             popupSaveUchPlanBtn.textContent = "Завершить редактирование"
             popupSaveUchPlanBtn.disabled = false
@@ -239,7 +239,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const fillDataForUploadFile = (targetItem) => {
         modalUploadFile.classList.add("open")
         document.body.classList.add("no-scroll")
-        
+
+        let fileUploadBtnLabel = modalUploadFile.querySelector(".file")
+        let linkInputLabel = modalUploadFile.querySelector(".link")
+
+        //обработчик событий выбора способа загрузки файла
+        const radioBtns = modalUploadFile.querySelectorAll(".radio__item label")
+        radioBtns.forEach((radioItem) => {
+            radioItem.addEventListener("click", function (e) {
+                //очищаем все радио кнопки
+                for (let radioEl of radioBtns) {
+                    radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+                }       
+
+                //помечаем нажатую кнопку как выбранную
+                e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
+
+                let selectedUploadOption = e.target.textContent.trim()
+
+                if (selectedUploadOption == "Загрузить файл") {
+                    fileUploadBtnLabel.style.display = "block"
+                    linkInputLabel.style.display = "none"
+                } else if (selectedUploadOption == "Загрузить ссылку") {
+                    linkInputLabel.style.display = "flex"
+                    fileUploadBtnLabel.style.display = "none"
+                }
+            })
+        })
+
         let fileTypeId = parseInt(targetItem.dataset.filetype)
         let profileId = parseInt(targetItem.closest("tr").dataset.profileid)
         modalUploadFile.querySelector("#fileTypeId").value = fileTypeId
@@ -248,55 +275,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //отображение названия выбранного файла
         let uploadInput = modalUploadFile.querySelector("input[type=file]")
-        uploadInput.addEventListener("change", function(e) {
+        uploadInput.addEventListener("change", function (e) {
             let fileNameField = modalUploadFile.querySelector(".popup-form__file-name")
             fileNameField.textContent = `Название файла: ${e.target.files[0].name}`
         })
     }
 
     // событие нажатия на кнопку создания файла в соответствующем модальном окне
-    popupUploadFileBtn.addEventListener("click", function(e) {
+    popupUploadFileBtn.addEventListener("click", function (e) {
         let fileTypeId = modalUploadFile.querySelector("#fileTypeId").value
-        let profileId = modalUploadFile.querySelector("#profileId").value
-        let uploadInput = e.target.closest(".popup-form").querySelector('input[type="file"]')
+        let profileId = modalUploadFile.querySelector("#profileId").value 
         let nameFileInput = e.target.closest(".popup-form").querySelector(".popup-form__label")
-        let isUploadFile = uploadInput.files.length > 0 ? true : false
         let isValidateName = nameFileInput.querySelector(".popup-form__input").value.trim() != "" ? true : false
+        let uploadInput = e.target.closest(".popup-form").querySelector('input[type="file"]')
+        let linkInputLabel = modalUploadFile.querySelector(".link")
+        let linkInput = modalUploadFile.querySelector(".link input")
 
-        if (isValidateName && isUploadFile) {
+        let isFormValid = true
+
+        if (isValidateName) {
             nameFileInput.classList.remove("invalid")
-            uploadInput.nextElementSibling.classList.remove("invalid")
+        } else {
+            nameFileInput.classList.add("invalid")
+            isFormValid = false
+        }
 
+        let selectedOption = modalUploadFile.querySelector(".radio [data-checked=true] + label").textContent.trim()
+        if (selectedOption == "Загрузить файл") {            
+            let isUploadFile = uploadInput.files.length > 0 ? true : false
+
+            if (isUploadFile) {
+                uploadInput.nextElementSibling.classList.remove("invalid")
+            } else {
+                uploadInput.nextElementSibling.classList.add("invalid")
+                isFormValid = false
+            }
+        } else {
+            let isValidateLink = linkInput.value.trim() != "" ? true : false
+
+            if (isValidateLink) {
+                linkInputLabel.classList.remove("invalud")
+            } else {
+                linkInputLabel.classList.add("invalid")
+                isFormValid = false
+            }
+        }
+
+        if (isFormValid) {
+            let formData = new FormData()
+            let fileName = nameFileInput.querySelector(".popup-form__input").value
+            formData.append("fileName", fileName)
+            formData.append("fileType", fileTypeId)
+            formData.append("profileId", profileId)
+
+            if (selectedOption == "Загрузить файл") {
+                formData.append("formFile", uploadInput.files[0])
+            } else {
+                formData.append("linkToFile", linkInput.value)
+            }
+                  
             e.target.classList.add("loading")
             e.target.textContent = "Загрузка..."
             e.target.disabled = true
 
-            let formData = new FormData()
-            
-            let fileName = nameFileInput.querySelector(".popup-form__input").value
-
-            formData.append("formFile", uploadInput.files[0])
-            formData.append("fileName", fileName)                    
-            formData.append("fileType", fileTypeId)
-            formData.append("profileId", profileId)
-
             saveFile(formData, e.target)
-
-        } else {
-            if (!isValidateName) {
-                nameFileInput.classList.add("invalid")
-                nameFileInput.focus()
-            } else {
-                nameFileInput.classList.remove("invalid")
-            }
-            
-            if (!isUploadFile) {
-                uploadInput.nextElementSibling.classList.add("invalid")
-                uploadInput.focus()
-            } else {
-                uploadInput.nextElementSibling.classList.remove("invalid")
-            }
-        }                           
+        }
     })
 
     //заполнение данными модальное окно для изменения файла
@@ -312,9 +355,43 @@ document.addEventListener("DOMContentLoaded", () => {
         popupEditFile.querySelector("#fileTypeId").value = fileTypeId
         popupEditFile.querySelector("#profileId").value = profileId
 
+        let fileUploadBtnLabel = popupEditFile.querySelector(".file")
+        let linkInputLabel = popupEditFile.querySelector(".link")
+
+        //обработчик событий выбора способа загрузки файла
+        const radioBtns = popupEditFile.querySelectorAll(".radio__item label")
+        radioBtns.forEach((radioItem) => {
+            radioItem.addEventListener("click", function (e) {
+                //очищаем все радио кнопки
+                for (let radioEl of radioBtns) {
+                    radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+                }       
+                console.log(e.target)
+                //помечаем нажатую кнопку как выбранную
+                e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
+
+                let selectedUploadOption = e.target.textContent.trim()
+
+                if (selectedUploadOption == "Загрузить файл") {
+                    fileUploadBtnLabel.style.display = "flex"
+                    linkInputLabel.style.display = "none"
+                } else if (selectedUploadOption == "Загрузить ссылку") {
+                    linkInputLabel.style.display = "flex"
+                    fileUploadBtnLabel.style.display = "none"
+                }
+            })
+        })
+
+        radioBtns[0].click()
+
         //получить и отобразить в текстовом поле название ссылки из файла
         let linkToFile = el.closest(".item-file").querySelector("a")
         let outputFileName = linkToFile.textContent
+
+        let hrefLink = linkToFile.getAttribute("href")
+        if (!hrefLink.startsWith("https://oop.icc.dgu.ru/sved/Files")) {
+            linkInputLabel.querySelector("input").value = hrefLink
+        }
 
         //получаем название файла из профиля
         let fileModelsProfile = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.fileModels
@@ -336,7 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //вывести название файла в случае выбора другого файла
         let uploadFileInput = popupEditFile.querySelector("input[type=file]")
-        uploadFileInput.addEventListener("change", function(e) {
+        uploadFileInput.addEventListener("change", function (e) {
             fileNameField.textContent = `Название файла: ${e.target.files[0].name}`
         })
     }
@@ -391,28 +468,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         if (yearInput.value.trim() == "") {
-            isValidForm = false 
+            isValidForm = false
             yearInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             yearInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
         if (profileInput.value.trim() == "") {
-            isValidForm = false 
+            isValidForm = false
             profileInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             profileInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
         if (eduLangInput.value.trim() == "") {
-            isValidForm = false 
+            isValidForm = false
             eduLangInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             eduLangInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
         if (accredInput.value.trim() == "") {
-            isValidForm = false 
+            isValidForm = false
             accredInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             accredInput.closest(".popup-form__label").classList.remove("invalid")
@@ -422,7 +499,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //нажатие на кнопку изменения профиля в модальном окне
-    popupEditFileBtn.addEventListener("click", function(e) {
+    popupEditFileBtn.addEventListener("click", function (e) {
         validateAndEditFileOpop(e.target)
     })
 
@@ -450,8 +527,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 formData.append("formFile", uploadInput.files[0])
             }
 
-            formData.append("fileName", fileName)                    
-            formData.append("fileType", fileTypeId)                    
+            formData.append("fileName", fileName)
+            formData.append("fileType", fileTypeId)
             formData.append("fileId", fileId)
             formData.append("profileId", profileId)
 
@@ -476,10 +553,10 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         if (response.ok) {
-            alert("Профиль изменен")      
+            alert("Профиль изменен")
             el.classList.remove("loading")
             el.textContent = "Завершить редактирование"
-            el.disabled = false  
+            el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
             getProfilesById(kafedra_id)
         } else {
@@ -489,15 +566,15 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-            
+
             el.classList.remove("loading")
-            el.textContent = "Завершить редактирование"  
+            el.textContent = "Завершить редактирование"
             el.disabled = false
         }
     }
 
     //нажатие на кнопку удаления файла в модальном окне изменения файла
-    popupDeleteFileBtn.addEventListener("click", function(e) {  
+    popupDeleteFileBtn.addEventListener("click", function (e) {
         popupEditFile.classList.remove("open")
 
         let fileId = popupEditFile.querySelector("#fileId").value
@@ -507,7 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //подтверждение удаления файла
-    popupDeleteFileYesBtn.addEventListener("click", function(e) {
+    popupDeleteFileYesBtn.addEventListener("click", function (e) {
         e.target.classList.add("loading")
         e.target.disabled = true
 
@@ -516,7 +593,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //отклонение удаления файла
-    popupDeleteFileNoBtn.addEventListener("click", function(e) {
+    popupDeleteFileNoBtn.addEventListener("click", function (e) {
         popupDeleteFile.classList.remove("open")
         document.body.classList.remove("no-scroll")
     })
@@ -526,7 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupEditText.classList.add("open")
         document.body.classList.add("no-scroll")
 
-        let tdElements = el.closest("tr")          
+        let tdElements = el.closest("tr")
         let profileEdited = profiles[profiles.map(e => e.profile.id).indexOf(+tdElements.dataset.profileid)]
         let year = profileEdited.profile.year
         let profile = profileEdited.profile.profileName
@@ -556,10 +633,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let eduFormSelectOptions = popupEditText.querySelectorAll("[data-selectfield=eduForm] .select__option")
         let kafedraSelectOptions = popupEditText.querySelectorAll("[data-selectfield=kafedra] .select__option")
 
-        deptSelectOptions.forEach(deptItem => {  
+        deptSelectOptions.forEach(deptItem => {
             if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
-                deptItem.click()          
-            } 
+                deptItem.click()
+            }
         })
 
         levelSelectOptions.forEach(levelItem => {
@@ -585,15 +662,15 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
 
-        kafedraSelectOptions.forEach(kafedraItem => {  
+        kafedraSelectOptions.forEach(kafedraItem => {
             if (listKafedrasName.includes(kafedraItem.textContent.trim().toLowerCase())) {
-                kafedraItem.click()          
-            } 
+                kafedraItem.click()
+            }
         })
     }
 
     //нажатие на кнопку сохранения изменений в модальном окне изменения профиля
-    popupEditTextBtn.addEventListener("click", function() {
+    popupEditTextBtn.addEventListener("click", function () {
         //валидация формы изменения профиля
         let isFormValid = validateProfileForm(popupEditText)
 
@@ -643,14 +720,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let tdElement = el.closest("tr")
         let profileId = tdElement.dataset.profileid
-        
+
         //получение айди удаляемого профиля
         let profileIdInput = popupDelete.querySelector("#profileId")
         profileIdInput.value = profileId
     }
 
     //нажатие на кнопку да в модальном окне удаления профиля
-    popupDeleteYesBtn.addEventListener("click", function(e) {
+    popupDeleteYesBtn.addEventListener("click", function (e) {
         let profileId = popupDelete.querySelector("#profileId").value
         popupDeleteYesBtn.classList.add("loading")
         popupDeleteYesBtn.disabled = true
@@ -659,15 +736,15 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //нажатие на кнопку нет в модальном окне удаления профиля
-    popupDeleteNoBtn.addEventListener("click", function() {
+    popupDeleteNoBtn.addEventListener("click", function () {
         popupDelete.querySelector(".popup__close").click()
     })
 
     //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
-        closeItem.addEventListener("click", function(e) {
+        closeItem.addEventListener("click", function (e) {
             let popupClosed = e.target.closest(".popup")
-            
+
             //очищение всех полей и выпадающих списков закрываемого модального окна
             let popupLabels = popupClosed.querySelectorAll(".popup-form__label")
             if (popupLabels) {
@@ -675,6 +752,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
                     let popupLabelSelect = popupLabel.querySelector(".select")
+                    let popupLabelUploadFile = popupLabel.querySelector(".file-upload__btn")
 
                     //очистка текстового поля
                     if (popupLabelInput) {
@@ -691,14 +769,18 @@ document.addEventListener("DOMContentLoaded", () => {
                         popupLabelSelect.classList.remove("invalid")
                         popupLabelSelectText.removeAttribute("data-id")
                         popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
-
-                    } else { // ставим значение роли по умолчанию (методист)
-                        let methodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
-                        methodistRoleRadioBtn.click()
-                        methodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+                    } else if (popupLabelUploadFile) {
+                        popupLabelUploadFile.classList.remove("invalid")
+                        popupLabelUploadFile.previousElementSibling.value = ''
                     }
+
+                    // } else { // ставим значение роли по умолчанию (методист)
+                    //     let methodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
+                    //     methodistRoleRadioBtn.click()
+                    //     methodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
+                    // }
                 })
-            } 
+            }
 
             let fileNameField = popupClosed.querySelector(".popup-form__file-name")
             if (fileNameField) {
@@ -708,7 +790,7 @@ document.addEventListener("DOMContentLoaded", () => {
             //после очистки закрываем модальное окно
             popupClosed.classList.remove("open")
             document.body.classList.remove("no-scroll")
-            
+
         })
     })
 
@@ -719,8 +801,8 @@ document.addEventListener("DOMContentLoaded", () => {
             selectItem.classList.toggle('active');
         })
         let options = selectItem.querySelector('.select__options');
-        options.addEventListener("click", function(e) {
-            if (e.target.closest(".select__option")) { 
+        options.addEventListener("click", function (e) {
+            if (e.target.closest(".select__option")) {
                 let selectedOption = e.target.closest(".select__option")
                 let selectedOptionText = selectedOption.querySelector('.select__option-text').textContent;
                 let selectText = selectItem.querySelector('.select__text')
@@ -735,7 +817,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             optionItem.classList.remove("selected")
                         })
 
-                        
+
 
                         //помечаем выбранный нами элемент как выбранный
                         selectedOption.classList.add("selected")
@@ -782,34 +864,34 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     }
                 }
-                
+
                 selectItem.classList.remove('active');
             }
         })
-                    
+
     })
 
-    
+
     //создать файл профиля
     const saveFile = async (formData, el) => {
         // Сохранение файлов (кроме РПД)
-        let ecpCode = ""
-        if (formData.has("ecp")) {
-            ecpCode += `&ecp=${formData.get("ecp")}`
+        let linkToFile = ""
+        if (formData.has("linkToFile")) {
+            linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`${URL}/FileModel/CreateFileModel?fileName=${formData.get("fileName")}&fileType=${formData.get("fileType")}&profileId=${formData.get("profileId")}${ecpCode}`, {
+        let response = await fetch(`${URL}/FileModel/CreateFileModel?fileName=${formData.get("fileName")}&fileType=${formData.get("fileType")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "POST",
             credentials: "include",
             body: formData
-        }) 
+        })
         if (response.ok) {
-           alert("Файл успешно добавлен")
-           el.classList.remove("loading")
-           el.textContent = "Загрузить файл"
-           el.disabled = false
-           el.closest(".popup__content").querySelector(".popup__close").click()
-           getProfilesById(kafedra_id)
+            alert("Файл успешно добавлен")
+            el.classList.remove("loading")
+            el.textContent = "Загрузить файл"
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -817,7 +899,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-            
+
             el.classList.remove("loading")
             el.textContent = "Загрузить файл"
             el.disabled = false
@@ -835,14 +917,14 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "PUT",
             credentials: "include",
             body: formData
-        }) 
+        })
         if (response.ok) {
-           alert("Файл успешно изменен")
-           el.classList.remove("loading")
-           el.textContent = "Загрузить файл"
-           el.disabled = false
-           el.closest(".popup__content").querySelector(".popup__close").click()
-           getProfilesById(kafedra_id)
+            alert("Файл успешно изменен")
+            el.classList.remove("loading")
+            el.textContent = "Загрузить файл"
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -850,7 +932,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-            
+
             el.classList.remove("loading")
             el.textContent = "Загрузить файл"
             el.disabled = false
@@ -862,13 +944,13 @@ document.addEventListener("DOMContentLoaded", () => {
         let response = await fetch(`${URL}/FileModel/DeleteFileModel?fileId=${fileId}`, {
             method: "DELETE",
             credentials: "include"
-        }) 
+        })
         if (response.ok) {
-           alert("Файл успешно удален")
-           el.classList.remove("loading")
-           el.disabled = false
-           el.closest(".popup__content").querySelector(".popup__close").click()
-           getProfilesById(kafedra_id)
+            alert("Файл успешно удален")
+            el.classList.remove("loading")
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -876,7 +958,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-           
+
             el.classList.remove("loading")
             el.textContent = "Удалить файл"
             el.disabled = false
@@ -901,8 +983,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (fileModels.size != 0) {
-           markup += `<td ${propItem}>`  
-           //циклом перебираем все файлы принадлежащие одному типу файлов (на случай, если их будет несколько)             
+            markup += `<td ${propItem}>`
+            //циклом перебираем все файлы принадлежащие одному типу файлов (на случай, если их будет несколько)             
             for (let fileModel of fileModels) {
                 markup += `
                     <div class="item-file">                                 
@@ -922,16 +1004,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <p class="document-key__text">${fileModel.codeECP}</p>
                             </div>
                             <a href=${fileModel.linkToFile != null
-                                ? fileModel.linkToFile
-                                : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
+                            ? fileModel.linkToFile
+                            : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
-                }  else {
+                } else {
                     markup += `
                     <a href=${fileModel.linkToFile != null
-                        ? fileModel.linkToFile
-                        : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
+                            ? fileModel.linkToFile
+                            : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -944,7 +1026,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `
             }
-            
+
             markup += `
                     <div class="actions">
                         <button class="file-upload file-upload__item">
@@ -976,7 +1058,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let response = await fetch(`${URL}/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
                 credentials: "include"
             })
-        
+
             if (response.ok) {
                 profiles = await response.json()
                 showProfiles(profiles)
@@ -994,7 +1076,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //здесь происходит создание разметки профилей с их атрибутами 
         for (let el of profiles) {
-            
+
             if (el.caseSDepartment != null) {
                 res += `
                 <tr data-profileid=${el.profile.id} itemprop="eduOp"> 
@@ -1033,14 +1115,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             </button>
                         </div>
                     </td>                    
-                ` 
-                
+                `
+
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ФГОС")) // фгос
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("ОПОП")) // опоп
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("АОПОП")) // аопоп
-                
+
                 res += `
                     <td itemprop="eduForm">
                         <span>${el.caseCEdukind.edukind}</span>
@@ -1076,11 +1158,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 res += `
                     <td itemprop="eduEl">
-                        ${
-                            el.profile.linkToDistanceEducation != "" 
-                            ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
-                            : "<span>не используется</span>"
-                        }
+                        ${el.profile.linkToDistanceEducation != ""
+                        ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                        : "<span>не используется</span>"
+                    }
                         <div class="actions">
                             <button type="button" class="edit edit-item--text">
                             <span class="edit__btn btn"></span>
@@ -1097,13 +1178,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         <td itemprop="educationAnnotation">
                             <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
                         </td>
-                    ` 
+                    `
                 } else {
                     res += `
                         <td itemprop="educationAnnotation">
                             <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
                         </td>
-                    ` 
+                    `
                 }
 
                 //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
@@ -1112,13 +1193,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         <td itemprop="educationRpd">
                             <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
                         </td>
-                    ` 
+                    `
                 } else {
                     res += `
                         <td itemprop="educationRpd">
                             <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
                         </td>
-                    ` 
+                    `
                 }
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
@@ -1129,8 +1210,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
-                            ${
-                                fileRPP.fileRPD != null
+                            ${fileRPP.fileRPD != null
                                 ? `
                                     <div class="item-file__inner">
                                         <span class="key-icon"></span>
@@ -1153,7 +1233,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             
                             </div>
                         `
-                    }               
+                    }
                     res += rpp
                 } else {
                     res += '<td itemprop="eduPr"></td>'
@@ -1178,12 +1258,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
             }
         }
-        
+
         if (res.length > 0) {
             document.querySelector("tbody").innerHTML = res
         } else {
             document.querySelector("tbody").innerHTML = ""
-        } 
+        }
     }
 
     //функция, которая создает ссылку на панель администратора если пользователем является админ
@@ -1213,7 +1293,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 alert(error)
             }
-            
+
             popupDeleteYesBtn.classList.remove("loading")
             popupDeleteYesBtn.disabled = false
             popupDeleteNoBtn.disabled = false
@@ -1226,7 +1306,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let response = await fetch(`${URL}/DekanatData/GetCaseSDepartments`, {
                 credentials: "include"
             })
-        
+
             if (response.ok) {
                 let data = await response.json()
                 let res = ""
@@ -1244,7 +1324,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             window.location.assign("/sved/login.html")
         }
-        
+
     }
 
     //получить уровни обучения
@@ -1252,7 +1332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let response = await fetch(`${URL}/LevelEdu/GetLevelEdu`, {
             credentials: "include"
         })
-        
+
         if (response.ok) {
             let data = await response.json()
             let res = ""
@@ -1272,9 +1352,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //получить формы обучения
     const getEduForms = async () => {
         let response = await fetch(`${URL}/DekanatData/GetCaseSEdukinds`, {
-                credentials: "include"
-            })
-        
+            credentials: "include"
+        })
+
         if (response.ok) {
             let data = await response.json()
             let res = ""
@@ -1330,11 +1410,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const logout = async () => {
         let response = await fetch(`${URL}/Account/Logout`, {
             credentials: "include"
-        }) 
+        })
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/sved/login.html")
+            window.location.assign("/login.html")
         }
     }
 
@@ -1342,7 +1422,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const isAuthorize = () => localStorage.getItem("userId") != null
 
     //нажатие на кнопку выхода из аккаунта пользователя
-    logoutBtn.addEventListener("click", function() {
+    logoutBtn.addEventListener("click", function () {
         logout()
     })
 

@@ -628,10 +628,22 @@ td a {
     padding-right: 55px;
 }
 
+.popup-form__label.file,
+.popup-form__label.link {
+    display: none;
+}
+
 .popup-form__actions {
     display: flex;
     justify-content: space-between;
     gap: 15px;
+}
+
+#popup-editFile .file {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
 }
 
 .popup-form .delete {

@@ -57,14 +57,14 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                             <a href="${fileModel.linkToFile != null
                                 ? fileModel.linkToFile
-                                : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}">${fileModel.outputFileName}</a>
+                                : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}">${fileModel.outputFileName}</a>
                         </div>
                     `
                 }  else {
                     markup += `
                     <a href=${fileModel.linkToFile != null
                         ? fileModel.linkToFile
-                        : "http://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
+                        : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `

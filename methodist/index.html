@@ -163,14 +163,37 @@
                         <label class="popup-form__label">
                             <span class="popup-form__text">Название</span>
                             <input type="text" class="popup-form__input">
-                        </label>       
-                        <div class="popup-form__actions">
+                        </label> 
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Способ загрузки</span>
+                            <div class="radio">
+                                <ul class="radio__list">
+                                    <li class="radio__item">
+                                        <input type="radio" name="radio1" id="radio1">
+                                        <label for="radio1">
+                                            <span>Загрузить файл</span>
+                                        </label>
+                                    </li>
+                                    <li class="radio__item">
+                                        <input type="radio" name="radio1" id="radio2">
+                                        <label for="radio2">
+                                            <span>Загрузить ссылку</span>
+                                        </label>
+                                    </li>           
+                                </ul>
+                            </div>
+                        </label>      
+                        <div class="popup-form__label file">
                             <label class="popup-form__file-upload file-upload">
                                 <input type="file" aria-invalid="true">
                                 <span class="file-upload__btn btn">Выбрать файл</span>     
                             </label>
+                            <div class="popup-form__file-name"></div>
                         </div>
-                        <div class="popup-form__file-name"></div>
+                        <div class="popup-form__label link">
+                            <span class="popup-form__text">Ссылка на файл</span>
+                            <input type="text" class="popup-form__input">
+                        </div>
                     </div>
                     <button type="button" class="popup-form__btn btn">Загрузить файл</button>
                 </form>
@@ -269,16 +292,39 @@
                             <span class="popup-form__text">Название</span>
                             <input type="text" class="popup-form__input">
                         </label>
-                        <div class="popup-form__actions">
+                        <label class="popup-form__label">
+                            <span class="popup-form__text">Способ загрузки</span>
+                            <div class="radio">
+                                <ul class="radio__list">
+                                    <li class="radio__item">
+                                        <input type="radio" name="radio2" id="radio3">
+                                        <label for="radio3">
+                                            <span>Загрузить файл</span>
+                                        </label>
+                                    </li>
+                                    <li class="radio__item">
+                                        <input type="radio" name="radio2" id="radio4">
+                                        <label for="radio4">
+                                            <span>Загрузить ссылку</span>
+                                        </label>
+                                    </li>           
+                                </ul>
+                            </div>
+                        </label>   
+                        <div class="popup-form__label file">
                             <label class="popup-form__file-upload file-upload">
-                                <input type="file" aria-invalid="true" required>
+                                <input type="file" aria-invalid="true">
                                 <span class="file-upload__btn btn">Выбрать файл</span>     
                             </label>
                             <button type="button" class="delete delete-file">
                                 <span class="delete__btn btn">Удалить файл</span>
-                            </button>      
+                            </button>  
+                            <div class="popup-form__file-name"></div>
                         </div>
-                        <div class="popup-form__file-name"></div>
+                        <div class="popup-form__label link">
+                            <span class="popup-form__text">Ссылка на файл</span>
+                            <input type="text" class="popup-form__input">
+                        </div>
                     </div>
                     <button type="button" class="popup-form__btn btn">Загрузить файлы</button>
                 </form>
