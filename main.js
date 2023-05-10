@@ -177,13 +177,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                 res += `
                     <td itemprop="educationAnnotation">
-                        <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                        <a href="${el.profile.linkToRPD}">РПД</a>
                     </td>
                 ` 
             } else {
                 res += `
                     <td itemprop="educationAnnotation">
-                        <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        <a href="/sved/eor.html?profileId=${el.profile.id}">РПД</a>
                     </td>
                 ` 
             } 
@@ -191,13 +191,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                        <a href="${el.profile.linkToRPD}">РПД</a>
                     </td>
                 ` 
             } else {
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        <a href="/sved/eor.html?profileId=${el.profile.id}">РПД</a>
                     </td>
                 ` 
             } 
@@ -243,6 +243,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                 `
             }
+
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Программа ГИА")) // гиа
+
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Матрицы компетенций")) // матрицы
     
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
         } 

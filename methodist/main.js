@@ -1176,13 +1176,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                     res += `
                         <td itemprop="educationAnnotation">
-                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                            <a href="${el.profile.linkToRPD}">РПД</a>
                         </td>
                     `
                 } else {
                     res += `
                         <td itemprop="educationAnnotation">
-                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
                         </td>
                     `
                 }
@@ -1191,13 +1191,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="${el.profile.linkToRPD}">Рабочие программы дисциплин</a>
+                            <a href="${el.profile.linkToRPD}">РПД</a>
                         </td>
                     `
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
                         </td>
                     `
                 }
