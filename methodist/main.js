@@ -366,7 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 for (let radioEl of radioBtns) {
                     radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
                 }       
-                console.log(e.target)
                 //помечаем нажатую кнопку как выбранную
                 e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
 
@@ -1222,7 +1221,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <div>
+                                            <div class="practic-name">
+                                                <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                            </div>
+                                            <button type="button" class="show-practic-btn">показать все</button>
+                                        </div>
                                     </div>
                                     
                                 `
@@ -1264,6 +1268,18 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             document.querySelector("tbody").innerHTML = ""
         }
+
+        let showPracticNameBtns = document.querySelectorAll(".show-practic-btn")
+        showPracticNameBtns.forEach(practicBtn => {
+            practicBtn.addEventListener("click", function(e) {
+                e.preventDefault()
+
+                let practicName = e.target.closest("div").querySelector(".practic-name")
+                practicName.classList.add("show")
+
+                e.target.remove()
+            })
+        })
     }
 
     //функция, которая создает ссылку на панель администратора если пользователем является админ

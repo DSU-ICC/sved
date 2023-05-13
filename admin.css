@@ -362,6 +362,22 @@ main {
     background-color: #0ebe49;
 }
 
+.practic-name {
+    max-height: 20px;
+    overflow: hidden;
+}
+
+.practic-name.show {
+    max-height: 100%;
+    overflow: visible;
+}
+
+.show-practic-btn {
+    background-color: transparent;
+    color: #0000ee;
+    cursor: pointer;
+}
+
 .edit .edit__btn::before {
     background: url("img/edit.svg") no-repeat center;
     position: relative;

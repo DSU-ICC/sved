@@ -466,6 +466,22 @@ td[itemprop="methodology"] .document-key {
     color: #074ab4;
 }
 
+.practic-name {
+    max-height: 20px;
+    overflow: hidden;
+}
+
+.practic-name.show {
+    max-height: 100%;
+    overflow: visible;
+}
+
+.show-practic-btn {
+    background-color: transparent;
+    color: #0000ee;
+    cursor: pointer;
+}
+
 .page__link svg {
     fill: transparent;
     transition: .3s;
