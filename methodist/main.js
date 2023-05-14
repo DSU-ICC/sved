@@ -1241,6 +1241,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length != 0) {
                     let rpp = `<td itemprop="eduPr">`
+                    rpp += '<div class="item-files">'
+
                     for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
@@ -1256,12 +1258,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <div>
-                                            <div class="practic-name">
-                                                <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
-                                            </div>
-                                            <button type="button" class="show-practic-btn">показать все</button>
-                                        </div>
+                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
@@ -1273,6 +1270,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                         `
                     }
+                    rpp += '</div>'
+                    rpp += '<button type="button" class="show-practic-btn">показать все</button>'
+
                     res += rpp
                 } else {
                     res += '<td itemprop="eduPr"></td>'
@@ -1309,8 +1309,8 @@ document.addEventListener("DOMContentLoaded", () => {
             practicBtn.addEventListener("click", function(e) {
                 e.preventDefault()
 
-                let practicName = e.target.closest("div").querySelector(".practic-name")
-                practicName.classList.add("show")
+                let practicNames = e.target.previousElementSibling
+                practicNames.classList.add("show")
 
                 e.target.remove()
             })

@@ -362,12 +362,12 @@ main {
     background-color: #0ebe49;
 }
 
-.practic-name {
+.item-files {
     max-height: 20px;
     overflow: hidden;
 }
 
-.practic-name.show {
+.item-files.show {
     max-height: 100%;
     overflow: visible;
 }
@@ -376,6 +376,9 @@ main {
     background-color: transparent;
     color: #0000ee;
     cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    font-size: 16px;
 }
 
 .edit .edit__btn::before {

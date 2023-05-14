@@ -207,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let fileModelsRpp = el.Disciplines // рабочие программы практик
             if (fileModelsRpp.length > 0) {
                 let rpp = `<td itemprop="eduPr">`
+                rpp += '<div class="item-files">'
                 for (let fileRPP of fileModelsRpp) {
                     rpp += `
                         <div class="item-file">
@@ -234,7 +235,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         
                         </div>
                     `
-                }                
+                }        
+                rpp += '</div>'
+                rpp += '<button type="button" class="show-practic-btn">показать все</button>'
+ 
                 res += rpp
             } else {
                 res += `
@@ -256,6 +260,17 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector("tbody").innerHTML = ""
         } 
         
+        let showPracticNameBtns = document.querySelectorAll(".show-practic-btn")
+        showPracticNameBtns.forEach(practicBtn => {
+            practicBtn.addEventListener("click", function(e) {
+                e.preventDefault()
+
+                let practicNames = e.target.previousElementSibling
+                practicNames.classList.add("show")
+
+                e.target.remove()
+            })
+        })
     }
 
     //нажатие на кнопку поиска факультета
@@ -358,18 +373,38 @@ document.addEventListener("DOMContentLoaded", function() {
                 let fileModelsRpp = el.Disciplines // рабочие программы практик
                 if (fileModelsRpp.length > 0) {
                     let rpp = `<td itemprop="eduPr">`
+                    rpp += '<div class="item-files">'
                     for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
                             ${
                                 fileRPP.FileRPD != null
-                                ? ` <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.name}">${fileRPP.DisciplineName}</a>`
-                                : `<span>${fileRPP.DisciplineName}</span>`
+                                ? `
+                                    <div class="item-file__inner">
+                                        <span class="key-icon"></span>
+                                        <div class="document-key">
+                                            <p class="document-key__text">Документ подписан</p>
+                                            <p class="document-key__text">Простая электронная подпись</p>
+                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                            <p class="document-key__text">Ректор</p>
+                                            <p class="document-key__text">Ключ (SHA-256):</p>
+                                            <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
+                                        </div>
+                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
+                                    </div>
+                                    
+                                `
+                                : `
+                                    <span>${fileRPP.DisciplineName}</span>
+                                `
                             }
                             
                             </div>
                         `
-                    }                
+                    }        
+                    rpp += '</div>'
+                    rpp += '<button type="button" class="show-practic-btn">показать все</button>'
+    
                     res += rpp
                 } else {
                     res += `
@@ -377,6 +412,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         </td>
                     `
                 }
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Программа ГИА")) // гиа
+
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Матрицы компетенций")) // матрицы
         
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Методические материалы для обеспечения ОП")) // методические материалы
             }
@@ -395,6 +434,18 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             document.querySelector("tbody").innerHTML = ""
         } 
+
+        let showPracticNameBtns = document.querySelectorAll(".show-practic-btn")
+        showPracticNameBtns.forEach(practicBtn => {
+            practicBtn.addEventListener("click", function(e) {
+                e.preventDefault()
+
+                let practicNames = e.target.previousElementSibling
+                practicNames.classList.add("show")
+
+                e.target.remove()
+            })
+        })
     }
 
     const getFileTypes = async () => {

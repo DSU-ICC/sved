@@ -466,12 +466,12 @@ td[itemprop="methodology"] .document-key {
     color: #074ab4;
 }
 
-.practic-name {
+.item-files {
     max-height: 20px;
     overflow: hidden;
 }
 
-.practic-name.show {
+.item-files.show {
     max-height: 100%;
     overflow: visible;
 }
@@ -480,6 +480,9 @@ td[itemprop="methodology"] .document-key {
     background-color: transparent;
     color: #0000ee;
     cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    font-size: 16px;
 }
 
 .page__link svg {
