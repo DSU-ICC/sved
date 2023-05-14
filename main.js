@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //генерация разметки для файловых элементов таблицы
     const generateMarkupFileModelByFileTypeId = (profile, fileTypeId) => {
-        let fileModels = new Set(profile.profile.fileModels.filter(e => e.fileTypeId == fileTypeId))
+        let fileModels = new Set(profile.Profile.FileModels.filter(e => e.FileTypeId == fileTypeId))
         let markup = "";
 
         //расставление тегов
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 `
 
                 //вывод ссылки на файл вместе с ключом эцп (если ключа нет, то выводим только ссылку на файл)
-                if (fileModel.codeECP != null) {
+                if (fileModel.CodeECP != null) {
                     markup += `
                         <div class="item-file__inner">
                             <span class="key-icon"></span>
@@ -53,19 +53,19 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                 <p class="document-key__text">Ректор</p>
                                 <p class="document-key__text">Ключ (SHA-256):</p>
-                                <p class="document-key__text">${fileModel.codeECP}</p>
+                                <p class="document-key__text">${fileModel.CodeECP}</p>
                             </div>
-                            <a href="${fileModel.linkToFile != null
-                                ? fileModel.linkToFile
-                                : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}">${fileModel.outputFileName}</a>
+                            <a href="${fileModel.LinkToFile != null
+                                ? fileModel.LinkToFile
+                                : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.Name}">${fileModel.OutputFileName}</a>
                         </div>
                     `
                 }  else {
                     markup += `
-                    <a href=${fileModel.linkToFile != null
-                        ? fileModel.linkToFile
-                        : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
-                        >${fileModel.outputFileName}</a>
+                    <a href=${fileModel.LinkToFile != null
+                        ? fileModel.LinkToFile
+                        : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.Name}
+                        >${fileModel.OutputFileName}</a>
                         
                     `
                 }
@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             faculties = await response.json()
-            console.log(faculties)
             fillFacultyList(faculties)
 
         }
@@ -128,9 +127,9 @@ document.addEventListener("DOMContentLoaded", function() {
         let facId = 0;
         for (let el of profiles) { 
             
-            if (el.caseSDepartment.facId !== facId) {
+            if (el.CaseSDepartment.FacId !== facId) {
                 //получаем имя факультета с помощью его айди
-                let facultyName = faculties[faculties.map(e => e.facId).indexOf(el.caseSDepartment.facId)]?.facName
+                let facultyName = faculties[faculties.map(e => e.facId).indexOf(el.CaseSDepartment.FacId)]?.facName
 
                 if (facultyName) {
                     //вывод названия факультета
@@ -142,25 +141,25 @@ document.addEventListener("DOMContentLoaded", function() {
                         </tr>
                     `            
                 }
-                facId = el.caseSDepartment.facId
+                facId = el.CaseSDepartment.FacId
             }
             
             res += `
                 <tr itemprop="eduOp">
                     <td>
-                        <span>${el.profile.year}</span>
+                        <span>${el.Profile.Year}</span>
                     </td>
                     <td itemprop="eduCode">
-                        <span>${el.caseSDepartment.code}</span>
+                        <span>${el.CaseSDepartment.Code}</span>
                     </td>
                     <td itemprop="eduName">
-                        <span>${el.caseSDepartment.deptName}</span>
+                        <span>${el.CaseSDepartment.DeptName}</span>
                     </td>
                     <td itemprop="eduLevel">
-                        <span>${el.profile.levelEdu.name}</span>
+                        <span>${el.Profile.LevelEdu.Name}</span>
                     </td>
                     <td itemprop="eduProf">
-                        <span>${el.profile.profileName}</span>
+                        <span>${el.Profile.ProfileName}</span>
                     </td>                    
             ` 
     
@@ -168,36 +167,36 @@ document.addEventListener("DOMContentLoaded", function() {
             
             res += `
                 <td itemprop="eduForm">
-                    <span>${el.caseCEdukind ? el.caseCEdukind.edukind : ""}</span>
+                    <span>${el.CaseCEdukind ? el.CaseCEdukind.Edukind : ""}</span>
                 </td>
             `
 
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
 
-            if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+            if (String(el.Profile.LinkToRPD).toString() != "NULL" && el.Profile.LinkToRPD != null) {
                 res += `
                     <td itemprop="educationAnnotation">
-                        <a href="${el.profile.linkToRPD}">РПД</a>
+                        <a href="${el.Profile.LinkToRPD}">РПД</a>
                     </td>
                 ` 
             } else {
                 res += `
                     <td itemprop="educationAnnotation">
-                        <a href="/sved/eor.html?profileId=${el.profile.id}">РПД</a>
+                        <a href="/sved/eor.html?profileId=${el.Profile.Id}">РПД</a>
                     </td>
                 ` 
             } 
     
-            if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
+            if (String(el.Profile.LinkToRPD).toString() != "NULL" && el.Profile.LinkToRPD != null) {
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="${el.profile.linkToRPD}">РПД</a>
+                        <a href="${el.Profile.LinkToRPD}">РПД</a>
                     </td>
                 ` 
             } else {
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="/sved/eor.html?profileId=${el.profile.id}">РПД</a>
+                        <a href="/sved/eor.html?profileId=${el.Profile.Id}">РПД</a>
                     </td>
                 ` 
             } 
@@ -205,14 +204,14 @@ document.addEventListener("DOMContentLoaded", function() {
     
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
     
-            let fileModelsRpp = el.disciplines // рабочие программы практик
+            let fileModelsRpp = el.Disciplines // рабочие программы практик
             if (fileModelsRpp.length > 0) {
                 let rpp = `<td itemprop="eduPr">`
                 for (let fileRPP of fileModelsRpp) {
                     rpp += `
                         <div class="item-file">
                         ${
-                            fileRPP.fileRPD != null
+                            fileRPP.FileRPD != null
                             ? `
                                 <div class="item-file__inner">
                                     <span class="key-icon"></span>
@@ -222,14 +221,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                         <p class="document-key__text">Ректор</p>
                                         <p class="document-key__text">Ключ (SHA-256):</p>
-                                        <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
+                                        <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                     </div>
-                                    <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                    <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
                                 </div>
                                 
                             `
                             : `
-                                <span>${fileRPP.disciplineName}</span>
+                                <span>${fileRPP.DisciplineName}</span>
                             `
                         }
                         
@@ -268,6 +267,8 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector("tbody").innerHTML = `
                 <tr><td>Идет загрузка профилей...</td></tr>
             `
+            
+            pageTitle.textContent = "Образовательные программы"
             showAllProfiles()
         }
         
@@ -283,13 +284,13 @@ document.addEventListener("DOMContentLoaded", function() {
         let faculty = faculties[faculties.map(e => e.facName).indexOf(facultyName)]
         let facultyId
         let profilesFaculty
-        console.log(profiles.filter(e => e.caseSDepartment?.facId == 17))
+
         //если факультет был найден
         if (faculty != null) {
             facultyId = faculty.facId
 
             //находим все профили, которые принадлежат факультету
-            profilesFaculty = profiles.filter(e => e.caseSDepartment?.facId === facultyId)   
+            profilesFaculty = profiles.filter(e => e.CaseSDepartment?.FacId === facultyId)   
         }
         
        
@@ -318,19 +319,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 res += `
                     <tr itemprop="eduOp">
                         <td>
-                            <span>${el.profile.year}</span>
+                            <span>${el.Profile.Year}</span>
                         </td>
                         <td itemprop="eduCode">
-                            <span>${el.caseSDepartment.code}</span>
+                            <span>${el.CaseSDepartment.Code}</span>
                         </td>
                         <td itemprop="eduName">
-                            <span>${el.caseSDepartment.deptName}</span>
+                            <span>${el.CaseSDepartment.DeptName}</span>
                         </td>
                         <td itemprop="eduLevel">
-                            <span>${el.profile.levelEdu.name}</span>
+                            <span>${el.Profile.LevelEdu.Name}</span>
                         </td>
                         <td itemprop="eduProf">
-                            <span>${el.profile.profileName}</span>
+                            <span>${el.Profile.ProfileName}</span>
                         </td>                    
                 ` 
         
@@ -338,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 res += `
                     <td itemprop="eduForm">
-                        <span>${el.caseCEdukind ? el.caseCEdukind.edukind : ""}</span>
+                        <span>${el.CaseCEdukind ? el.CaseCEdukind.Edukind : ""}</span>
                     </td>
                 `
 
@@ -348,22 +349,22 @@ document.addEventListener("DOMContentLoaded", function() {
         
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="/sved/eor.html?profileId=${el.profile.id}">Рабочие программы дисциплин</a>
+                        <a href="/sved/eor.html?profileId=${el.Profile.Id}">Рабочие программы дисциплин</a>
                     </td>
                 ` 
         
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
         
-                let fileModelsRpp = el.disciplines // рабочие программы практик
+                let fileModelsRpp = el.Disciplines // рабочие программы практик
                 if (fileModelsRpp.length > 0) {
                     let rpp = `<td itemprop="eduPr">`
                     for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
                             ${
-                                fileRPP.fileRPD != null
-                                ? ` <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>`
-                                : `<span>${fileRPP.disciplineName}</span>`
+                                fileRPP.FileRPD != null
+                                ? ` <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.name}">${fileRPP.DisciplineName}</a>`
+                                : `<span>${fileRPP.DisciplineName}</span>`
                             }
                             
                             </div>

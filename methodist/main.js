@@ -510,9 +510,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let uploadInput = el.closest(".popup-form").querySelector('input[type="file"]')
         let nameFileInput = el.closest(".popup-form").querySelector(".popup-form__label")
-        let isUploadFile = uploadInput.files.length > 0 ? true : false
+
+        let linkInputLabel = popupEditFile.querySelector(".link")
+        let linkInput = popupEditFile.querySelector(".link input")
+
         let isValidateName = nameFileInput.querySelector(".popup-form__input").value.trim() != "" ? true : false
+        let isUploadFile = uploadInput.files.length > 0 ? true : false
+        let isValidateLink = linkInput.value.trim() != "" ? true : false
+
+        
+
+        let isFormValid = true
+
         if (isValidateName) {
+            nameFileInput.classList.remove("invalid")
+        } else {
+            nameFileInput.classList.add("invalid")
+            isFormValid = false
+        }
+
+        let selectedOption = popupEditFile.querySelector(".radio [data-checked=true] + label").textContent.trim()
+        if (selectedOption == "Загрузить ссылку") {            
+            if (isValidateLink) {
+                linkInputLabel.classList.remove("invalid")
+            } else {
+                linkInputLabel.classList.add("invalid")
+                isFormValid = false
+            }
+        }
+
+        if (isFormValid) {
             nameFileInput.classList.remove("invalid")
 
             el.classList.add("loading")
@@ -522,9 +549,17 @@ document.addEventListener("DOMContentLoaded", () => {
             let formData = new FormData()
             let fileName = nameFileInput.querySelector(".popup-form__input").value
 
-            if (isUploadFile) {
-                formData.append("formFile", uploadInput.files[0])
+            
+            if (selectedOption == "Загрузить файл") {
+                if (isUploadFile) {
+                    formData.append("formFile", uploadInput.files[0])
+                }
+            } else {
+                if (isValidateLink) {
+                    formData.append("linkToFile", linkInput.value)
+                } 
             }
+            
 
             formData.append("fileName", fileName)
             formData.append("fileType", fileTypeId)
@@ -907,12 +942,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //изменить файл профиля
     const editFile = async (formData, el) => {
-        let ecpCode = ""
-        if (formData.has("ecp")) {
-            ecpCode += `&ecp=${formData.get("ecp")}`
+        let linkToFile = ""
+        if (formData.has("linkToFile")) {
+            linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${ecpCode}`, {
+        let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "PUT",
             credentials: "include",
             body: formData
