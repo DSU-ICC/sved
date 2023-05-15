@@ -159,11 +159,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             statusDisciplineList = await response.json()
-<<<<<<< HEAD
             showRemovableStatusDisciplines(statusDisciplineList)
-=======
-            showRemovableStatusDisciplines(statusDisciplineList)  
->>>>>>> 822da63be2554fda526e3e82c96f76fb1e2e0c31
+
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
