@@ -70,39 +70,39 @@ document.addEventListener("DOMContentLoaded", function() {
     const showProfiles = (profiles) => {
         let res = ""
         for (let el of profiles) {
-            if (el.caseSDepartment != null) {
+            if (el.CaseSDepartment != null) {
                 res += `
-                <tr data-profileid=${el.profile.id} itemprop="eduAccred">
+                <tr data-profileid=${el.Profile.Id} itemprop="eduAccred">
                     <td>
-                        <span>${el.profile.year}</span>
+                        <span>${el.Profile.Year}</span>
                     </td>
                     <td itemprop="eduCode">
-                        <span>${el.caseSDepartment.code}</span>
+                        <span>${el.CaseSDepartment.Code}</span>
                     </td>
                     <td itemprop="eduName">
-                        <span>${el.caseSDepartment.deptName}</span>
+                        <span>${el.CaseSDepartment.DeptName}</span>
                     </td>
                     <td itemprop="eduProf">
-                        <span>${el.profile.profileName}</span>
+                        <span>${el.Profile.ProfileName}</span>
                     </td>    
                     <td itemprop="eduLevel">
-                        <span>${el.profile.levelEdu.name}</span>
+                        <span>${el.Profile.LevelEdu.Name}</span>
                     </td>   
                     <td itemprop="eduForm">
-                        <span>${el.caseCEdukind.edukind}</span>
+                        <span>${el.CaseCEdukind.Edukind}</span>
                     </td>  
                     <td itemprop="learningTerm">
-                        <span>${el.profile.termEdu}</span>
+                        <span>${el.Profile.TermEdu}</span>
                     </td>    
                     <td itemprop="dateEnd">
-                        <span>${el.profile.validityPeriodOfStateAccreditasion}</span>
+                        <span>${el.Profile.ValidityPeriodOfStateAccreditasion}</span>
                     </td>  
                     <td itemprop="language">
-                        <span>${el.profile.educationLanguage}</span>
+                        <span>${el.Profile.EducationLanguage}</span>
                     </td>     
                 ` 
 
-                if (el.profile.disciplines.length > 0) {
+                if (el.Profile.Disciplines.length > 0) {
                     res += `
                         <td itemprop="eduPred">
                             <button class="show-disciplines btn">Показать</button>
@@ -114,14 +114,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     `
                 }
 
-                let fileModelsRpp = el.disciplines // рабочие программы практик
+                let fileModelsRpp = el.Disciplines // рабочие программы практик
                 if (fileModelsRpp.length != 0) {
                     let rpp = `<td itemprop="eduPrac">`
                     for (let fileRPP of fileModelsRpp) {
                         rpp += `
                             <div class="item-file">
                             ${
-                                fileRPP.fileRPD != null
+                                fileRPP.FileRPD != null
                                 ? `
                                     <div class="item-file__inner">
                                         <span class="key-icon"></span>
@@ -131,14 +131,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                             <p class="document-key__text">Ректор</p>
                                             <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
+                                            <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
                                     </div>
                                     
                                 `
                                 : `
-                                    <span>${fileRPP.disciplineName}</span>
+                                    <span>${fileRPP.DisciplineName}</span>
                                 `
                             }
                                 
@@ -153,8 +153,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 res += `
                     <td itemprop="eduEl">
                     ${
-                        el.profile.linkToDistanceEducation != "" 
-                        ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                        el.Profile.LinkToDistanceEducation != "" 
+                        ? `<a href=${el.Profile.LinkToDistanceEducation}>Дистанционное обучение</a>`
                         : "<span>не используется</span>"
                     }
                 </td>
@@ -172,15 +172,15 @@ document.addEventListener("DOMContentLoaded", function() {
         showDisciplinesBtns.forEach(btnItem => {
             btnItem.addEventListener("click", function(e) {
                 let profileId = parseInt(e.target.closest("tr").dataset.profileid)
-                let profileDisciplines = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.disciplines
+                let profileDisciplines = profiles[profiles.map(e => e.Profile.Id).indexOf(profileId)].Profile.Disciplines
                 let res = ""
                 for (let discipline of profileDisciplines) {
                     res += `
                         <li class="popup__item">
                             ${
-                                discipline.fileRPD != null 
-                                ? `<a href="${discipline.fileRPD.name}">${discipline.disciplineName}</a>`
-                                : discipline.disciplineName
+                                discipline.FileRPD != null 
+                                ? `<a href="${discipline.FileRPD.name}">${discipline.DisciplineName}</a>`
+                                : discipline.DisciplineName
                             }
                         </li>
                     `
