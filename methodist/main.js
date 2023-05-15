@@ -1465,7 +1465,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/login.html")
+            window.location.assign("/sved/login.html")
         }
     }
 
