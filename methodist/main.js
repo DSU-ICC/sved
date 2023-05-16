@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
+
     const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://localhost:44370"
 
     let logoutBtn = document.querySelector(".header .action__btn")
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
@@ -217,6 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
             popupSaveUchPlanBtn.textContent = "Завершить редактирование"
             popupSaveUchPlanBtn.disabled = false
             popupSaveUchPlanBtn.closest(".popup__content").querySelector(".popup__close").click()
+
+            generateJsonFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -397,7 +401,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let fileName = "";
         fileModelsProfile.forEach(fileModel => {
             if (fileModel.outputFileName == outputFileName) {
-                fileName = fileModel.name
+                if (hrefLink.startsWith("https://oop.icc.dgu.ru/sved/Files")) {
+                    fileName = fileModel.name
+                }       
             }
         })
 
@@ -592,6 +598,8 @@ document.addEventListener("DOMContentLoaded", () => {
             el.textContent = "Завершить редактирование"
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
+
+            generateJsonFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -925,6 +933,8 @@ document.addEventListener("DOMContentLoaded", () => {
             el.textContent = "Загрузить файл"
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
+
+            generateJsonFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -958,6 +968,8 @@ document.addEventListener("DOMContentLoaded", () => {
             el.textContent = "Загрузить файл"
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
+
+            generateJsonFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -984,6 +996,8 @@ document.addEventListener("DOMContentLoaded", () => {
             el.classList.remove("loading")
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
+
+            generateJsonFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1039,7 +1053,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                             <a href=${fileModel.linkToFile != null
                             ? fileModel.linkToFile
-                            : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
+                            : `https://oop.icc.dgu.ru/sved/Files/${fileModel.name.replace(/\s/g, "%20")}`}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
@@ -1336,6 +1350,8 @@ document.addEventListener("DOMContentLoaded", () => {
             popupDeleteYesBtn.disabled = false
             popupDeleteNoBtn.disabled = false
             popupDeleteYesBtn.closest(".popup__content").querySelector(".popup__close").click()
+
+            generateJsonFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1455,6 +1471,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const getFileTypeIdByName = (nameFileType) => {
         let fileType = fileTypes.find(x => x.name.toLowerCase() == nameFileType.toLowerCase())
         return fileType.id
+    }
+
+    const generateJsonFiles = async () => {
+        await fetch(`${URL}/JsonFileGeneration/GenerateJsonFile`)
     }
 
     //выход подьзователя из аккаунта

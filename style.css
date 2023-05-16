@@ -204,7 +204,8 @@ table, th, td {
 
 .page__table {
     overflow-x: auto;
-    height: 640px;
+    /* height: 600px; */
+    height: calc(100vh - 272px);
 }
 
 .page__table table {
