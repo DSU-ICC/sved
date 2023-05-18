@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
-        } else if (fileTypeId == getFileTypeIdByName("Календарный график")) { //тег для календарного рабочего графика
+        } else if (fileTypeId == getFileTypeIdByName("КУГ")) { //тег для календарного рабочего графика
             propItem += `itemprop="educationShedule"`
         } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
             propItem += `itemprop="methodology"`
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     ` 
                 }
         
-                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Календарный график")) // календарный учебный график
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("КУГ")) // календарный учебный график
         
                 let fileModelsRpp = el.disciplines // рабочие программы практик
                 if (fileModelsRpp.length > 0) {
