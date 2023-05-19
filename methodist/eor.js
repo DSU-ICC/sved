@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupDeleteDiscipline = document.querySelector("#popup-deleteDiscipline")
     let popupDeleteDisciplineYesBtn = document.querySelector("#popup-deleteDiscipline .confirm-button--yes")
     let popupDeleteDisciplineNoBtn = document.querySelector("#popup-deleteDiscipline .confirm-button--no")
-    let deleteStatusBtn = document.querySelector(".status__btn")
+    //let deleteStatusBtn = document.querySelector(".status__btn")
     let popupDeleteStatus = document.querySelector("#popup-deleteStatus")
     let popupDeleteStatusYesBtn = document.querySelector("#popup-deleteStatus .confirm-button--yes")
     let popupDeleteStatusNoBtn = document.querySelector("#popup-deleteStatus .confirm-button--no")
@@ -713,20 +713,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //кнопка удаления статуса дисциплины
-    deleteStatusBtn.addEventListener("click", function(e) {
-        let selectedStatusDiscipline = e.target.closest(".status").querySelector("[data-selectfield=statusDiscipline] .select__text")
+    // deleteStatusBtn.addEventListener("click", function(e) {
+    //     let selectedStatusDiscipline = e.target.closest(".status").querySelector("[data-selectfield=statusDiscipline] .select__text")
 
-        if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
-            selectedStatusDiscipline.closest(".select").classList.add("invalid")
-        } else {
-            selectedStatusDiscipline.closest(".select").classList.remove("invalid")
-            popupDeleteStatus.classList.add("open")
-            document.body.classList.add("no-scroll")
+    //     if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
+    //         selectedStatusDiscipline.closest(".select").classList.add("invalid")
+    //     } else {
+    //         selectedStatusDiscipline.closest(".select").classList.remove("invalid")
+    //         popupDeleteStatus.classList.add("open")
+    //         document.body.classList.add("no-scroll")
 
-            let statusDisciplineId = selectedStatusDiscipline.dataset.id
-            popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
-        }
-    })
+    //         let statusDisciplineId = selectedStatusDiscipline.dataset.id
+    //         popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
+    //     }
+    // })
 
     //нажатие на кнопку да в модальном окне удаления статуса дисциплины
     popupDeleteStatusYesBtn.addEventListener("click", function(e) {
@@ -873,7 +873,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
             }
             popupCreateDiscipline.querySelector("[data-selectfield=statusDiscipline] .select__options").innerHTML = res
-            document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
+            //document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
         } else if (response.status == 405) {
             window.location.assign("/sved/login.html")
         } else {
