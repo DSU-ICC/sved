@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 
+
     if (fileModels.size != 0) {
     markup += `<td ${propItem}>`    
         //циклом перебираем все файлы принадлежащие одному типу файлов (на случай, если их будет несколько)      
