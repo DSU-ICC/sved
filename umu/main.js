@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    const URL = "https://localhost:44370"
+    const URL = "https://oop.icc.dgu.ru"
     let disciplineList
     let statusDisciplineList
     let closeModalBtns = document.querySelectorAll(".popup__close")

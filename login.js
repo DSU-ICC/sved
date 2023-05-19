@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("userName", userData.user.userName)
             localStorage.setItem("userRole", userData.role)
             localStorage.setItem("persDepartmentId", userData.user.persDepartmentId)
-            console.log(userData)
+
             redirectByRole(userData.role)
         } else {
             let error = await response.text()
@@ -83,6 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     const redirectByRole = (role) => {
-        window.location.assign(`/${role}/`)
+        window.location.assign(`/sved/${role}/`)
     }
 })

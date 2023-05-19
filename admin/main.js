@@ -453,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     //скрываем выбор кафедр
                     kafedraSelect.closest(".popup-form__label").style.display = "none"
 
-                    let userFacultiesName = userEdited.faculties.map(e => e.divName)
+                    let userFacultiesName = userEdited.faculties.map(e => e.facName)
                     let facultySelectOptions = facultySelect.querySelectorAll(".select__option")
                     facultySelectOptions.forEach(facultyItem => {
                         if (userFacultiesName.includes(facultyItem.textContent.trim())) {
@@ -558,8 +558,8 @@ document.addEventListener("DOMContentLoaded", function() {
         
         for (let faculty of faculties) {
             res += `
-                <li class="select__option" data-id=${faculty.divId}>
-                    <span class="select__option-text">${faculty.divName}</span>
+                <li class="select__option" data-id=${faculty.facId}>
+                    <span class="select__option-text">${faculty.facName}</span>
                 </li>
             `
         }
