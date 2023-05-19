@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
     const URL = "https://oop.icc.dgu.ru"
+    
     let disciplineList
     let statusDisciplineList
     let closeModalBtns = document.querySelectorAll(".popup__close")
