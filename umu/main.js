@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.icc.dgu.ru"
 
     let disciplineList
     let statusDisciplineList
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка удаляемых дисцилин...</td></tr>
         ` 
 
-        let response = await fetch(`${URL}/Discipline/GetRemovableDisciplines?userId=${userId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/GetRemovableDisciplines?userId=${userId}`, {
             credentials: "include"
         })
 
@@ -106,8 +106,11 @@ document.addEventListener("DOMContentLoaded", function() {
         for (let discipline of disciplineList) {
             res += `
                 <tr>
-                    <td>Удаление дисциплины</td>
-                    <td>${discipline.disciplineName}</td>
+                    <td>${discipline.profile.year}</td>
+                    <td>${discipline.profile.profileName}</td>
+                    <td>${discipline.discipline.disciplineName}</td>      
+                    <td>${discipline.caseCEdukind.edukind}</td>
+                    <td>${discipline.levelEdu.name}</td>
                     <td>
                         <div class="wrapper">
                             <button type="button" class="approve approve-discipline">
@@ -320,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/Discipline/DeleteDiscipline?disciplineId=${disciplineId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/DeleteDiscipline?disciplineId=${disciplineId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -360,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/StatusDiscipline/DeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/DeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -402,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/Discipline/EditDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/EditDiscipline`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -448,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/StatusDiscipline/UpdateStatusDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/UpdateStatusDiscipline`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -504,13 +507,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //выход подьзователя из аккаунта
     const logout = async () => {
-        let response = await fetch(`${URL}/Account/Logout`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Account/Logout`, {
             credentials: "include"
         }) 
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/sved/login.html")
+            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
         }
     }
 
@@ -538,9 +541,9 @@ document.addEventListener("DOMContentLoaded", function() {
             //getRemovableStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли        
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`/sved/${redirectPage}/`)
+            window.location.assign(`https://oop.icc.dgu.ru/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("/sved/login.html")
+        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
     }
 })

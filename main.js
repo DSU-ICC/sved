@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.icc.dgu.ru"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
     let searchBtn = document.querySelector(".search__btn")
@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function() {
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == getFileTypeIdByName("Учебный план")) { //тег для учебного плана
             propItem += `itemprop="educationPlan"`
+        } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) {
+            propItem += `itemprop="educationAnnotation"`
         } else if (fileTypeId == getFileTypeIdByName("КУГ")) { //тег для календарного учебного графика
             propItem += `itemprop="educationShedule"`
         } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
@@ -57,14 +59,14 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                             <a href="${fileModel.LinkToFile != null
                                 ? fileModel.LinkToFile
-                                : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.Name}">${fileModel.OutputFileName}</a>
+                                : "/sved/Files/" + fileModel.Name}">${fileModel.OutputFileName}</a>
                         </div>
                     `
                 }  else {
                     markup += `
                     <a href=${fileModel.LinkToFile != null
                         ? fileModel.LinkToFile
-                        : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.Name}
+                        : "/sved/Files/" + fileModel.Name}
                         >${fileModel.OutputFileName}</a>
                         
                     `
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка профилей...</td></tr>
         `
 
-        let response = await fetch(`${URL}/Profiles/GetDataForOopDgu`)
+        let response = await fetch(`/api/Profiles/GetDataForOopDgu`)
 
         if (response.ok) {
             profiles = await response.json()
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const getAllFaculties = async () => {
-        let response = await fetch(`${URL}/DekanatData/GetFaculties`)
+        let response = await fetch(`/api/DekanatData/GetFaculties`)
 
         if (response.ok) {
             faculties = await response.json()
@@ -173,19 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
 
-            if (String(el.Profile.LinkToRPD).toString() != "NULL" && el.Profile.LinkToRPD != null) {
-                res += `
-                    <td itemprop="educationAnnotation">
-                        <a href="${el.Profile.LinkToRPD}">РПД</a>
-                    </td>
-                ` 
-            } else {
-                res += `
-                    <td itemprop="educationAnnotation">
-                        <a href="/sved/eor.html?profileId=${el.Profile.Id}">РПД</a>
-                    </td>
-                ` 
-            } 
+            res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // Аннотации к РПД
     
             if (String(el.Profile.LinkToRPD).toString() != "NULL" && el.Profile.LinkToRPD != null) {
                 res += `
@@ -224,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p class="document-key__text">Ключ (SHA-256):</p>
                                         <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                     </div>
-                                    <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
+                                    <a href="/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
                                 </div>
                                 
                             `
@@ -390,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
+                                        <a href="/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
                                     </div>
                                     
                                 `
@@ -449,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const getFileTypes = async () => {
-        let response = await fetch(`${URL}/FileType/GetFileTypes`, {
+        let response = await fetch(`/api/FileType/GetFileTypes`, {
             credentials: "include"
         })
 
@@ -460,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //кнопка для входа на страницу авторизации
     loginBtn.addEventListener("click", function() {
-        window.location.assign("/sved/login.html")
+        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
     })
     
     getFileTypes().then(_ => getAllFaculties()).then(_ => getAllProfiles())

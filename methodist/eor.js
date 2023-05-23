@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.icc.dgu.ru"
     let logoutBtn = document.querySelector(".header .action__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupUploadFileRpd = document.querySelector("#popup-createRpd")
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <li>Идет загрузка дисциплин...</li>
             `
 
-        let response = await fetch(`${URL}/Discipline/GetDisciplineByProfileId?profileId=${profileId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/GetDisciplineByProfileId?profileId=${profileId}`, {
             credentials: "include",
         })
         const userName = localStorage.getItem("userName")
@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Загрузка..."
         el.disabled = true
 
-        let response = await fetch(`${URL}/FileRPD/CreateRPD?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}`, {
+        let response = await fetch(`https://oop.icc.dgu.ruhttps://oop.icc.dgu.ru/api/FileRPD/CreateRPD?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Создание..."
         el.disabled = true
 
-        let response = await fetch(`${URL}/Discipline/CreateDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/CreateDiscipline`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Сохранение..."
         el.disabled = true
 
-        let response = await fetch(`${URL}/Discipline/EditDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/EditDiscipline`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -520,7 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.add("loading")
         el.disabled = true 
 
-        let response = await fetch(`${URL}/Discipline/RequestDeleteDiscipline?disciplineId=${disciplineId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/RequestDeleteDiscipline?disciplineId=${disciplineId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -560,7 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/FileRPD/DeleteRPD?fileRPDId=${fileRPDId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/FileRPD/DeleteRPD?fileRPDId=${fileRPDId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -621,7 +621,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Создание..."
         el.disabled = true
 
-        let response = await fetch(`${URL}/StatusDiscipline/CreateStatusDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/CreateStatusDiscipline`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -681,7 +681,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Сохранение..."
         el.disabled = true
 
-        let response = await fetch(`${URL}/StatusDiscipline/UpdateStatusDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/UpdateStatusDiscipline`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -744,7 +744,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/StatusDiscipline/RequestDeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/RequestDeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -757,7 +757,7 @@ document.addEventListener("DOMContentLoaded", () => {
             getDisciplinesByProfile(profileId)
             getAllStatusDisciplines()
         } else if (response.status == 405) {
-            window.location.assign("/sved/login.html")
+            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -859,7 +859,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получение всех статусов дисциплин
     const getAllStatusDisciplines = async () => {
-        let response = await fetch(`${URL}/StatusDiscipline/GetStatusDiscipline`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/GetStatusDiscipline`, {
             credentials: "include",
         })
         let res = ""
@@ -875,7 +875,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupCreateDiscipline.querySelector("[data-selectfield=statusDiscipline] .select__options").innerHTML = res
             //document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
         } else if (response.status == 405) {
-            window.location.assign("/sved/login.html")
+            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
@@ -890,7 +890,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.add("loading")
         el.nextElementSibling.disabled = true
 
-        let response = await fetch(`${URL}/PersonalData/GetAuthors`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/PersonalData/GetAuthors`, {
             credentials: "include",
         })
         let res = ""
@@ -920,13 +920,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //выход подьзователя из аккаунта
     const logout = async () => {
-        let response = await fetch(`${URL}/Account/Logout`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Account/Logout`, {
             credentials: "include"
         }) 
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("/sved/login.html")
+            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
         }
     }
 
@@ -955,9 +955,9 @@ document.addEventListener("DOMContentLoaded", () => {
             getAllStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`/sved/${redirectPage}/`)
+            window.location.assign(`https://oop.icc.dgu.ru/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("/sved/login.html")
+        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
     }
 })

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.icc.dgu.ru"
     //const URL = "https://localhost:44370"
 
     //функция валидации формы входа
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
             password: passwordUser
         }
 
-        let response = await fetch(`${URL}/Account/Login`, {
+        let response = await fetch(`/api/Account/Login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -83,6 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     const redirectByRole = (role) => {
-        window.location.assign(`/sved/${role}/`)
+        window.location.assign(`https://oop.icc.dgu.ru/sved/${role}/`)
     }
 })
