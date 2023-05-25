@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
     //const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://localhost:44370"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
     let searchBtn = document.querySelector(".search__btn")
@@ -91,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка профилей...</td></tr>
         `
 
-        let response = await fetch(`/api/Profiles/GetDataForOopDgu`)
+        let response = await fetch(`${URL}/api/Profiles/GetDataForOopDgu`)
 
         if (response.ok) {
             profiles = await response.json()
@@ -100,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const getAllFaculties = async () => {
-        let response = await fetch(`/api/DekanatData/GetFaculties`)
+        let response = await fetch(`${URL}/api/DekanatData/GetFaculties`)
 
         if (response.ok) {
             faculties = await response.json()
@@ -439,7 +440,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const getFileTypes = async () => {
-        let response = await fetch(`/api/FileType/GetFileTypes`, {
+        let response = await fetch(`${URL}/api/FileType/GetFileTypes`, {
             credentials: "include"
         })
 

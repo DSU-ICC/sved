@@ -84,5 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const redirectByRole = (role) => {
         window.location.assign(`https://oop.icc.dgu.ru/sved/${role}/`)
+        //window.location.assign(`/${role}/`)
     }
 })

@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    //const URL = "https://oop.icc.dgu.ru"
-    //const URL = "https://localhost:44370"
+    const URL = "https://oop.icc.dgu.ru/api"
+    //const URL = "https://localhost:44370/api"
 
     let logoutBtn = document.querySelector(".header .action__btn")
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let profiles
     let kafedra_id
     let listKafedras
+    let departments
     let fileTypes
     let userName
     let userRole
@@ -67,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let formData = new FormData()
         formData.append("uploadedFile", el.files[0])
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Profiles/ParsingProfileByFile`, {
+        let response = await fetch(`${URL}/Profiles/ParsingProfileByFile`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -111,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let yearInp = modalUchPlan.querySelector("#year")
         yearInp.value = year
+        let deptCodeInput =  modalUchPlan.querySelector("#departmentCode")
+        deptCodeInput.value = String(getDepartmentCodeByDepartmentId(data.caseSDepartment?.departmentId))
         let profileInp = modalUchPlan.querySelector("#profile")
         profileInp.value = profile
         let langInput = modalUchPlan.querySelector("#eduLang")
@@ -128,6 +131,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
         }
+
+        deptSelectOptions.forEach(deptSelect => {
+            deptSelect.addEventListener("click", function(e) {
+                let deptId = deptSelect.dataset.id
+                deptCodeInput.value = getDepartmentCodeByDepartmentId(deptId)
+            })
+        })
 
         if (level) {
             levelSelectOptions.forEach(levelItem => {
@@ -150,6 +160,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 kafedraItem.click()
             }
         })
+    }
+
+    const getDepartmentCodeByDepartmentId = (departmentId) => {
+        let department = departments[departments.map(e => e.departmentId).indexOf(+departmentId)]
+        return department.code
     }
 
     //кнопка создания профиля в модальном окне
@@ -204,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dataUchPlanFinal.listPersDepartmentsId = listPersDepartmentsId
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Profiles/CreateProfile?kafedraId=${kafedra_id}`, {
+        let response = await fetch(`${URL}/Profiles/CreateProfile?kafedraId=${kafedra_id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -247,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const addKafedraToProfile = async (kafedraId, newProfile) => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Profiles/AddKafedraToProfile?kafedraId=${kafedraId}`, {
+        let response = await fetch(`${URL}/Profiles/AddKafedraToProfile?kafedraId=${kafedraId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -625,7 +640,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Сохранение..."
         el.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Profiles/EditProfile`, {
+        let response = await fetch(`${URL}/Profiles/EditProfile`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -703,6 +718,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let yearInp = popupEditText.querySelector("#year")
         yearInp.value = year
+        let deptCodeInput = popupEditText.querySelector("#departmentCode")
+        deptCodeInput.value = getDepartmentCodeByDepartmentId(profileEdited.caseSDepartment.departmentId)
         let profileInp = popupEditText.querySelector("#profile")
         profileInp.value = profile
         let langInput = popupEditText.querySelector("#eduLang")
@@ -721,6 +738,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
                 deptItem.click()
             }
+        })
+
+        deptSelectOptions.forEach(deptSelect => {
+            deptSelect.addEventListener("click", function(e) {
+                let deptId = deptSelect.dataset.id
+                deptCodeInput.value = getDepartmentCodeByDepartmentId(deptId)
+            })
         })
 
         levelSelectOptions.forEach(levelItem => {
@@ -964,7 +988,7 @@ document.addEventListener("DOMContentLoaded", () => {
             linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/FileModel/CreateFileModel?fileName=${formData.get("fileName")}&fileType=${formData.get("fileType")}&profileId=${formData.get("profileId")}${linkToFile}`, {
+        let response = await fetch(`${URL}/FileModel/CreateFileModel?fileName=${formData.get("fileName")}&fileType=${formData.get("fileType")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -999,7 +1023,7 @@ document.addEventListener("DOMContentLoaded", () => {
             linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
+        let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "PUT",
             credentials: "include",
             body: formData
@@ -1029,7 +1053,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //удаление файла профиля
     const deleteFile = async (fileId, el) => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/FileModel/DeleteFileModel?fileId=${fileId}`, {
+        let response = await fetch(`${URL}/FileModel/DeleteFileModel?fileId=${fileId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -1147,7 +1171,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <tr><td>Идет загрузка профилей...</td></tr>
             `
 
-            let response = await fetch(`https://oop.icc.dgu.ru/api/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
+            let response = await fetch(`${URL}/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
                 credentials: "include"
             })
 
@@ -1371,7 +1395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //удалить профиль
     const deleteProfile = async (profileId) => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Profiles/DeleteProfile?profileId=${profileId}`, {
+        let response = await fetch(`${URL}/Profiles/DeleteProfile?profileId=${profileId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -1402,15 +1426,15 @@ document.addEventListener("DOMContentLoaded", () => {
     //получить направления кафедры
     const getCaseSDepartments = async () => {
         if (kafedra_id) {
-            let response = await fetch(`https://oop.icc.dgu.ru/api/DekanatData/GetCaseSDepartments`, {
+            let response = await fetch(`${URL}/DekanatData/GetCaseSDepartments`, {
                 credentials: "include"
             })
 
             if (response.ok) {
-                let data = await response.json()
+                departments = await response.json()
                 let res = ""
 
-                for (let el of data) {
+                for (let el of departments) {
                     res += `
                         <li class="select__option" data-id=${el.departmentId}>
                             <span class="select__option-text">${el.deptName}</span>
@@ -1428,7 +1452,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получить уровни обучения
     const getLevelEdues = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/LevelEdu/GetLevelEdu`, {
+        let response = await fetch(`${URL}/LevelEdu/GetLevelEdu`, {
             credentials: "include"
         })
 
@@ -1450,7 +1474,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получить формы обучения
     const getEduForms = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/DekanatData/GetCaseSEdukinds`, {
+        let response = await fetch(`${URL}/DekanatData/GetCaseSEdukinds`, {
             credentials: "include"
         })
 
@@ -1470,7 +1494,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const getAllKafedra = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/PersonalData/GetAllKafedra`, {
+        let response = await fetch(`${URL}/PersonalData/GetAllKafedra`, {
             credentials: "include"
         })
 
@@ -1491,7 +1515,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const getFileTypes = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/FileType/GetFileTypes`, {
+        let response = await fetch(`${URL}/FileType/GetFileTypes`, {
             credentials: "include"
         })
 
@@ -1506,12 +1530,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const generateJsonFiles = async () => {
-        await fetch(`https://oop.icc.dgu.ru/api/JsonFileGeneration/GenerateJsonFile`)
+        await fetch(`${URL}/JsonFileGeneration/GenerateJsonFile`)
     }
 
     //выход подьзователя из аккаунта
     const logout = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Account/Logout`, {
+        let response = await fetch(`${URL}/Account/Logout`, {
             credentials: "include"
         })
 

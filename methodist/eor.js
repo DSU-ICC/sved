@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Загрузка..."
         el.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ruhttps://oop.icc.dgu.ru/api/FileRPD/CreateRPD?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/FileRPD/CreateRPD?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}`, {
             method: "POST",
             credentials: "include",
             body: formData
