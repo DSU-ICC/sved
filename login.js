@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
             password: passwordUser
         }
 
-        let response = await fetch(`/api/Account/Login`, {
+        let response = await fetch(`https://oop.icc.dgu.ru/api/Account/Login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

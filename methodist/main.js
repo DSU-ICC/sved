@@ -641,7 +641,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.disabled = true
 
         let response = await fetch(`${URL}/Profiles/EditProfile`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -1024,7 +1024,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
-            method: "PUT",
+            method: "POST",
             credentials: "include",
             body: formData
         })
@@ -1121,7 +1121,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                             <a href=${fileModel.linkToFile != null
                             ? fileModel.linkToFile
-                            : `https://oop.icc.dgu.ru/sved/Files/${fileModel.name.replace(/\s/g, "%20")}`}
+                            : `/Files/${fileModel.name.replace(/\s/g, "%20")}`}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
@@ -1129,7 +1129,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     markup += `
                     <a href=${fileModel.linkToFile != null
                             ? fileModel.linkToFile
-                            : "https://oop.icc.dgu.ru/sved/Files/" + fileModel.name}
+                            : "/Files/" + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -1301,7 +1301,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="https://oop.icc.dgu.ru/sved/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
+                            <a href="/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
                         </td>
                     `
                 }

@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
         popupEditUserBtn.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/User/EditUser`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },

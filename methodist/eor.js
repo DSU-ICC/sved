@@ -165,7 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
-                                        <a class="discipline-name" href="https://oop.icc.dgu.ru/sved/Files/${discipline.fileRPD.name}">${discipline.disciplineName}</a>
+                                        <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
+                                            ? discipline.fileRPD.linkToFile
+                                            : `https://oop.icc.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                                >${discipline.disciplineName}</a>
                                     </div>
                                     <div class="actions-rpd">
                                         <button type="button" class="delete delete-rpd">
@@ -475,7 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/EditDiscipline`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -682,7 +685,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/UpdateStatusDiscipline`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },

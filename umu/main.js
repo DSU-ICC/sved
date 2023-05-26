@@ -406,7 +406,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/EditDiscipline`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -452,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/UpdateStatusDiscipline`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },

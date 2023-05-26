@@ -75,7 +75,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
-                                        <a class="discipline-name" href="/sved/Files/${discipline.fileRPD.name}">${discipline.disciplineName}</a>
+                                        <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
+                                            ? discipline.fileRPD.linkToFile
+                                            : `https://oop.icc.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                                >${discipline.disciplineName}</a>
                                     </div>
                                 </div>
                             </td>

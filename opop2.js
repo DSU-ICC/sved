@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //кнопка для входа на страницу авторизации
     loginBtn.addEventListener("click", function() {
-        window.location.assign("/sved/login.html")
+        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
     })
 
     getProfiles()
