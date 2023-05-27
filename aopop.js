@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
         for (let el of profiles) { 
             if (el.CaseSDepartment != null) {
                 res += `
-                <tr itemprop="eduOp">
+                <tr itemprop="eduAdOp">
                     <td>
                         <span>${el.Profile.Year}</span>
                     </td>

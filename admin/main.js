@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function() {
         popupDeleteUserYesBtn.disabled = true
         
         let response = await fetch(`https://oop.icc.dgu.ru/api/User/DeleteUser?id=${userId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 

@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/DeleteDiscipline?disciplineId=${disciplineId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/DeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 

@@ -1054,7 +1054,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //удаление файла профиля
     const deleteFile = async (fileId, el) => {
         let response = await fetch(`${URL}/FileModel/DeleteFileModel?fileId=${fileId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
         if (response.ok) {
@@ -1396,7 +1396,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //удалить профиль
     const deleteProfile = async (profileId) => {
         let response = await fetch(`${URL}/Profiles/DeleteProfile?profileId=${profileId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 

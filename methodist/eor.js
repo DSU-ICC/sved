@@ -524,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.disabled = true 
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/RequestDeleteDiscipline?disciplineId=${disciplineId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 
@@ -564,7 +564,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/FileRPD/DeleteRPD?fileRPDId=${fileRPDId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 
@@ -748,7 +748,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.disabled = true
 
         let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/RequestDeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
-            method: "DELETE",
+            method: "POST",
             credentials: "include"
         })
 
