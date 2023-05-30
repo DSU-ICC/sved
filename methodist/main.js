@@ -1301,7 +1301,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
+                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
                         </td>
                     `
                 }

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    //const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://oop.dgu.ru"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
     let searchBtn = document.querySelector(".search__btn")
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let fileTypes;
 
     const getFileTypes = async () => {
-        let response = await fetch(`/api/FileType/GetFileTypes`, {
+        let response = await fetch(`${URL}/api/FileType/GetFileTypes`, {
             credentials: "include"
         })
 
@@ -65,14 +65,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         <a href="${fileModel.LinkToFile != null
                             ? fileModel.LinkToFile
-                            : "/sved/Files/" + fileModel.Name}">${fileModel.OutputFileName}</a>
+                            : `${URL}/sved/Files/` + fileModel.Name}">${fileModel.OutputFileName}</a>
                     </div>
                 `
             }  else {
                 markup += `
                 <a href=${fileModel.LinkToFile != null
                     ? fileModel.LinkToFile
-                    : "/sved/Files/" + fileModel.Name}
+                    : `${URL}/sved/Files/` + fileModel.Name}
                     >${fileModel.OutputFileName}</a>
                     
                 `
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка профилей...</td></tr>
         `
         
-        let response = await fetch(`/api/Profiles/GetDataForOopDgu`)
+        let response = await fetch(`${URL}/api/Profiles/GetDataForOopDgu`)
         
         if (response.ok) {
             profiles = await response.json()
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="/sved/eor.html?profileId=${el.Profile.Id}">РПД</a>
+                            <a href="${URL}/sved/eor.html?profileId=${el.Profile.Id}">РПД</a>
                         </td>
                     ` 
                 }
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                         </div>
-                                        <a href="/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
+                                        <a href="${URL}/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
                                     </div>
                                     
                                 `

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    //const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://oop.dgu.ru"
     let loginBtn = document.querySelector(".header .action__btn")
     let popupDisciplines = document.querySelector("#popup-disciplines")
     let closeModalBtns = document.querySelectorAll(".popup__close")
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка профилей...</td></tr>
         `
 
-        let response = await fetch(`/api/Profiles/GetDataOpop2`, {
+        let response = await fetch(`${URL}/api/Profiles/GetDataOpop2`, {
             credentials: "include"
         })
 
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                         </div>
-                                        <a href="/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
+                                        <a href="${URL}/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
                                     </div>
                                     
                                 `

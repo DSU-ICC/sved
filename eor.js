@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                         </div>
                                         <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
                                             ? discipline.fileRPD.linkToFile
-                                            : `https://oop.icc.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                            : `https://oop.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
                                                 >${discipline.disciplineName}</a>
                                     </div>
                                 </div>
