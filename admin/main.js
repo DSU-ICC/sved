@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    //const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.dgu.ru"
     let logoutBtn = document.querySelector(".header .action__btn")
 
     let createUserBtn = document.querySelector(".users__btn")
@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function() {
         popupCreateUserBtn.textContent = "Создание..."
         popupCreateUserBtn.disabled = true
         
-        let response = await fetch(`https://oop.icc.dgu.ru/api/User/CreateUser`, {
+        let response = await fetch(`https://oop.dgu.ru/api/User/CreateUser`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function() {
         popupEditUserBtn.textContent = "Сохранение..."
         popupEditUserBtn.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/User/EditUser`, {
+        let response = await fetch(`https://oop.dgu.ru/api/User/EditUser`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", function() {
         popupDeleteUserYesBtn.classList.add("loading")
         popupDeleteUserYesBtn.disabled = true
         
-        let response = await fetch(`https://oop.icc.dgu.ru/api/User/DeleteUser?id=${userId}`, {
+        let response = await fetch(`https://oop.dgu.ru/api/User/DeleteUser?id=${userId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <p>Идет загрузка пользователей...</p>
         `
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/User/GetUsers`, {
+        let response = await fetch(`https://oop.dgu.ru/api/User/GetUsers`, {
             credentials: "include"
         })
 
@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //получение всех кафедр
     const getAllKafedra = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/PersonalData/GetAllKafedra`, {
+        let response = await fetch(`https://oop.dgu.ru/api/PersonalData/GetAllKafedra`, {
             credentials: "include"
         })
             
@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     const getAllFaculties = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/DekanatData/GetFaculties`)
+        let response = await fetch(`https://oop.dgu.ru/api/DekanatData/GetFaculties`)
 
         if (response.ok) {
             faculties = await response.json()
@@ -653,13 +653,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //выход подьзователя из аккаунта
     const logout = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Account/Logout`, {
+        let response = await fetch(`https://oop.dgu.ru/api/Account/Logout`, {
             credentials: "include"
         }) 
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign("https://oop.dgu.ru/sved/login.html")
         }
     }
 
@@ -688,9 +688,9 @@ document.addEventListener("DOMContentLoaded", function() {
             getAllKafedra().then(_ => getAllFaculties()).then(_ => getAllUsers())
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`https://oop.icc.dgu.ru/sved/${redirectPage}/`)
+            window.location.assign(`https://oop.dgu.ru/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+        window.location.assign("https://oop.dgu.ru/sved/login.html")
     }
 })  

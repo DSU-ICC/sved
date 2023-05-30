@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://oop.icc.dgu.ru/api"
+    const URL = "https://oop.dgu.ru/api"
     //const URL = "https://localhost:44370/api"
 
     let logoutBtn = document.querySelector(".header .action__btn")
@@ -449,7 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let outputFileName = linkToFile.textContent
 
         let hrefLink = linkToFile.getAttribute("href")
-        if (!hrefLink.startsWith("https://oop.icc.dgu.ru/sved/Files")) {
+        if (!hrefLink.startsWith("https://oop.dgu.ru/sved/Files")) {
             linkInputLabel.querySelector("input").value = hrefLink
         }
 
@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let fileName = "";
         fileModelsProfile.forEach(fileModel => {
             if (fileModel.outputFileName == outputFileName) {
-                if (hrefLink.startsWith("https://oop.icc.dgu.ru/sved/Files")) {
+                if (hrefLink.startsWith("https://oop.dgu.ru/sved/Files")) {
                     fileName = fileModel.name
                 }       
             }
@@ -1179,10 +1179,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 profiles = await response.json()
                 showProfiles(profiles)
             } else if (response.status == 405) {
-                window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+                window.location.assign("https://oop.dgu.ru/sved/login.html")
             }
         } else {
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign("https://oop.dgu.ru/sved/login.html")
         }
     }
 
@@ -1328,7 +1328,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href="https://oop.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
@@ -1445,7 +1445,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupEditText.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
             }
         } else {
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign("https://oop.dgu.ru/sved/login.html")
         }
 
     }
@@ -1541,7 +1541,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign("https://oop.dgu.ru/sved/login.html")
         }
     }
 
@@ -1576,9 +1576,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "methodist"
-            window.location.assign(`https://oop.icc.dgu.ru/sved/${redirectPage}/`)
+            window.location.assign(`https://oop.dgu.ru/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+        window.location.assign("https://oop.dgu.ru/sved/login.html")
     }
 })

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    //const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.dgu.ru"
     let disciplineList
     let profileId
 
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                         </div>
                                         <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
                                             ? discipline.fileRPD.linkToFile
-                                            : `https://oop.icc.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                            : `https://oop.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
                                                 >${discipline.disciplineName}</a>
                                     </div>
                                 </div>

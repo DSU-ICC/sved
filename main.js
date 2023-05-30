@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    //const URL = "https://oop.icc.dgu.ru"
+    //const URL = "https://oop.dgu.ru"
     //const URL = "https://localhost:44370"
     let loginBtn = document.querySelector(".header .action__btn")
     let pageTitle = document.querySelector(".page__title")
@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //кнопка для входа на страницу авторизации
     loginBtn.addEventListener("click", function() {
-        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+        window.location.assign("https://oop.dgu.ru/sved/login.html")
     })
     
     getFileTypes().then(_ => getAllFaculties()).then(_ => getAllProfiles())
