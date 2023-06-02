@@ -1530,7 +1530,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const generateHtmlFiles = async () => {
-        await fetch(`${URL}/HtmlFileGeneration/GenerateHtmlFile`)
+        await fetch(`${URL}/api/HtmlFileGeneration/GenerateHtmlFile`)
     }
 
     //выход подьзователя из аккаунта
