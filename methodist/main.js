@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupSaveUchPlanBtn.disabled = false
             popupSaveUchPlanBtn.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupSaveUchPlanBtn.disabled = false
             popupSaveUchPlanBtn.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -656,7 +656,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1000,7 +1000,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1035,7 +1035,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1063,7 +1063,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.disabled = false
             el.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1407,7 +1407,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupDeleteNoBtn.disabled = false
             popupDeleteYesBtn.closest(".popup__content").querySelector(".popup__close").click()
 
-            generateJsonFiles()
+            generateHtmlFiles()
             getProfilesById(kafedra_id)
         } else {
             let error = await response.text()
@@ -1529,8 +1529,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return fileType.id
     }
 
-    const generateJsonFiles = async () => {
-        await fetch(`${URL}/JsonFileGeneration/GenerateJsonFile`)
+    const generateHtmlFiles = async () => {
+        await fetch(`${URL}/HtmlFileGeneration/GenerateHtmlFile`)
     }
 
     //выход подьзователя из аккаунта
