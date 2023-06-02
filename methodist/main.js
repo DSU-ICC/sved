@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://oop.icc.dgu.ru/api"
+    const URL = "https://oop.dgu.ru"
     //const URL = "https://localhost:44370/api"
 
     let logoutBtn = document.querySelector(".header .action__btn")
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let formData = new FormData()
         formData.append("uploadedFile", el.files[0])
 
-        let response = await fetch(`${URL}/Profiles/ParsingProfileByFile`, {
+        let response = await fetch(`${URL}/api/Profiles/ParsingProfileByFile`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dataUchPlanFinal.listPersDepartmentsId = listPersDepartmentsId
 
-        let response = await fetch(`${URL}/Profiles/CreateProfile?kafedraId=${kafedra_id}`, {
+        let response = await fetch(`${URL}/api/Profiles/CreateProfile?kafedraId=${kafedra_id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const addKafedraToProfile = async (kafedraId, newProfile) => {
-        let response = await fetch(`${URL}/Profiles/AddKafedraToProfile?kafedraId=${kafedraId}`, {
+        let response = await fetch(`${URL}/api/Profiles/AddKafedraToProfile?kafedraId=${kafedraId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -449,7 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let outputFileName = linkToFile.textContent
 
         let hrefLink = linkToFile.getAttribute("href")
-        if (!hrefLink.startsWith("https://oop.icc.dgu.ru/sved/Files")) {
+        if (!hrefLink.startsWith(`${URL}/sved/files-oop`)) {
             linkInputLabel.querySelector("input").value = hrefLink
         }
 
@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let fileName = "";
         fileModelsProfile.forEach(fileModel => {
             if (fileModel.outputFileName == outputFileName) {
-                if (hrefLink.startsWith("https://oop.icc.dgu.ru/sved/Files")) {
+                if (hrefLink.startsWith(`${URL}/sved/files-oop`)) {
                     fileName = fileModel.name
                 }       
             }
@@ -640,7 +640,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.textContent = "Сохранение..."
         el.disabled = true
 
-        let response = await fetch(`${URL}/Profiles/EditProfile`, {
+        let response = await fetch(`${URL}/api/Profiles/EditProfile`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -988,7 +988,7 @@ document.addEventListener("DOMContentLoaded", () => {
             linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`${URL}/FileModel/CreateFileModel?fileName=${formData.get("fileName")}&fileType=${formData.get("fileType")}&profileId=${formData.get("profileId")}${linkToFile}`, {
+        let response = await fetch(`${URL}/api/FileModel/CreateFileModel?fileName=${formData.get("fileName")}&fileType=${formData.get("fileType")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -1023,7 +1023,7 @@ document.addEventListener("DOMContentLoaded", () => {
             linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`${URL}/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
+        let response = await fetch(`${URL}/api/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "POST",
             credentials: "include",
             body: formData
@@ -1053,7 +1053,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //удаление файла профиля
     const deleteFile = async (fileId, el) => {
-        let response = await fetch(`${URL}/FileModel/DeleteFileModel?fileId=${fileId}`, {
+        let response = await fetch(`${URL}/api/FileModel/DeleteFileModel?fileId=${fileId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -1120,16 +1120,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <p class="document-key__text">${fileModel.codeECP}</p>
                             </div>
                             <a href=${fileModel.linkToFile != null
-                            ? fileModel.linkToFile
-                            : `/Files/${fileModel.name.replace(/\s/g, "%20")}`}
+                            ? fileModel.linkToFile.replace(/\s/g, "%20")
+                            : `${URL}/sved/files-oop/${fileModel.name.replace(/\s/g, "%20")}`}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
                 } else {
                     markup += `
                     <a href=${fileModel.linkToFile != null
-                            ? fileModel.linkToFile
-                            : "/Files/" + fileModel.name}
+                            ? fileModel.linkToFile.replace(/\s/g, "%20")
+                            : `${URL}/sved/files-oop/` + fileModel.name.replace(/\s/g, "%20")}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -1171,7 +1171,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <tr><td>Идет загрузка профилей...</td></tr>
             `
 
-            let response = await fetch(`${URL}/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
+            let response = await fetch(`${URL}/api/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
                 credentials: "include"
             })
 
@@ -1179,10 +1179,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 profiles = await response.json()
                 showProfiles(profiles)
             } else if (response.status == 405) {
-                window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+                window.location.assign(`${URL}/sved/login.html`)
             }
         } else {
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign(`${URL}/sved/login.html`)
         }
     }
 
@@ -1301,7 +1301,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="/sved/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
+                            <a href="${URL}/sved/methodist/eor.html?profileId=${el.profile.id}">РПД</a>
                         </td>
                     `
                 }
@@ -1328,7 +1328,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href="https://oop.icc.dgu.ru/sved/Files/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href=${URL}/sved/files-oop/${fileRPP.fileRPD.name.replace(/\s/g, "%20")}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
@@ -1395,7 +1395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //удалить профиль
     const deleteProfile = async (profileId) => {
-        let response = await fetch(`${URL}/Profiles/DeleteProfile?profileId=${profileId}`, {
+        let response = await fetch(`${URL}/api/Profiles/DeleteProfile?profileId=${profileId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -1426,7 +1426,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //получить направления кафедры
     const getCaseSDepartments = async () => {
         if (kafedra_id) {
-            let response = await fetch(`${URL}/DekanatData/GetCaseSDepartments`, {
+            let response = await fetch(`${URL}/api/DekanatData/GetCaseSDepartments`, {
                 credentials: "include"
             })
 
@@ -1445,14 +1445,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupEditText.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
             }
         } else {
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign(`${URL}/sved/login.html`)
         }
 
     }
 
     //получить уровни обучения
     const getLevelEdues = async () => {
-        let response = await fetch(`${URL}/LevelEdu/GetLevelEdu`, {
+        let response = await fetch(`${URL}/api/LevelEdu/GetLevelEdu`, {
             credentials: "include"
         })
 
@@ -1474,7 +1474,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //получить формы обучения
     const getEduForms = async () => {
-        let response = await fetch(`${URL}/DekanatData/GetCaseSEdukinds`, {
+        let response = await fetch(`${URL}/api/DekanatData/GetCaseSEdukinds`, {
             credentials: "include"
         })
 
@@ -1494,7 +1494,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const getAllKafedra = async () => {
-        let response = await fetch(`${URL}/PersonalData/GetAllKafedra`, {
+        let response = await fetch(`${URL}/api/PersonalData/GetAllKafedra`, {
             credentials: "include"
         })
 
@@ -1515,7 +1515,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const getFileTypes = async () => {
-        let response = await fetch(`${URL}/FileType/GetFileTypes`, {
+        let response = await fetch(`${URL}/api/FileType/GetFileTypes`, {
             credentials: "include"
         })
 
@@ -1541,7 +1541,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign(`${URL}/sved/login.html`)
         }
     }
 
@@ -1576,9 +1576,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "methodist"
-            window.location.assign(`https://oop.icc.dgu.ru/sved/${redirectPage}/`)
+            window.location.assign(`https://oop.dgu.ru/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+        window.location.assign("https://oop.dgu.ru/sved/login.html")
     }
 })

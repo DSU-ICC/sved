@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    //const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://oop.dgu.ru"
     let disciplineList
     let profileId
 
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `
         
         profileId = window.location.href.split("=")[1]
-        let response = await fetch(`/api/Discipline/GetDisciplineByProfileId?profileId=${profileId}`)
+        let response = await fetch(`${URL}/api/Discipline/GetDisciplineByProfileId?profileId=${profileId}`)
 
         if (response.ok) {
             let data = await response.json()
@@ -76,8 +76,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
                                         <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
-                                            ? discipline.fileRPD.linkToFile
-                                            : `https://oop.dgu.ru/sved/Files/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                            ? discipline.fileRPD.linkToFile.replace(/\s/g, "%20")
+                                            : `${URL}/sved/files-oop/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
                                                 >${discipline.disciplineName}</a>
                                     </div>
                                 </div>

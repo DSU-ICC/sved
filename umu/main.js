@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    //const URL = "https://oop.icc.dgu.ru"
+    const URL = "https://oop.dgu.ru"
 
     let disciplineList
     let statusDisciplineList
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <tr><td>Идет загрузка удаляемых дисцилин...</td></tr>
         ` 
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/GetRemovableDisciplines?userId=${userId}`, {
+        let response = await fetch(`${URL}/api/Discipline/GetRemovableDisciplines?userId=${userId}`, {
             credentials: "include"
         })
 
@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/DeleteDiscipline?disciplineId=${disciplineId}`, {
+        let response = await fetch(`${URL}/api/Discipline/DeleteDiscipline?disciplineId=${disciplineId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/DeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
+        let response = await fetch(`${URL}/api/StatusDiscipline/DeleteStatusDiscipline?statusDisciplineId=${statusDisciplineId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -405,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Discipline/EditDiscipline`, {
+        let response = await fetch(`${URL}/api/Discipline/EditDiscipline`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`https://oop.icc.dgu.ru/api/StatusDiscipline/UpdateStatusDiscipline`, {
+        let response = await fetch(`${URL}/api/StatusDiscipline/UpdateStatusDiscipline`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -507,13 +507,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //выход подьзователя из аккаунта
     const logout = async () => {
-        let response = await fetch(`https://oop.icc.dgu.ru/api/Account/Logout`, {
+        let response = await fetch(`${URL}/api/Account/Logout`, {
             credentials: "include"
         }) 
 
         if (response.ok) {
             localStorage.clear()
-            window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+            window.location.assign(`${URL}/sved/login.html`)
         }
     }
 
@@ -541,9 +541,9 @@ document.addEventListener("DOMContentLoaded", function() {
             //getRemovableStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли        
             let redirectPage = userRole !== "null" ? userRole : "metodist"
-            window.location.assign(`https://oop.icc.dgu.ru/sved/${redirectPage}/`)
+            window.location.assign(`${URL}/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+        window.location.assign(`${URL}/sved/login.html`)
     }
 })

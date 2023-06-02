@@ -64,15 +64,15 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p class="document-key__text">${fileModel.CodeECP}</p>
                         </div>
                         <a href="${fileModel.LinkToFile != null
-                            ? fileModel.LinkToFile
-                            : `${URL}/sved/Files/` + fileModel.Name}">${fileModel.OutputFileName}</a>
+                            ? fileModel.LinkToFile.replace(/\s/g, "%20")
+                            : `${URL}/sved/files-oop/` + fileModel.Name.replace(/\s/g, "%20")}">${fileModel.OutputFileName}</a>
                     </div>
                 `
             }  else {
                 markup += `
                 <a href=${fileModel.LinkToFile != null
-                    ? fileModel.LinkToFile
-                    : `${URL}/sved/Files/` + fileModel.Name}
+                    ? fileModel.LinkToFile.replace(/\s/g, "%20")
+                    : `${URL}/sved/files-oop/` + fileModel.Name.replace(/\s/g, "%20")}
                     >${fileModel.OutputFileName}</a>
                     
                 `
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.FileRPD.CodeECP}</p>
                                         </div>
-                                        <a href="${URL}/sved/Files/${fileRPP.FileRPD.Name}">${fileRPP.DisciplineName}</a>
+                                        <a href="${URL}/sved/files/${fileRPP.FileRPD.Name.replace(/\s/g, "%20")}">${fileRPP.DisciplineName}</a>
                                     </div>
                                     
                                 `
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //кнопка для входа на страницу авторизации
     loginBtn.addEventListener("click", function() {
-        window.location.assign("https://oop.icc.dgu.ru/sved/login.html")
+        window.location.assign(`${URL}/sved/login.html`)
     })
     
     
