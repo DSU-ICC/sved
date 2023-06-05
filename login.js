@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     const redirectByRole = (role) => {
-        window.location.assign(`${URL}/sved/${role}/`)
-        //window.location.assign(`/${role}/`)
+       window.location.assign(`${URL}/sved/${role}/`)
+       // window.location.assign(`/${role}/`)
     }
 })

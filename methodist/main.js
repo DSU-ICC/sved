@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
     const URL = "https://oop.dgu.ru"
-    //const URL = "https://localhost:44370/api"
+    //const URL = "https://localhost:44370"
 
     let logoutBtn = document.querySelector(".header .action__btn")
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let profileInput = modalUchPlan.querySelector("#profile")
         let eduLangInput = modalUchPlan.querySelector("#eduLang")
         let accredInput = modalUchPlan.querySelector("#periodAccredistation")
-        let linkToEduDistanceInput = modalUchPlan.querySelector("#linkToEduDistance")
+        //let linkToEduDistanceInput = modalUchPlan.querySelector("#linkToEduDistance")
 
         dataUchPlanFinal = data.profile
 
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dataUchPlanFinal.caseCEdukindId = parseInt(selectedEduFormItem.dataset.id)
         dataUchPlanFinal.educationLanguage = eduLangInput.value
         dataUchPlanFinal.validityPeriodOfStateAccreditasion = accredInput.value
-        dataUchPlanFinal.linkToDistanceEducation = linkToEduDistanceInput.value ?? ""
+        //dataUchPlanFinal.linkToDistanceEducation = linkToEduDistanceInput.value ?? ""
 
         let listPersDepartmentsId = []
         let selectedKafedrasId = [...selectedKafedras.dataset.id.split(", ")].map(id => parseInt(id))
@@ -711,7 +711,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let eduForm = profileEdited.caseCEdukind.edukind
         let lang = profileEdited.profile.educationLanguage
         let accred = profileEdited.profile.validityPeriodOfStateAccreditasion
-        let linkToEduDistance = profileEdited.profile.linkToDistanceEducation
+        //let linkToEduDistance = profileEdited.profile.linkToDistanceEducation
 
         let profileIdInput = popupEditText.querySelector("#profileId")
         profileIdInput.value = tdElements.dataset.profileid
@@ -726,8 +726,8 @@ document.addEventListener("DOMContentLoaded", () => {
         langInput.value = lang
         let accredInput = popupEditText.querySelector("#periodAccredistation")
         accredInput.value = accred
-        let linkToDistanceInput = popupEditText.querySelector("#linkToEduDistance")
-        linkToDistanceInput.value = linkToEduDistance
+        //let linkToDistanceInput = popupEditText.querySelector("#linkToEduDistance")
+        //linkToDistanceInput.value = linkToEduDistance
 
         let deptSelectOptions = popupEditText.querySelectorAll("[data-selectfield=dept] .select__option")
         let levelSelectOptions = popupEditText.querySelectorAll("[data-selectfield=levelEdu] .select__option")
@@ -802,7 +802,7 @@ document.addEventListener("DOMContentLoaded", () => {
             profileItem.profile.levelEduId = levelEduId
             profileItem.profile.educationLanguage = popupEditText.querySelector("#eduLang").value
             profileItem.profile.validityPeriodOfStateAccreditasion = popupEditText.querySelector("#periodAccredistation").value
-            profileItem.profile.linkToDistanceEducation = popupEditText.querySelector("#linkToEduDistance").value
+            //profileItem.profile.linkToDistanceEducation = popupEditText.querySelector("#linkToEduDistance").value
 
             let listPersDepartmentsId = []
             let selectedKafedrasId = [...selectedKafedras.dataset.id.split(", ")].map(id => parseInt(id))
@@ -1094,6 +1094,8 @@ document.addEventListener("DOMContentLoaded", () => {
             propItem += `itemprop="educationPlan"`
         } else if (fileTypeId == getFileTypeIdByName("КУГ")) { //тег для календарного учебного графика
             propItem += `itemprop="educationShedule"`
+        } else if (fileTypeId == getFileTypeIdByName("Дистанционное обучение")) {
+            propItem += `itemprop="eduEl"`
         } else if (fileTypeId == getFileTypeIdByName("Методические материалы для обеспечения ОП")) { //тег для методического материала
             propItem += `itemprop="methodology"`
         }
@@ -1120,16 +1122,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <p class="document-key__text">${fileModel.codeECP}</p>
                             </div>
                             <a href=${fileModel.linkToFile != null
-                            ? fileModel.linkToFile.replace(/\s/g, "%20")
-                            : `${URL}/sved/files-oop/${fileModel.name.replace(/\s/g, "%20")}`}
+                            ? fileModel.linkToFile
+                            : `${URL}/sved/files-oop/${fileModel.name}`}
                                 >${fileModel.outputFileName}</a>
                         </div>
                     `
                 } else {
                     markup += `
                     <a href=${fileModel.linkToFile != null
-                            ? fileModel.linkToFile.replace(/\s/g, "%20")
-                            : `${URL}/sved/files-oop/` + fileModel.name.replace(/\s/g, "%20")}
+                            ? fileModel.linkToFile
+                            : `${URL}/sved/files-oop/` + fileModel.name}
                         >${fileModel.outputFileName}</a>
                         
                     `
@@ -1272,19 +1274,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     </td>
                 `
 
-                res += `
-                    <td itemprop="eduEl">
-                        ${el.profile.linkToDistanceEducation != ""
-                        ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
-                        : "<span>не используется</span>"
-                    }
-                        <div class="actions">
-                            <button type="button" class="edit edit-item--text">
-                            <span class="edit__btn btn"></span>
-                            </button>
-                        </div>
-                    </td>
-                `
+                // res += `
+                //     <td itemprop="eduEl">
+                //         ${el.profile.linkToDistanceEducation != ""
+                //         ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
+                //         : "<span>не используется</span>"
+                //     }
+                //         <div class="actions">
+                //             <button type="button" class="edit edit-item--text">
+                //             <span class="edit__btn btn"></span>
+                //             </button>
+                //         </div>
+                //     </td>
+                // `
+                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Дистанционное обучение")) // дистанционное обучение
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
 
@@ -1328,7 +1331,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href=${URL}/sved/files-oop/${fileRPP.fileRPD.name.replace(/\s/g, "%20")}">${fileRPP.disciplineName}</a>
+                                        <a href=${URL}/sved/files-oop/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
@@ -1535,7 +1538,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //выход подьзователя из аккаунта
     const logout = async () => {
-        let response = await fetch(`${URL}/Account/Logout`, {
+        let response = await fetch(`${URL}/api/Account/Logout`, {
             credentials: "include"
         })
 
@@ -1576,9 +1579,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли 
             let redirectPage = userRole !== "null" ? userRole : "methodist"
-            window.location.assign(`https://oop.dgu.ru/sved/${redirectPage}/`)
+            window.location.assign(`/sved/${redirectPage}/`)
         }
     } else {
-        window.location.assign("https://oop.dgu.ru/sved/login.html")
+        window.location.assign(`${URL}/sved/login.html`)
     }
 })

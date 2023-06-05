@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     const URL = "https://oop.dgu.ru"
+    //const URL = "https://localhost:44370"
     let logoutBtn = document.querySelector(".header .action__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupUploadFileRpd = document.querySelector("#popup-createRpd")
@@ -408,9 +409,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 statusDisciplineId: statusDisciplineId,
                 statusDiscipline: null,
                 code: newDisciplineCode.value,
-                fileRPD: null,
-                createDate: "0001-01-01T00:00:00",
-                updateDate: "0001-01-01T00:00:00"
+                fileRPD: null
+                //createDate: "0001-01-01T00:00:00",
+                //updateDate: "0001-01-01T00:00:00"
             }
 
             createDiscipline(newDiscipline, e.target)
