@@ -114,10 +114,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td>
                         <div class="wrapper">
                             <button type="button" class="approve approve-discipline">
-                                <span data-disciplineid=${discipline.id} class="approve__btn btn"></span>
+                                <span data-disciplineid=${discipline.discipline.id} class="approve__btn btn"></span>
                             </button>
                             <button type="button" class="reject reject-discipline">
-                                <span data-disciplineid=${discipline.id} class="reject__btn btn"></span>
+                                <span data-disciplineid=${discipline.discipline.id} class="reject__btn btn"></span>
                             </button>
                         </div>
                     </td>
