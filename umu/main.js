@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
+    //const URL = "https://localhost:44370"
     const URL = "https://oop.dgu.ru"
 
     let disciplineList
@@ -390,9 +391,9 @@ document.addEventListener("DOMContentLoaded", function() {
     //нажатие на кнопку да при отклонении удаления дисциплины
     popupRejectDisciplineYesBtn.addEventListener("click", function(e) {
         let disciplineId = parseInt(popupRejectDiscipline.querySelector("#disciplineId").value)
-        let rejectedDiscipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
-        rejectedDiscipline.isDeletionRequest = false
-        sendRejectDeleteDiscipline(rejectedDiscipline, e.target)
+        let rejectedDiscipline = disciplineList[disciplineList.map(e => e.discipline.id).indexOf(disciplineId)]
+        rejectedDiscipline.discipline.isDeletionRequest = false
+        sendRejectDeleteDiscipline(rejectedDiscipline.discipline, e.target)
     })
 
     //нажатие на кнопку нет при отклонении удаления дисциплины
