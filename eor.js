@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function() {
         let res = ""
 
         for (let statusItem of statusList) {
-            //разметка статуса
             res += `
                 <li class="accordeon__item">
                     <div class="accordeon__control" aria-expanded="false">               
@@ -43,24 +42,30 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                     <div class="accordeon__content" aria-hidden="true">
                         <table class="discipline-table">
+                            <thead>
+                                <tr>
+                                    <th>Код</th>
+                                    <th>Название</th>
+                                    <th>РПД</th>
+                                    <th>ФОС</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 
-                        
+                           
             `
-            
             for (let discipline of disciplineList) {
-                //находим дисциплины которые принадлежат статусу
                 if (discipline.statusDiscipline.name == statusItem) {
-
-                    //разментка для дисциплины
                     let disciplineMarkup = "";
                     disciplineMarkup += 
                         `
                         <tr class="discipline">
                             <td>${discipline.code}</td>
+                            <td>
+                                <span class="discipline-name">${discipline.disciplineName}</span>
+                            </td>
                     `
-
-                    //если файл дисциплины есть, то выводим ссылку на файл вместе с ключом эци (если файла дсициплины нет, то выводим только его названия)
+                    //если файл рпд загружен для данной дисциплины, то выводим его вместе с ключом эцп
                     if (discipline.fileRPD != null) {
                         disciplineMarkup += `
                             <td>
@@ -75,25 +80,56 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
-                                        <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
+                                        <a href=${discipline.fileRPD.linkToFile != null
                                             ? discipline.fileRPD.linkToFile.replace(/\s/g, "%20")
                                             : `${URL}/sved/files-oop/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
-                                                >${discipline.disciplineName}</a>
-                                    </div>
+                                                >РПД
+                                        </a>
+                                    </div>                              
                                 </div>
-                            </td>
-                            </tr>
-                        `
+                            </td>                           
+                        `   
                     } else {
+                        disciplineMarkup += `
+                            <td>  
+                            </td>
+                        `
+                    }
+
+                    if (discipline.fileFOS != null) {
                         disciplineMarkup += `
                             <td>
                                 <div class="wrapper">
-                                    <span class="discipline-name">${discipline.disciplineName}</span>
+                                    <div class="item-file__inner">
+                                        <span class="key-icon"></span>
+                                        <div class="document-key">
+                                            <p class="document-key__text">Документ подписан</p>
+                                            <p class="document-key__text">Простая электронная подпись</p>
+                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                            <p class="document-key__text">Ректор</p>
+                                            <p class="document-key__text">Ключ (SHA-256):</p>
+                                            <p class="document-key__text">${discipline.fileFOS.codeECP}</p>
+                                        </div>
+                                        <a href=${discipline.fileFOS.linkToFile != null
+                                            ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
+                                            : `${URL}/sved/files-oop/${discipline.fileFOS.name.replace(/\s/g, "%20")}`}
+                                                >ФОС
+                                        </a>
+                                    </div>                             
                                 </div>
-                            </td> 
-                            </tr>
-                            `
+                            </td>                           
+                        `   
+                    } else {
+                        disciplineMarkup += `
+                            <td>
+                            </td>
+                        `
                     }
+
+                    disciplineMarkup += `
+                    </tr>
+                    `
+
                     res += disciplineMarkup
                 }
             }

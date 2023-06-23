@@ -561,20 +561,18 @@ td[itemprop="methodology"] .document-key {
     max-height: none;
 }
 
-.discipline-table, .discipline th, .discipline td {
-    border: none;
+.discipline-table, .discipline td {
     vertical-align: middle;
 }
 
-.discipline-table {
-    width: 100%;
-    border-right: none;
+.discipline, .discipline-table th {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .discipline:hover {
     background-color: #f3f3f3;
 }
-
 
 .discipline td:last-child {
     border-right: none;
@@ -582,12 +580,16 @@ td[itemprop="methodology"] .document-key {
 
 .discipline td {
     height: 60px;
-    padding: 0;
+    padding: 0 10px;
 }
 
-.discipline td:nth-child(1) {   
-    border-right: 1px solid #cecece;
-    border-bottom: 1px solid #cecece;
+.discipline-table .edit {
+    margin: 0;
+}
+
+.discipline td:nth-child(1) {
+    /* border-right: 1px solid #cecece; */
+    /* border-bottom: 1px solid #cecece; */
     width: 103px;
     padding-right: 20px;
 }
@@ -597,20 +599,35 @@ td[itemprop="methodology"] .document-key {
     justify-content: space-between;
     align-items: center;
     gap: 15px;
+    border: 0;
     border-bottom: 1px solid #cecece;
+}
+
+.discipline:last-child td:nth-child(2) {
+    border-bottom: 0;
+}
+
+.discipline-name {
+    width: 850px;
+}
+
+.discipline .edit {
+    margin-bottom: 0;
 }
 
 .wrapper {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 20px;
 }
 
-.discipline .wrapper {
+/* .discipline .wrapper {
     width: 100%;
     max-width: 850px;
     padding-left: 16px;
+} */
+.discipline-name {
+    width: 850px;
 }
 
 @media (max-width: 768px) {
