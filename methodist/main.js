@@ -300,33 +300,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fillDataForUploadFile = (targetItem) => {
         modalUploadFile.classList.add("open")
         document.body.classList.add("no-scroll")
-
-        let fileUploadBtnLabel = modalUploadFile.querySelector(".file")
-        let linkInputLabel = modalUploadFile.querySelector(".link")
-
-        //обработчик событий выбора способа загрузки файла
-        const radioBtns = modalUploadFile.querySelectorAll(".radio__item label")
-        radioBtns.forEach((radioItem) => {
-            radioItem.addEventListener("click", function (e) {
-                //очищаем все радио кнопки
-                for (let radioEl of radioBtns) {
-                    radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
-                }       
-
-                //помечаем нажатую кнопку как выбранную
-                e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
-
-                let selectedUploadOption = e.target.textContent.trim()
-
-                if (selectedUploadOption == "Загрузить файл") {
-                    fileUploadBtnLabel.style.display = "block"
-                    linkInputLabel.style.display = "none"
-                } else if (selectedUploadOption == "Загрузить ссылку") {
-                    linkInputLabel.style.display = "flex"
-                    fileUploadBtnLabel.style.display = "none"
-                }
-            })
-        })
+        
+        
 
         let fileTypeId = parseInt(targetItem.dataset.filetype)
         let profileId = parseInt(targetItem.closest("tr").dataset.profileid)
@@ -341,6 +316,53 @@ document.addEventListener("DOMContentLoaded", () => {
             fileNameField.textContent = `Название файла: ${e.target.files[0].name}`
         })
     }
+
+    //обработчик событий выбора способа загрузки файла
+    const radioBtns = document.querySelectorAll(".radio__item label")
+    radioBtns.forEach((radioItem) => {
+        radioItem.addEventListener("click", function (e) {                                
+            let fileUploadBtnLabel = e.target.closest(".popup__content").querySelector(".file")
+            let linkInputLabel = e.target.closest(".popup__content").querySelector(".link")
+            let popup = e.target.closest(".popup")
+            let popupRadioBtns = popup.querySelectorAll(".radio__item label")
+
+            if (radioItem.closest(".radio__item").querySelector("input").classList.contains("checked")) {
+
+                for (let radioEl of popupRadioBtns) {
+                    //radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+                    radioEl.closest(".radio__item").querySelector("input").classList.remove("checked")
+                }
+                fileUploadBtnLabel.style.display = "none"
+                linkInputLabel.style.display = "none"
+            } else {
+                //очищаем все радио кнопки
+                
+                for (let radioEl of popupRadioBtns) {
+                    //radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+                    radioEl.closest(".radio__item").querySelector("input").classList.remove("checked")
+                    //radioEl.closest(".radio__item").querySelector("input").checked = false
+                }
+                e.target.closest(".radio__item").querySelector("input").classList.add("checked")
+
+                let selectedUploadOption = e.target.textContent.trim()
+                if (selectedUploadOption == "Загрузить файл") {
+                    if (popup.getAttribute("id") == "popup-uploadFile") {
+                        fileUploadBtnLabel.style.display = "block"
+                    } else {
+                        fileUploadBtnLabel.style.display = "flex"
+                    }
+
+                    linkInputLabel.style.display = "none"
+                } else if (selectedUploadOption == "Загрузить ссылку") {
+                    linkInputLabel.style.display = "flex"
+                    fileUploadBtnLabel.style.display = "none"
+                }
+            }           
+        })
+    })
+
+    
+
 
     // событие нажатия на кнопку создания файла в соответствующем модальном окне
     popupUploadFileBtn.addEventListener("click", function (e) {
@@ -361,24 +383,26 @@ document.addEventListener("DOMContentLoaded", () => {
             isFormValid = false
         }
 
-        let selectedOption = modalUploadFile.querySelector(".radio [data-checked=true] + label").textContent.trim()
-        if (selectedOption == "Загрузить файл") {            
-            let isUploadFile = uploadInput.files.length > 0 ? true : false
-
-            if (isUploadFile) {
-                uploadInput.nextElementSibling.classList.remove("invalid")
+        let selectedOption = modalUploadFile.querySelector(".radio .checked + label")?.textContent.trim()
+        if (selectedOption) {
+            if (selectedOption == "Загрузить файл") {            
+                let isUploadFile = uploadInput.files.length > 0 ? true : false
+    
+                if (isUploadFile) {
+                    uploadInput.nextElementSibling.classList.remove("invalid")
+                } else {
+                    uploadInput.nextElementSibling.classList.add("invalid")
+                    isFormValid = false
+                }
             } else {
-                uploadInput.nextElementSibling.classList.add("invalid")
-                isFormValid = false
-            }
-        } else {
-            let isValidateLink = linkInput.value.trim() != "" ? true : false
-
-            if (isValidateLink) {
-                linkInputLabel.classList.remove("invalud")
-            } else {
-                linkInputLabel.classList.add("invalid")
-                isFormValid = false
+                let isValidateLink = linkInput.value.trim() != "" ? true : false
+    
+                if (isValidateLink) {
+                    linkInputLabel.classList.remove("invalud")
+                } else {
+                    linkInputLabel.classList.add("invalid")
+                    isFormValid = false
+                }
             }
         }
 
@@ -391,17 +415,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (selectedOption == "Загрузить файл") {
                 formData.append("formFile", uploadInput.files[0])
-            } else {
+            } else if (selectedOption == "Загрузить ссылку") {
                 formData.append("linkToFile", linkInput.value)
             }
                   
             e.target.classList.add("loading")
             e.target.textContent = "Загрузка..."
             e.target.disabled = true
-
+            
             saveFile(formData, e.target)
         }
     })
+
+    //обработчик событий выбора способа загрузки файла
+    // const radioBtns = popupEditFile.querySelectorAll(".radio__item label")
+    // radioBtns.forEach((radioItem) => {
+    //     radioItem.addEventListener("click", function (e) {                                
+    //         //помечаем нажатую кнопку как выбранную если она не была выбрана
+    //         if (radioItem.closest(".radio__item").querySelector("input").classList.contains("checked")) {
+
+    //             for (let radioEl of radioBtns) {
+    //                 //radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+    //                 radioEl.closest(".radio__item").querySelector("input").classList.remove("checked")
+    //             }
+    //             fileUploadBtnLabel.style.display = "none"
+    //             linkInputLabel.style.display = "none"
+    //         } else {
+    //             //очищаем все радио кнопки
+                 
+    //             for (let radioEl of radioBtns) {
+    //                 //radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
+    //                 radioEl.closest(".radio__item").querySelector("input").classList.remove("checked")
+    //                 //radioEl.closest(".radio__item").querySelector("input").checked = false
+    //             }
+    //             e.target.closest(".radio__item").querySelector("input").classList.add("checked")
+
+    //             let selectedUploadOption = e.target.textContent.trim()
+    //             if (selectedUploadOption == "Загрузить файл") {
+    //                 fileUploadBtnLabel.style.display = "block"
+    //                 linkInputLabel.style.display = "none"
+    //             } else if (selectedUploadOption == "Загрузить ссылку") {
+    //                 linkInputLabel.style.display = "flex"
+    //                 fileUploadBtnLabel.style.display = "none"
+    //             }
+    //         }
+    //     })
+    // })
 
     //заполнение данными модальное окно для изменения файла
     const fillDataForEditFile = (el) => {
@@ -416,68 +475,54 @@ document.addEventListener("DOMContentLoaded", () => {
         popupEditFile.querySelector("#fileTypeId").value = fileTypeId
         popupEditFile.querySelector("#profileId").value = profileId
 
-        let fileUploadBtnLabel = popupEditFile.querySelector(".file")
+        //let fileUploadBtnLabel = popupEditFile.querySelector(".file")
         let linkInputLabel = popupEditFile.querySelector(".link")
-
-        //обработчик событий выбора способа загрузки файла
-        const radioBtns = popupEditFile.querySelectorAll(".radio__item label")
-        radioBtns.forEach((radioItem) => {
-            radioItem.addEventListener("click", function (e) {
-                //очищаем все радио кнопки
-                for (let radioEl of radioBtns) {
-                    radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
-                }       
-                //помечаем нажатую кнопку как выбранную
-                e.target.closest(".radio__item").querySelector("input").setAttribute("data-checked", true)
-
-                let selectedUploadOption = e.target.textContent.trim()
-
-                if (selectedUploadOption == "Загрузить файл") {
-                    fileUploadBtnLabel.style.display = "flex"
-                    linkInputLabel.style.display = "none"
-                } else if (selectedUploadOption == "Загрузить ссылку") {
-                    linkInputLabel.style.display = "flex"
-                    fileUploadBtnLabel.style.display = "none"
-                }
-            })
-        })
-
-        radioBtns[0].click()
-
-        //получить и отобразить в текстовом поле название ссылки из файла
-        let linkToFile = el.closest(".item-file").querySelector("a")
-        let outputFileName = linkToFile.textContent
-
-        let hrefLink = linkToFile.getAttribute("href")
-        if (!hrefLink.startsWith(`${URL}/sved/files-oop`)) {
-            linkInputLabel.querySelector("input").value = hrefLink
-        }
-
-        //получаем название файла из профиля
-        let fileModelsProfile = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.fileModels
-        let fileName = "";
-        fileModelsProfile.forEach(fileModel => {
-            if (fileModel.outputFileName == outputFileName) {
-                if (hrefLink.startsWith(`${URL}/sved/files-oop`)) {
-                    fileName = fileModel.name
-                }       
-            }
-        })
-
-        let popupEditFileInput = popupEditFile.querySelector(".popup-form__input")
-        popupEditFileInput.value = outputFileName
-
-        popupEditFileInput.setAttribute("placeholder", fileTypes[fileTypes.map(e => e.id).indexOf(fileTypeId)].name)
-
-        //вывод названия файла
+        
         let fileNameField = popupEditFile.querySelector(".popup-form__file-name")
-        fileNameField.textContent = `Название файла: ${fileName}`
+        let itemFileInner = el.closest(".item-file").querySelector(".item-file__inner")
+        let fileElem = itemFileInner.children[itemFileInner.children.length - 1]
 
-        //вывести название файла в случае выбора другого файла
-        let uploadFileInput = popupEditFile.querySelector("input[type=file]")
-        uploadFileInput.addEventListener("change", function (e) {
-            fileNameField.textContent = `Название файла: ${e.target.files[0].name}`
-        })
+        if (fileElem) {
+            let outputFileName = fileElem.textContent
+
+            let popupEditFileInput = popupEditFile.querySelector(".popup-form__input")
+            popupEditFileInput.value = outputFileName
+
+            if (fileElem.hasAttribute("href")) {
+                let hrefLink = fileElem.getAttribute("href")
+                if (!hrefLink.startsWith(`${URL}/sved/files-oop`)) {
+                    linkInputLabel.querySelector("input").value = hrefLink
+                    popupEditFile.querySelector(".radio__item:nth-child(2) label").click()
+                } else {
+                    //получаем название файла из профиля
+                    let fileModelsProfile = profiles[profiles.map(e => e.profile.id).indexOf(profileId)].profile.fileModels
+                    let fileName = "";
+                    fileModelsProfile.forEach(fileModel => {
+                        if (fileModel.outputFileName == outputFileName) {
+                            if (fileModel.name != null) {
+                                fileName = fileModel.name
+                                popupEditFile.querySelector(".radio__item:nth-child(1) label").click() 
+                            }   
+                        }
+                    })
+
+                    //вывод названия файла                
+                    fileNameField.textContent = `Название файла: ${fileName}`           
+                }
+            }
+
+            //вывести название файла в случае выбора другого файла
+            let uploadFileInput = popupEditFile.querySelector("input[type=file]")
+            uploadFileInput.addEventListener("change", function (e) {
+                fileNameField.textContent = `Название файла: ${e.target.files[0].name}`
+            })
+
+            popupEditFileInput.setAttribute("placeholder", fileTypes[fileTypes.map(e => e.id).indexOf(fileTypeId)].name)
+        }            
+
+        
+
+        
     }
 
     //валидация формы изменения профиля
@@ -592,13 +637,15 @@ document.addEventListener("DOMContentLoaded", () => {
             isFormValid = false
         }
 
-        let selectedOption = popupEditFile.querySelector(".radio [data-checked=true] + label").textContent.trim()
-        if (selectedOption == "Загрузить ссылку") {            
-            if (isValidateLink) {
-                linkInputLabel.classList.remove("invalid")
-            } else {
-                linkInputLabel.classList.add("invalid")
-                isFormValid = false
+        let selectedOption = popupEditFile.querySelector(".radio .checked + label")?.textContent.trim()
+        if (selectedOption) {
+            if (selectedOption == "Загрузить ссылку") {            
+                if (isValidateLink) {
+                    linkInputLabel.classList.remove("invalid")
+                } else {
+                    linkInputLabel.classList.add("invalid")
+                    isFormValid = false
+                }
             }
         }
 
@@ -617,7 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (isUploadFile) {
                     formData.append("formFile", uploadInput.files[0])
                 }
-            } else {
+            } else if (selectedOption == "Загрузить ссылку") {
                 if (isValidateLink) {
                     formData.append("linkToFile", linkInput.value)
                 } 
@@ -861,6 +908,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
                     let popupLabelSelect = popupLabel.querySelector(".select")
                     let popupLabelUploadFile = popupLabel.querySelector(".file-upload__btn")
+                    let popupLabelRadioBtns = popupLabel.querySelector(".radio")
 
                     //очистка текстового поля
                     if (popupLabelInput) {
@@ -880,13 +928,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else if (popupLabelUploadFile) {
                         popupLabelUploadFile.classList.remove("invalid")
                         popupLabelUploadFile.previousElementSibling.value = ''
+                    } else if (popupLabelRadioBtns) { 
+                        let selectedRadioBtn = popupLabel.querySelector(".radio__item .checked + label")
+                        if (selectedRadioBtn) {
+                            selectedRadioBtn.click()
+                        }
+                        //selectedRadioBtn.previousElementSibling.classList.remove("checked")
                     }
-
-                    // } else { // ставим значение роли по умолчанию (методист)
-                    //     let methodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
-                    //     methodistRoleRadioBtn.click()
-                    //     methodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
-                    // }
                 })
             }
 
@@ -1109,33 +1157,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
 
                 //вывод ссылки на файл вместе с ключом эцп (если ключа нет, то выводим только ссылку на файл)
-                if (fileModel.codeECP != null) {
-                    markup += `
-                        <div class="item-file__inner">
-                            <span class="key-icon"></span>
-                            <div class="document-key">
-                                <p class="document-key__text">Документ подписан</p>
-                                <p class="document-key__text">Простая электронная подпись</p>
-                                <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
-                                <p class="document-key__text">Ректор</p>
-                                <p class="document-key__text">Ключ (SHA-256):</p>
-                                <p class="document-key__text">${fileModel.codeECP}</p>
-                            </div>
-                            <a href=${fileModel.linkToFile != null
-                            ? fileModel.linkToFile
-                            : `${URL}/sved/files-oop/${fileModel.name}`}
-                                >${fileModel.outputFileName}</a>
-                        </div>
-                    `
-                } else {
-                    markup += `
-                    <a href=${fileModel.linkToFile != null
-                            ? fileModel.linkToFile
-                            : `${URL}/sved/files-oop/` + fileModel.name}
-                        >${fileModel.outputFileName}</a>
-                        
-                    `
-                }
+                markup += `
+                    <div class="item-file__inner">
+                        ${
+                            (fileModel.linkToFile != null || fileModel.name != null)  
+                            ? `
+                                <span class="key-icon"></span>
+                                <div class="document-key">
+                                    <p class="document-key__text">Документ подписан</p>
+                                    <p class="document-key__text">Простая электронная подпись</p>
+                                    <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                    <p class="document-key__text">Ректор</p>
+                                    <p class="document-key__text">Ключ (SHA-256):</p>
+                                    <p class="document-key__text">${fileModel.codeECP}</p>
+                                </div>
+                            `
+                            : ''
+                        }
+                        ${
+                            fileModel.linkToFile != null
+                            ? `<a href=${fileModel.linkToFile}>${fileModel.outputFileName}</a>`
+                            : fileModel.name != null
+                            ? `<a href='${URL}/sved/files-oop/${fileModel.name}'>${fileModel.outputFileName}</a>`
+                            : `<span>${fileModel.outputFileName}</span>`
+                        }
+                    </div>
+                `
                 markup += `            
                     <div class="actions">
                         <button type="button" class="edit edit-item">

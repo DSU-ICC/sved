@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupUploadFileRpd = document.querySelector("#popup-createRpd")
     let popupUploadFileRpdBtn = document.querySelector("#popup-createRpd .popup-form__btn")
+    let popupUploadFileFos = document.querySelector("#popup-createFos")
+    let popupUploadFileFosBtn = document.querySelector("#popup-createFos .popup-form__btn")
     let createDisciplineBtn = document.querySelector(".page__header .action-eor")
     let createStatusBtn = document.querySelector(".popup-form__btn--create-status")
     let popupCreateStatus = document.querySelector("#popup-createStatus")
@@ -20,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupDeleteRpd = document.querySelector("#popup-deleteRpd")
     let popupDeleteRpdYesBtn = document.querySelector("#popup-deleteRpd .confirm-button--yes")
     let popupDeleteRpdNoBtn = document.querySelector("#popup-deleteRpd .confirm-button--no")
+    let popupDeleteFos = document.querySelector("#popup-deleteFos")
+    let popupDeleteFosYesBtn = document.querySelector("#popup-deleteFos .confirm-button--yes")
+    let popupDeleteFosNoBtn = document.querySelector("#popup-deleteFos .confirm-button--no")
     let popupDeleteDiscipline = document.querySelector("#popup-deleteDiscipline")
     let popupDeleteDisciplineYesBtn = document.querySelector("#popup-deleteDiscipline .confirm-button--yes")
     let popupDeleteDisciplineNoBtn = document.querySelector("#popup-deleteDiscipline .confirm-button--no")
@@ -60,10 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         popupLabelSelectText.removeAttribute("data-id")
                         popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
 
-                    } else { // ставим значение роли по умолчанию (методист)
-                        let metodistRoleRadioBtn = popupLabel.querySelector(".radio__item:nth-child(1) label")
-                        metodistRoleRadioBtn.click()
-                        metodistRoleRadioBtn.previousElementSibling.setAttribute("data-checked", true)
                     }
                 })
             } 
@@ -139,6 +140,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             </button>
                         </div>
                         <table class="discipline-table">
+                            <thead>
+                                <tr>
+                                    <th>Код</th>
+                                    <th>Название</th>
+                                    <th>РПД</th>
+                                    <th>ФОС</th>
+                                    <th>Удаление дисциплины</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 
                            
@@ -150,12 +160,18 @@ document.addEventListener("DOMContentLoaded", () => {
                         `
                         <tr class="discipline">
                             <td>${discipline.code}</td>
+                            <td>
+                                <span class="discipline-name">${discipline.disciplineName}</span>
+                                <button type="button" class="edit">
+                                    <span data-disciplineid="${discipline.id}" class="edit__btn btn"></span>
+                                </button> 
+                            </td>
                     `
                     //если файл рпд загружен для данной дисциплины, то выводим его вместе с ключом эцп
                     if (discipline.fileRPD != null) {
                         disciplineMarkup += `
                             <td>
-                               <div class="wrapper">
+                                <div class="wrapper">
                                     <div class="item-file__inner">
                                         <span class="key-icon"></span>
                                         <div class="document-key">
@@ -166,53 +182,86 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
                                         </div>
-                                        <a class="discipline-name" href=${discipline.fileRPD.linkToFile != null
+                                        <a href=${discipline.fileRPD.linkToFile != null
                                             ? discipline.fileRPD.linkToFile.replace(/\s/g, "%20")
                                             : `${URL}/sved/files-oop/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
-                                                >${discipline.disciplineName}</a>
-                                    </div>
-                                    <div class="actions-rpd">
-                                        <button type="button" class="delete delete-rpd">
-                                            <span data-filerpdid="${discipline.fileRPD.id}" class="delete__btn btn"></span>
-                                        </button>                 
-                                        <button type="button" class="edit">
-                                            <span data-disciplineid="${discipline.id}" class="edit__btn btn"></span>
-                                        </button>     
-                                `
+                                                >РПД
+                                        </a>
+                                    </div> 
+                                    <button type="button" class="delete delete-rpd">
+                                        <span data-filerpdid="${discipline.fileRPD.id}" class="delete__btn btn"></span>
+                                    </button>                             
+                                </div>
+                            </td>                           
+                        `   
                     } else {
                         disciplineMarkup += `
                             <td>
-                                <div class="wrapper">
-                                    <span class="discipline-name">${discipline.disciplineName}</span>
-                                    <div class="actions-rpd">
-                                        <label class="file-upload">                                      
-                                            <span data-disciplineid="${discipline.id}" class="file-upload__btn btn"></span>
-                                            <input type="file">
-                                        </label>    
-                                        <button type="button" class="edit">
-                                            <span data-disciplineid="${discipline.id}" class="edit__btn btn"></span>
-                                        </button> 
-                            `
+                                <label class="file-upload">                                      
+                                    <span data-disciplineid="${discipline.id}" class="file-upload__btn btn"></span>
+                                    <input type="file">
+                                </label>   
+                            </td>
+                        `
                     }
+
+                    if (discipline.fileFOS != null) {
+                        disciplineMarkup += `
+                            <td>
+                                <div class="wrapper">
+                                    <div class="item-file__inner">
+                                        <span class="key-icon"></span>
+                                        <div class="document-key">
+                                            <p class="document-key__text">Документ подписан</p>
+                                            <p class="document-key__text">Простая электронная подпись</p>
+                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                            <p class="document-key__text">Ректор</p>
+                                            <p class="document-key__text">Ключ (SHA-256):</p>
+                                            <p class="document-key__text">${discipline.fileFOS.codeECP}</p>
+                                        </div>
+                                        <a href=${discipline.fileFOS.linkToFile != null
+                                            ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
+                                            : `${URL}/sved/files-oop/${discipline.fileFOS.name.replace(/\s/g, "%20")}`}
+                                                >ФОС
+                                        </a>
+                                    </div> 
+                                    <button type="button" class="delete delete-fos">
+                                        <span data-filefosid="${discipline.fileFOS.id}" class="delete__btn btn"></span>
+                                    </button>                            
+                                </div>
+                            </td>                           
+                        `   
+                    } else {
+                        disciplineMarkup += `
+                            <td>
+                                <label class="file-upload">                                      
+                                    <span data-disciplineid="${discipline.id}" data-fos class="file-upload__btn btn"></span>
+                                    <input type="file">
+                                </label> 
+                            </td>
+                        `
+                    }
+
 
                     if (discipline.isDeletionRequest) {
                         disciplineMarkup += `
-                            <button type="button" class="delete delete-discipline">
-                                <span disabled data-disciplineid="${discipline.id}" class="delete__btn btn">Помечен на удаление</span>
-                            </button> 
+                           <td>
+                                <button type="button" class="delete delete-discipline">
+                                    <span disabled data-disciplineid="${discipline.id}" class="delete__btn btn">Помечен на удаление</span>
+                                </button> 
+                           </td>
                         `
                     } else {
                         disciplineMarkup += `
-                            <button type="button" class="delete delete-discipline">
-                                <span data-disciplineid="${discipline.id}" class="delete__btn btn">Пометить на удаление</span>
-                            </button> 
+                            <td>
+                                <button type="button" class="delete delete-discipline">
+                                    <span data-disciplineid="${discipline.id}" class="delete__btn btn">Пометить на удаление</span>
+                                </button> 
+                            </td>
                         `
                     }
 
                     disciplineMarkup += `
-                            </div>
-                        </div>
-                    </td>
                     </tr>
                     `
 
@@ -237,26 +286,54 @@ document.addEventListener("DOMContentLoaded", () => {
         uploadFileRpdBtns.forEach(uploadBtn => {
             uploadBtn.addEventListener("change", function(e) {
                 let btnUpload = e.target.previousElementSibling
-    
-                popupUploadFileRpd.querySelector("#disciplineId").value = btnUpload.dataset.disciplineid
+                
+                if (!authors) {
+                   getAuthors(btnUpload)
+                } else {
+                    let isFos = btnUpload.hasAttribute("data-fos")
+                    if (isFos) {
+                        popupUploadFileFos.querySelector("#disciplineId").value = btnUpload.dataset.disciplineid
+                        popupUploadFileFos.querySelector("#uploadedFile").files = e.target.files
+                        popupUploadFileFos.querySelector(".popup-form__file-name").textContent = `Название файла: ${e.target.files[0].name}`
 
-                popupUploadFileRpd.querySelector("#uploadedFile").files = e.target.files
-                popupUploadFileRpd.querySelector(".popup-form__file-name").textContent = `Название файла: ${e.target.files[0].name}`
+                        popupUploadFileFos.classList.add("open")
+                    } else {
+                        popupUploadFileRpd.querySelector("#disciplineId").value = btnUpload.dataset.disciplineid
+                        popupUploadFileRpd.querySelector("#uploadedFile").files = e.target.files
+                        popupUploadFileRpd.querySelector(".popup-form__file-name").textContent = `Название файла: ${e.target.files[0].name}`
 
-                getAuthors(btnUpload)
+                        popupUploadFileRpd.classList.add("open")
+                    }
+
+                    document.body.classList.add("no-scroll")
+                }
+
+                
                 
             })
         })
 
         //обработка нажатия на кнопку удаления файла РПД
-        let popupDeleteRpdBtns = document.querySelectorAll(".delete-rpd")
-        popupDeleteRpdBtns.forEach(popupDeleteRpdBtn => {
-            popupDeleteRpdBtn.addEventListener("click", function(e) {
+        let deleteRpdBtns = document.querySelectorAll(".delete-rpd")
+        deleteRpdBtns.forEach(deleteRpdBtn => {
+            deleteRpdBtn.addEventListener("click", function(e) {
                 popupDeleteRpd.classList.add("open")
                 document.body.classList.add("no-scroll")
         
                 let fileRpdId = e.target.dataset.filerpdid
                 popupDeleteRpd.querySelector("#fileRPDId").value = fileRpdId
+            })
+        })
+
+        //обработка нажатия на кнопку удаления файла РПД
+        let deleteFosBtns = document.querySelectorAll(".delete-fos")
+        deleteFosBtns.forEach(deleteFosBtn => {
+            deleteFosBtn.addEventListener("click", function(e) {
+                popupDeleteFos.classList.add("open")
+                document.body.classList.add("no-scroll")
+        
+                let fileFosId = e.target.dataset.filefosid
+                popupDeleteFos.querySelector("#fileFOSId").value = fileFosId
             })
         })
 
@@ -267,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupEditDiscipline.classList.add("open")
                 document.body.classList.add("no-scroll")
 
-                let disciplineName = e.target.closest(".wrapper").querySelector(".discipline-name").textContent
+                let disciplineName = e.target.closest(".discipline").querySelector(".discipline-name").textContent
                 let disciplineId = e.target.dataset.disciplineid
 
                 popupEditDiscipline.querySelector("#disciplineId").value = disciplineId
@@ -359,6 +436,65 @@ document.addEventListener("DOMContentLoaded", () => {
             
             el.classList.remove("loading")
             el.textContent = "Загрузить файл РПД"
+            el.disabled = false
+        }
+    }
+
+    // логика загрузки файла ФОС
+    popupUploadFileFosBtn.addEventListener("click", function(e) {
+        let selectedAuthor = popupUploadFileFos.querySelector(".search__input")
+
+        if (selectedAuthor.textContent == "Выберите автора") {
+            selectedAuthor.closest(".popup-form__label").classList.add("invalid")
+        } else {
+            selectedAuthor.closest(".popup-form__label").classList.remove("invalid")
+
+            let author = authors[authors.map(e => e.fio).indexOf(selectedAuthor.value)]
+            if (author) {
+                let formData = new FormData()
+                formData.append("disciplineId", popupUploadFileFos.querySelector("#disciplineId").value)
+
+                let uploadedFile = popupUploadFileFos.querySelector("#uploadedFile").files[0]
+                formData.append("uploadedFile", uploadedFile)
+
+                formData.append("authorId", author.id)
+                uploadFileFos(formData, e.target) 
+            } else {
+                alert("Такого автора нет в списке!")
+            }
+           
+        } 
+    })
+
+    //загрузка файла ФОС    
+    const uploadFileFos = async (formData, el) => {
+        el.classList.add("loading")
+        el.textContent = "Загрузка..."
+        el.disabled = true
+
+        let response = await fetch(`${URL}/api/FileFOS/CreateFOS?authorId=${formData.get("authorId")}&disciplineId=${formData.get("disciplineId")}`, {
+            method: "POST",
+            credentials: "include",
+            body: formData
+        })
+
+        if (response.ok) {
+            alert("ФОС успешно загружен")
+            el.classList.remove("loading")
+            el.textContent = "Загрузить файл ФОС"
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getDisciplinesByProfile(profileId)
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось загрузить ФОС. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+            
+            el.classList.remove("loading")
+            el.textContent = "Загрузить файл ФОС"
             el.disabled = false
         }
     }
@@ -579,6 +715,46 @@ document.addEventListener("DOMContentLoaded", () => {
             let error = await response.text()
             if (error.startsWith("{")) {
                 alert("Не удалось удалить РПД. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+            
+            el.classList.remove("loading")
+            el.disabled = false
+        }
+    }
+
+    //нажатие на кнопку да в модальном окне удаления файла РПД
+    popupDeleteFosYesBtn.addEventListener("click", function(e) {
+        let fileFosId = popupDeleteFos.querySelector("#fileFOSId").value
+        deleteFos(fileFosId, e.target)
+    })
+
+    //нажатие на кнопку нет в модальном окне удаления файла РПД
+    popupDeleteFosNoBtn.addEventListener("click", function() {
+        popupDeleteFos.querySelector(".popup__close").click()
+    })
+
+    //удаление файла РПД
+    const deleteFos = async (fileFOSId, el) => {
+        el.classList.add("loading")
+        el.disabled = true
+
+        let response = await fetch(`${URL}/api/FileFOS/DeleteFOS?fileFOSId=${fileFOSId}`, {
+            method: "POST",
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            alert("ФОС успешно удален")
+            el.classList.remove("loading")
+            el.disabled = false
+            popupDeleteFos.querySelector(".popup__close").click()
+            getDisciplinesByProfile(profileId)
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось удалить ФОС. Попробуйте еще раз")
             } else {
                 alert(error)
             }
@@ -906,11 +1082,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
             }
             popupUploadFileRpd.querySelector("datalist").innerHTML = res
+            popupUploadFileFos.querySelector("datalist").innerHTML = res
 
             el.classList.remove("loading")
-            el.disabled = false
+            el.nextElementSibling.disabled = false
 
-            popupUploadFileRpd.classList.add("open")
+            let isFos = el.hasAttribute("data-fos")
+            if (isFos) {
+                popupUploadFileFos.querySelector("#disciplineId").value = el.dataset.disciplineid
+                popupUploadFileFos.querySelector("#uploadedFile").files = el.nextElementSibling.files
+                popupUploadFileFos.querySelector(".popup-form__file-name").textContent = `Название файла: ${el.nextElementSibling.files[0].name}`
+
+                popupUploadFileFos.classList.add("open")
+            } else {
+                popupUploadFileRpd.querySelector("#disciplineId").value = el.dataset.disciplineid
+                popupUploadFileRpd.querySelector("#uploadedFile").files = el.nextElementSibling.files
+                popupUploadFileRpd.querySelector(".popup-form__file-name").textContent = `Название файла: ${el.nextElementSibling.files[0].name}`
+
+                popupUploadFileRpd.classList.add("open")
+            }
+
             document.body.classList.add("no-scroll")
         } else {
             let error = await response.text()

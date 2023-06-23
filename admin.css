@@ -422,13 +422,22 @@ table, th, td {
 }
 
 .page__table {
-    overflow-x: auto;
-    /* height: 600px; */
+    position: relative;
+    overflow-x: auto; 
     height: calc(100vh - 254px);
 }
 
 .page__table table {
     width: max-content;
+    position: relative;
+}
+
+.page__table th {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    width: 80px;
+    padding: 14px 7px;
 }
 
 th,
@@ -463,11 +472,6 @@ tr td:not(:last-child) button.file-upload__item {
 .editable td:last-child .edit__btn::before {
     background-image: url("img/edit-save.svg");
     background-position-y: 1px;
-}
-
-.page__table th {
-    width: 80px;
-    padding: 14px 7px;
 }
 
 td a {
@@ -648,6 +652,13 @@ td a {
     padding-right: 55px;
 }
 
+.popup-form__label.file {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
 .popup-form__label.file,
 .popup-form__label.link {
     display: none;
@@ -659,17 +670,9 @@ td a {
     gap: 15px;
 }
 
-#popup-editFile .file {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-}
-
 .popup-form .delete {
     margin: 0;
 }
-
 
 .popup-form__file-name {
     font-size: 20px;
@@ -933,14 +936,13 @@ td[colspan] {
     max-height: none;
 }
 
-.discipline-table, .discipline th, .discipline td {
-    border: none;
+.discipline-table, .discipline td {
     vertical-align: middle;
 }
 
-.discipline-table {
-    width: 100%;
-    border-right: none;
+.discipline, .discipline-table th {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .discipline:hover {
@@ -953,12 +955,16 @@ td[colspan] {
 
 .discipline td {
     height: 60px;
-    padding: 0;
+    padding: 0 10px;
 }
 
-.discipline td:nth-child(1) {   
-    border-right: 1px solid #cecece;
-    border-bottom: 1px solid #cecece;
+.discipline-table .edit {
+    margin: 0;
+}
+
+.discipline td:nth-child(1) {
+    /* border-right: 1px solid #cecece; */
+    /* border-bottom: 1px solid #cecece; */
     width: 103px;
     padding-right: 20px;
 }
@@ -968,7 +974,16 @@ td[colspan] {
     justify-content: space-between;
     align-items: center;
     gap: 15px;
+    border: 0;
     border-bottom: 1px solid #cecece;
+}
+
+.discipline:last-child td:nth-child(2) {
+    border-bottom: 0;
+}
+
+.discipline-name {
+    width: 850px;
 }
 
 .discipline .edit {
@@ -977,25 +992,19 @@ td[colspan] {
 
 .wrapper {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 20px;
 }
 
-.discipline .wrapper {
-    width: 850px;
-    padding-left: 16px;
-}
-
-.actions-rpd {
+/* .discipline .actions-rpd {
     display: flex;
     align-items: center;
     gap: 13px;
-}
+} */
 
-.actions-rpd .edit__btn::before {
+/* .actions-rpd .edit__btn::before {
     background-position: center;
-}
+} */
 
 #popup-delete, #popup-deleteRpd, #popup-deleteStatus, #popup-deleteDiscipline {
     display: flex;
@@ -1054,7 +1063,7 @@ td[colspan] {
     text-align: center;
 }
 
-.actions-rpd .delete-discipline .delete__btn::before {
+.discipline .delete-discipline .delete__btn::before {
     content: none;
 }
 
@@ -1239,11 +1248,11 @@ datalist option:hover::before {
    margin-right: 5px;
 }
 
-.radio__item [type='radio']:checked ~ label {
+.radio__item .checked ~ label {
    border-color: #0050cf;
 }
 
-.radio__item [type='radio']:checked ~ label:before {
+.radio__item .checked ~ label:before {
    border-color: #fff;
    background-color: #0050cf;
 }
