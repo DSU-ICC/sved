@@ -1134,7 +1134,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //расставление тегов
         let propItem = ""
-        if (fileTypeId == getFileTypeIdByName("ОПОП")) { //тег для опоп
+        if (fileTypeId == getFileTypeIdByName("ОПОП") || fileTypeId == getFileTypeIdByName("АОПОП")) { //тег для опоп
             propItem += `itemprop="opMain"`
         } else if (fileTypeId == getFileTypeIdByName("Аннотации к РПД")) {
             propItem += `itemprop="educationAnnotation"`
