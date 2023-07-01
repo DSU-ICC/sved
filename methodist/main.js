@@ -1358,7 +1358,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("КУГ")) // календарный учебный график
 
-                let fileModelsRpp = el.disciplines // рабочие программы практик
+                let fileModelsRpp = el.profile.disciplines // рабочие программы практик
                 if (fileModelsRpp.length != 0) {
                     let rpp = `<td itemprop="eduPr">`
                     rpp += '<div class="item-files">'
@@ -1378,7 +1378,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
                                         </div>
-                                        <a href=${URL}/sved/files-oop/${fileRPP.fileRPD.name}">${fileRPP.disciplineName}</a>
+                                        <a href='${fileRPP.fileRPD.linkToFile ? fileRPP.fileRPD.linkToFile : `${URL}/sved/files-oop/${fileRPP.fileRPD.name}`}'>${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `
