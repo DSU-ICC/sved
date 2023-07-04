@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (response.ok) {
             let data = await response.json()
-            disciplineList = data.disciplines 
+            disciplineList = data.profile.disciplines 
 
             let headerTitle = document.querySelector(".page__title")
             headerTitle.textContent = `Направление: ${data.caseSDepartment.code} ${data.caseSDepartment.deptName}`

@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             let data = await response.json()
-            disciplineList = data.disciplines 
+            disciplineList = data.profile.disciplines
 
             //вывод пользователю названия направления профиля
             let headerTitle = document.querySelector(".page__title")
