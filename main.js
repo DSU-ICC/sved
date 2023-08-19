@@ -181,13 +181,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (String(el.Profile.LinkToRPD).toString() != "NULL" && el.Profile.LinkToRPD != null) {
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="${el.Profile.LinkToRPD}">РПД</a>
+                        <a href="${el.Profile.LinkToRPD}">РПД и ФОС</a>
                     </td>
                 ` 
             } else {
                 res += `
                     <td itemprop="educationRpd">
-                        <a href="${URL}/sved/eor.html?profileId=${el.Profile.Id}">РПД</a>
+                        <a href="${URL}/sved/eor.html?profileId=${el.Profile.Id}">РПД и ФОС</a>
                     </td>
                 ` 
             } 
