@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //const URL = "https://localhost:44370"
 
     let logoutBtn = document.querySelector(".header .action__btn")
+
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
     let modalUchPlan = document.querySelector("#popup-uchplan")
 
@@ -33,11 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let listKafedras
     let departments
     let fileTypes
+    let userId
     let userName
     let userRole
 
-
-    let pageTable = document.querySelector("table")
+    let pageTable = document.querySelector(".page__table")
     pageTable.addEventListener("click", function (e) {
         let targetItem = e.target
 
@@ -112,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let yearInp = modalUchPlan.querySelector("#year")
         yearInp.value = year
-        let deptCodeInput =  modalUchPlan.querySelector("#departmentCode")
+        let deptCodeInput = modalUchPlan.querySelector("#departmentCode")
         deptCodeInput.value = String(getDepartmentCodeByDepartmentId(data.caseSDepartment?.departmentId))
         let profileInp = modalUchPlan.querySelector("#profile")
         profileInp.value = profile
@@ -518,11 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             popupEditFileInput.setAttribute("placeholder", fileTypes[fileTypes.map(e => e.id).indexOf(fileTypeId)].name)
-        }            
-
-        
-
-        
+        }                
     }
 
     //валидация формы изменения профиля
@@ -887,7 +884,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popupDeleteYesBtn.classList.add("loading")
         popupDeleteYesBtn.disabled = true
         popupDeleteNoBtn.disabled = true
-        deleteProfile(profileId)
+        deleteProfile(profileId, userId)
     })
 
     //нажатие на кнопку нет в модальном окне удаления профиля
@@ -1444,8 +1441,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //удалить профиль
-    const deleteProfile = async (profileId) => {
-        let response = await fetch(`${URL}/api/Profiles/DeleteProfile?profileId=${profileId}`, {
+    const deleteProfile = async (profileId, userId) => {
+        let response = await fetch(`${URL}/api/Profiles/DeleteProfile?profileId=${profileId}&userId=${userId}`, {
             method: "POST",
             credentials: "include"
         })

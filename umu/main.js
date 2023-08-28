@@ -7,7 +7,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let disciplineList
     let statusDisciplineList
+
     let closeModalBtns = document.querySelectorAll(".popup__close")
+
+    let recoveryBtn = document.querySelector(".profile-recovery-btn")
+    let popupRecovery = document.querySelector("#popup-recovery")
+    let popupProfilesDeleted = popupRecovery.querySelector(".profiles-deleted")
+    let popupRecoveryConfirm = document.querySelector("#popup-recovery-confirm")
+    let popupRecoveryConfirmYesBtn = document.querySelector("#popup-recovery-confirm .confirm-button--yes")
+    let popupRecoveryConfirmNoBtn = document.querySelector("#popup-recovery-confirm .confirm-button--no")
+
     let popupApproveDiscipline = document.querySelector("#popup-approveDiscipline")
     let popupApproveDisciplineYesBtn = document.querySelector("#popup-approveDiscipline .confirm-button--yes")
     let popupApproveDisciplineNoBtn = document.querySelector("#popup-approveDiscipline .confirm-button--no")
@@ -27,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let logoutBtn = document.querySelector(".header .action__btn")
     let userId
     let userRole
+    let deletedProfiles
 
     //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
@@ -70,6 +80,125 @@ document.addEventListener("DOMContentLoaded", function() {
             document.body.classList.remove("no-scroll")
             
         })
+    })
+
+    recoveryBtn.addEventListener("click", function() {
+        popupRecovery.classList.add("open")
+        document.body.classList.add("no-scroll")
+        
+        if (!deletedProfiles) {
+            popupProfilesDeleted.innerHTML = "<span>Загрузка удаленных профилей...</span>"
+            getDeletedProfiles(userId)
+        } else {
+            showDeletedProfiles(deletedProfiles)
+        }
+    })
+
+    const getDeletedProfiles = async (userId) => {
+        let response = await fetch(`${URL}/api/Profiles/GetDeletedProfiles?umuId=${userId}`, {
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            deletedProfiles = await response.json()
+            showDeletedProfiles(deletedProfiles)
+        } else if (response.status == 400) {
+            popupProfilesDeleted.innerHTML = "<span>Нет доступных дисциплин для восстановления</span>"
+        } else {
+            popupProfilesDeleted.innerHTML = "<span>Ошибка загрузки профиля</span>"
+        }
+    }
+
+    const showDeletedProfiles = (deletedProfiles) => {
+        let profileTable = `
+            <table class="profiles-deleted__table">
+                <thead>
+                    <tr>
+                        <th>Год реал-ии</th>
+                        <th>Код, шифр</th>
+                        <th>Профиль</th>
+                        <th>Форма обучения</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+        `
+
+        for (let profileItem of deletedProfiles) {
+            profileTable += `
+                <tr data-profileid=${profileItem.profile.id}>
+                    <td>
+                        <span>${profileItem.profile.year}</span>
+                    </td>
+                    <td>
+                        <span>${profileItem.caseSDepartment.code}</span>
+                    </td>
+                    <td>
+                        <span>${profileItem.profile.profileName}</span>
+                    </td>
+                    <td>
+                        <span>${profileItem.profile.levelEdu.name}</span>
+                    </td>
+                    <td>
+                        <button type="button" class="profiles-deleted__btn btn">Восстановить</button>'
+                    </td>    
+                </tr>
+            `
+        }
+
+        profileTable += `
+                </tbody>
+            </table>
+        `
+        popupProfilesDeleted.innerHTML = profileTable
+
+        let popupProfilesDeletedBtns = popupRecovery.querySelectorAll(".profiles-deleted__btn")
+        popupProfilesDeletedBtns.forEach(profileDeletedBtn => {
+            profileDeletedBtn.addEventListener("click", function() {
+                let profileId = profileDeletedBtn.closest("tr").dataset.profileid
+
+                let profileIdField = popupRecoveryConfirm.querySelector("#profileId")
+                profileIdField.value = profileId
+
+                popupRecovery.classList.remove("open")
+                popupRecoveryConfirm.classList.add("open")
+            })
+        })
+    }
+
+    popupRecoveryConfirmYesBtn.addEventListener("click", function() {
+        let profileId = popupRecoveryConfirm.querySelector("#profileId").value
+
+        popupRecoveryConfirmYesBtn.classList.add("loading")
+        recoveryProfile(profileId, userId)
+    })
+
+    const recoveryProfile = async (profileId, userId) => {
+        let response = await fetch(`${URL}/api/Profiles/RecoveryProfile?profileId=${profileId}&userId=${userId}`, {
+            method: "POST",
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            alert("Восстановление профиля прошло успешно")
+            popupRecoveryConfirmYesBtn.classList.remove("loading")
+            popupRecoveryConfirm.querySelector(".popup__close").click()
+            deletedProfiles = null
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось восстановить профиль. Попробуйте еще раз")          
+            } else {
+                alert(error)
+            }
+
+            popupRecoveryConfirmYesBtn.classList.remove("loading")
+        }
+    }
+
+    popupRecoveryConfirmNoBtn.addEventListener("click", function() {
+        popupRecoveryConfirm.classList.remove("open")
+        recoveryBtn.click()
     })
 
     //получение удаляемых дисциплин

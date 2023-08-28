@@ -259,6 +259,14 @@ main {
     }
 }
 
+.profile-recovery-btn {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
 .file-upload input[type=file] {
 	position: absolute;
 	z-index: -1;
@@ -437,7 +445,6 @@ table, th, td {
     top: 0;
     z-index: 9;
     width: 80px;
-    padding: 14px 7px;
 }
 
 th,
@@ -446,9 +453,10 @@ td[colspan]{
     line-height: 1.285;
     background-color: #f2f2f7;
     color: #00235a;
-    padding-top: 14px;
-    padding-bottom: 22px;
+    /* padding-top: 14px;
+    padding-bottom: 22px; */
     text-align: left;
+    padding: 14px 7px;
 }
 
 td {
@@ -626,6 +634,31 @@ td a {
     width: 242px;
 }
 
+#popup-recovery .popup__content {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.profiles-deleted > span {
+    display: block;
+    text-align: center;
+    font-size: 24px;
+}
+
+.profiles-deleted__table th {
+    width: 100px;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+.profiles-deleted__btn {
+    padding: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
 .popup-form__btn,
 .login-form__btn {
     padding: 15px 21px;
@@ -765,8 +798,6 @@ td[itemprop="methodology"] .document-key {
 .document-key__text:not(:last-child) {
     margin-bottom: 10px;
 }
-
-
 
 #popup-delete .popup-form__btn {
     background-color: #ec071e;
