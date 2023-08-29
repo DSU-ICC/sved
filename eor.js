@@ -18,11 +18,21 @@ document.addEventListener("DOMContentLoaded", function() {
             let data = await response.json()
             disciplineList = data.profile.disciplines 
 
-            let headerTitle = document.querySelector(".page__title")
-            headerTitle.textContent = `Направление: ${data.caseSDepartment.code} ${data.caseSDepartment.deptName}`
+            //вывод пользователю названия направления профиля
+            let headerTitleDept = document.querySelector(".page__title")
+            headerTitleDept.textContent = `Направление: ${data.caseSDepartment.code} ${data.caseSDepartment.deptName}`
 
-            let headerSubTitle = document.querySelector(".page__subtitle")
-            headerSubTitle.textContent = `Профиль: ${data.profile.profileName}`
+            //вывод пользователю названия профиля
+            let headerSubTitleProfileName = document.querySelector(".page__subtitle--profile-name")
+            headerSubTitleProfileName.textContent = `Профиль: ${data.profile.profileName}`
+
+            //вывод пользователю года реализации профиля
+            let headerSubTitleYear = document.querySelector(".page__subtitle--year")
+            headerSubTitleYear.textContent = `Год: ${data.profile.year}`
+
+            //вывод пользователю формы обучения профиля
+            let headerSubTitleEduForm = document.querySelector(".page__subtitle--edu-form")
+            headerSubTitleEduForm.textContent = `Форма обучения: ${data.caseCEdukind.edukind}`
 
             showDisciplines(disciplineList)
         } 
