@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let profileId = window.location.href.split("=")[1];
     let disciplineList;
     let authors;
+    let userId
     
     //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
@@ -553,7 +554,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 statusDisciplineId: statusDisciplineId,
                 statusDiscipline: null,
                 code: newDisciplineCode.value,
-                fileRPD: null
+                fileRPD: null,
+                lastChangeAuthorId: userId
                 //createDate: "0001-01-01T00:00:00",
                 //updateDate: "0001-01-01T00:00:00"
             }
@@ -612,6 +614,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             disciplineNameInput.classList.remove("invalid")
             discipline.disciplineName = newDisciplineName
+            discipline.lastChangeAuthorId = userId
             editDiscipline(discipline, e.target)
         }
     })
@@ -668,7 +671,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.add("loading")
         el.disabled = true 
 
-        let response = await fetch(`${URL}/api/Discipline/RequestDeleteDiscipline?disciplineId=${disciplineId}`, {
+        let response = await fetch(`${URL}/api/Discipline/RequestDeleteDiscipline?disciplineId=${disciplineId}&userId=${userId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -795,7 +798,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let statusDiscipline = {
                 id: 0,
                 name: statusDisciplineNameInput.value,
-                isDeleted: false
+                isDeleted: false,
+                lastChangeAuthorId: userId
             }
 
             createStatusDiscipline(statusDiscipline, e.target)
@@ -856,7 +860,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let statusDiscipline = {
                 id: statusDisciplineId,
                 name: statusDisciplineNameInput.value,
-                isDeleted: false
+                isDeleted: false,
+                lastChangeAuthorId: userId
             }
 
             editStatusDiscipline(statusDiscipline, e.target)
@@ -1152,6 +1157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let hasAccess = hasUserAccessToRole()
         if (hasAccess) {
             userName = localStorage.getItem("userName")
+            userId = localStorage.getItem("userId")
 
             setUserName(userName)
             getDisciplinesByProfile(profileId)

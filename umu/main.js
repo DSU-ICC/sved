@@ -453,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function() {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/api/Discipline/DeleteDiscipline?disciplineId=${disciplineId}`, {
+        let response = await fetch(`${URL}/api/Discipline/DeleteDiscipline?disciplineId=${disciplineId}&userId=${userId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -522,6 +522,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let disciplineId = parseInt(popupRejectDiscipline.querySelector("#disciplineId").value)
         let rejectedDiscipline = disciplineList[disciplineList.map(e => e.discipline.id).indexOf(disciplineId)]
         rejectedDiscipline.discipline.isDeletionRequest = false
+        rejectedDiscipline.discipline.lastChangeAuthorId = userId
         sendRejectDeleteDiscipline(rejectedDiscipline.discipline, e.target)
     })
 

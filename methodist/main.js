@@ -219,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         dataUchPlanFinal.listPersDepartmentsId = listPersDepartmentsId
+        dataUchPlanFinal.lastChangeAuthorId = userId
 
         let response = await fetch(`${URL}/api/Profiles/CreateProfile?kafedraId=${kafedra_id}`, {
             method: "POST",
@@ -860,7 +861,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             profileItem.profile.listPersDepartmentsId = listPersDepartmentsId
-
+            profileItem.profile.lastChangeAuthorId = userId
             editProfile(profileItem.profile, popupEditTextBtn)
         }
     })
