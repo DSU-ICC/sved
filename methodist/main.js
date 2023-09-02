@@ -38,6 +38,69 @@ document.addEventListener("DOMContentLoaded", () => {
     let userName
     let userRole
 
+    let choiceOptions = {
+        noResultsText: "Результат не найден",
+        itemSelectText: "",
+        loadingText: "Загрузка данных...",
+        noChoicesText: "Элементы списка отсутствуют",
+        removeItemButton: true, 
+        position: "bottom",
+        searchResultLimit: 9999,
+    }
+
+    let deptSelect = document.querySelector("#dept")
+    let deptChoice = new Choices(deptSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите название направления"
+    });
+
+    let levelEduSelect = document.querySelector("#levelEdu")
+    let levelEduChoice = new Choices(levelEduSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите уровень образования"
+    })
+
+    let eduFormSelect = document.querySelector("#eduForm")
+    let eduFormChoice = new Choices(eduFormSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите форму обучения"
+    })
+
+    let kafedraSelect = document.querySelector("#kafedra")
+    let kafedraChoice = new Choices(kafedraSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите каферу"
+    })
+
+    let deptSelectTwo = document.querySelector("#dept-2")
+    let deptChoiceTwo = new Choices(deptSelectTwo, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите название направления"
+    });
+
+    deptSelectTwo.addEventListener("choice", function(evt) {
+        let selectedEl = this.nextElementSibling
+        selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
+    })
+
+    let levelEduSelectTwo = document.querySelector("#levelEdu-2")
+    let levelEduChoiceTwo = new Choices(levelEduSelectTwo, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите уровень образования"
+    })
+
+    let eduFormSelectTwo = document.querySelector("#eduForm-2")
+    let eduFormChoiceTwo = new Choices(eduFormSelectTwo, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите форму обучения"
+    })
+
+    let kafedraSelectTwo = document.querySelector("#kafedra-2")
+    let kafedraChoiceTwo = new Choices(kafedraSelectTwo, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите каферу"
+    })
+
     let pageTable = document.querySelector(".page__table")
     pageTable.addEventListener("click", function (e) {
         let targetItem = e.target
@@ -105,67 +168,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let year = data.profile.year ?? ""
         let profile = data.profile.profileName ?? ""
-        let level = data.profile.levelEdu?.name
-        let deptName = data.caseSDepartment?.deptName
-        let eduForm = data.caseCEdukind?.edukind
+        let levelId = data.profile.levelEdu?.id
+        let deptId = data.caseSDepartment?.departmentId
+        let eduFormId = data.caseCEdukind?.edukindId
 
-        let kafedraName = listKafedras.find(x => x.depId == kafedra_id).depName
+        let kafedraId = listKafedras.find(x => x.depId == kafedra_id).depId
 
         let yearInp = modalUchPlan.querySelector("#year")
         yearInp.value = year
         let deptCodeInput = modalUchPlan.querySelector("#departmentCode")
-        deptCodeInput.value = String(getDepartmentCodeByDepartmentId(data.caseSDepartment?.departmentId))
+        deptCodeInput.value = data.caseSDepartment?.code
         let profileInp = modalUchPlan.querySelector("#profile")
         profileInp.value = profile
         let langInput = modalUchPlan.querySelector("#eduLang")
         langInput.value = "русский"
 
-        let deptSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='dept'] .select__option")
-        let levelSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='levelEdu'] .select__option")
-        let eduFormSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='eduForm'] .select__option")
-        let kafedraSelectOptions = modalUchPlan.querySelectorAll("[data-selectfield='kafedra'] .select__option")
-
-        if (deptName) {
-            deptSelectOptions.forEach(deptItem => {
-                if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
-                    deptItem.click()
-                }
-            })
+        if (deptId) {
+            deptChoice.setChoiceByValue(deptId)
         }
 
-        deptSelectOptions.forEach(deptSelect => {
-            deptSelect.addEventListener("click", function(e) {
-                let deptId = deptSelect.dataset.id
-                deptCodeInput.value = getDepartmentCodeByDepartmentId(deptId)
-            })
+        deptSelect.addEventListener("choice", function(evt) {
+            let selectedEl = this.nextElementSibling
+            selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
+            deptCodeInput.value = evt.detail.choice.customProperties.deptCode
         })
 
-        if (level) {
-            levelSelectOptions.forEach(levelItem => {
-                if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) {
-                    levelItem.click()
-                }
-            })
+        if (levelId) {
+            levelEduChoice.setChoiceByValue(levelId)
         }
 
-        if (eduForm) {
-            eduFormSelectOptions.forEach(eduFormItem => {
-                if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) {
-                    eduFormItem.click()
-                }
-            })
+        if (eduFormId) {
+            eduFormChoice.setChoiceByValue(eduFormId)
         }
 
-        kafedraSelectOptions.forEach(kafedraItem => {
-            if (kafedraItem.textContent.trim().toLowerCase() == kafedraName.toLowerCase()) {
-                kafedraItem.click()
-            }
-        })
-    }
-
-    const getDepartmentCodeByDepartmentId = (departmentId) => {
-        let department = departments[departments.map(e => e.departmentId).indexOf(+departmentId)]
-        return department.code
+        if (kafedraId) {
+            kafedraChoice.setChoiceByValue(kafedraId)
+        }
     }
 
     //кнопка создания профиля в модальном окне
@@ -184,31 +222,26 @@ document.addEventListener("DOMContentLoaded", () => {
         popupSaveUchPlanBtn.textContent = "Сохранение..."
         popupSaveUchPlanBtn.disabled = true
 
-        let selectedDeptItem = modalUchPlan.querySelector("[data-selectfield='dept'] .select__text")
-        let selectedLevelEduItem = modalUchPlan.querySelector("[data-selectfield='levelEdu'] .select__text")
-        let selectedEduFormItem = modalUchPlan.querySelector("[data-selectfield='eduForm'] .select__text")
-        let selectedKafedras = modalUchPlan.querySelector("[data-selectfield='kafedra'] .select__text")
-
         let yearInput = modalUchPlan.querySelector("#year")
         let profileInput = modalUchPlan.querySelector("#profile")
         let eduLangInput = modalUchPlan.querySelector("#eduLang")
         let accredInput = modalUchPlan.querySelector("#periodAccredistation")
-        //let linkToEduDistanceInput = modalUchPlan.querySelector("#linkToEduDistance")
 
         dataUchPlanFinal = data.profile
 
-        dataUchPlanFinal.levelEdu = null
-        dataUchPlanFinal.levelEduId = parseInt(selectedLevelEduItem.dataset.id)
+        if (dataUchPlanFinal.levelEdu) {
+            dataUchPlanFinal.levelEdu = null
+        }
+        dataUchPlanFinal.levelEduId = parseInt(levelEduChoice.getValue(true))
         dataUchPlanFinal.year = yearInput.value.trim()
         dataUchPlanFinal.profileName = profileInput.value.trim()
-        dataUchPlanFinal.caseSDepartmentId = parseInt(selectedDeptItem.dataset.id)
-        dataUchPlanFinal.caseCEdukindId = parseInt(selectedEduFormItem.dataset.id)
+        dataUchPlanFinal.caseSDepartmentId = parseInt(deptChoice.getValue(true))
+        dataUchPlanFinal.caseCEdukindId = parseInt(eduFormChoice.getValue(true))
         dataUchPlanFinal.educationLanguage = eduLangInput.value
         dataUchPlanFinal.validityPeriodOfStateAccreditasion = accredInput.value
-        //dataUchPlanFinal.linkToDistanceEducation = linkToEduDistanceInput.value ?? ""
 
         let listPersDepartmentsId = []
-        let selectedKafedrasId = [...selectedKafedras.dataset.id.split(", ")].map(id => parseInt(id))
+        let selectedKafedrasId = kafedraChoice.getValue(true)
         selectedKafedrasId.forEach(facItem => {
             listPersDepartmentsId.push({
                 id: 0,
@@ -257,10 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
             popupSaveUchPlanBtn.classList.remove("loading")
             popupSaveUchPlanBtn.textContent = "Завершить редактирование"
             popupSaveUchPlanBtn.disabled = false
-            // popupSaveUchPlanBtn.closest(".popup__content").querySelector(".popup__close").click()
-            // getProfilesById(kafedra_id)
         }
-
     }
 
     const addKafedraToProfile = async (kafedraId, newProfile) => {
@@ -293,17 +323,13 @@ document.addEventListener("DOMContentLoaded", () => {
             popupSaveUchPlanBtn.classList.remove("loading")
             popupSaveUchPlanBtn.textContent = "Завершить редактирование"
             popupSaveUchPlanBtn.disabled = false
-            // popupSaveUchPlanBtn.closest(".popup__content").querySelector(".popup__close").click()
-            // getProfilesById(kafedra_id)
         }
     }
 
     //заполнение модального окна данными для создания файла
     const fillDataForUploadFile = (targetItem) => {
         modalUploadFile.classList.add("open")
-        document.body.classList.add("no-scroll")
-        
-        
+        document.body.classList.add("no-scroll")  
 
         let fileTypeId = parseInt(targetItem.dataset.filetype)
         let profileId = parseInt(targetItem.closest("tr").dataset.profileid)
@@ -362,9 +388,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }           
         })
     })
-
-    
-
 
     // событие нажатия на кнопку создания файла в соответствующем модальном окне
     popupUploadFileBtn.addEventListener("click", function (e) {
@@ -429,41 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-    //обработчик событий выбора способа загрузки файла
-    // const radioBtns = popupEditFile.querySelectorAll(".radio__item label")
-    // radioBtns.forEach((radioItem) => {
-    //     radioItem.addEventListener("click", function (e) {                                
-    //         //помечаем нажатую кнопку как выбранную если она не была выбрана
-    //         if (radioItem.closest(".radio__item").querySelector("input").classList.contains("checked")) {
-
-    //             for (let radioEl of radioBtns) {
-    //                 //radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
-    //                 radioEl.closest(".radio__item").querySelector("input").classList.remove("checked")
-    //             }
-    //             fileUploadBtnLabel.style.display = "none"
-    //             linkInputLabel.style.display = "none"
-    //         } else {
-    //             //очищаем все радио кнопки
-                 
-    //             for (let radioEl of radioBtns) {
-    //                 //radioEl.closest(".radio__item").querySelector("input").removeAttribute("data-checked")
-    //                 radioEl.closest(".radio__item").querySelector("input").classList.remove("checked")
-    //                 //radioEl.closest(".radio__item").querySelector("input").checked = false
-    //             }
-    //             e.target.closest(".radio__item").querySelector("input").classList.add("checked")
-
-    //             let selectedUploadOption = e.target.textContent.trim()
-    //             if (selectedUploadOption == "Загрузить файл") {
-    //                 fileUploadBtnLabel.style.display = "block"
-    //                 linkInputLabel.style.display = "none"
-    //             } else if (selectedUploadOption == "Загрузить ссылку") {
-    //                 linkInputLabel.style.display = "flex"
-    //                 fileUploadBtnLabel.style.display = "none"
-    //             }
-    //         }
-    //     })
-    // })
-
     //заполнение данными модальное окно для изменения файла
     const fillDataForEditFile = (el) => {
         popupEditFile.classList.add("open")
@@ -525,17 +513,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //валидация формы изменения профиля
     const validateProfileForm = (modalWindow) => {
-        let selectedDeptItem = modalWindow.querySelector("[data-selectfield='dept'] .select__text")
-        let deptName = selectedDeptItem.textContent
-
-        let selectedLevelItem = modalWindow.querySelector("[data-selectfield='levelEdu'] .select__text")
-        let levelEdu = selectedLevelItem.textContent
-
-        let selectedEduFormItem = modalWindow.querySelector("[data-selectfield='eduForm'] .select__text")
-        let eduForm = selectedEduFormItem.textContent
-
-        let selectedKafedras = modalWindow.querySelector("[data-selectfield='kafedra'] .select__text")
-
         let yearInput = modalWindow.querySelector("#year")
         let profileInput = modalWindow.querySelector("#profile")
         let eduLangInput = modalWindow.querySelector("#eduLang")
@@ -543,34 +520,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let isValidForm = true
 
-        if (deptName == "Выберите направление") {
-            isValidForm = false
-            selectedDeptItem.closest(".popup-form__label").classList.add("invalid")
-        } else {
-            selectedDeptItem.closest(".popup-form__label").classList.remove("invalid")
-        }
+        let modalWindowId = modalWindow.getAttribute("id")
+        if (modalWindowId == "popup-uchplan") {
+            let deptId = deptChoice.getValue(true)
+            let levelEduId = levelEduChoice.getValue(true)
+            let eduFormId = eduFormChoice.getValue(true)
+            let kafedras = kafedraChoice.getValue(true)
 
-        if (levelEdu == "Выберите уровень образования") {
-            isValidForm = false
-            selectedLevelItem.closest(".popup-form__label").classList.add("invalid")
-        } else {
-            selectedLevelItem.closest(".popup-form__label").classList.remove("invalid")
-        }
+            if (!deptId) {
+                isValidForm = false
+                deptSelect.closest(".choices__inner").classList.add("invalid")
+            } else {
+                deptSelect.closest(".choices__inner").classList.remove("invalid")
+            }
 
-        if (eduForm == "Выберите форму обучения") {
-            isValidForm = false
-            selectedEduFormItem.closest(".popup-form__label").classList.add("invalid")
-        } else {
-            selectedEduFormItem.closest(".popup-form__label").classList.remove("invalid")
-        }
+            if (!levelEduId) {
+                isValidForm = false
+                levelEduSelect.closest(".choices__inner").classList.add("invalid")
+            } else {
+                levelEduSelect.closest(".choices__inner").classList.remove("invalid")
+            }
 
-        if (selectedKafedras.textContent == "Выберите кафедры") {
-            isValidForm = false
-            selectedKafedras.closest(".popup-form__label").classList.add("invalid")
-        } else {
-            selectedKafedras.closest(".popup-form__label").classList.remove("invalid")
-        }
+            if (!eduFormId) {
+                isValidForm = false
+                eduFormSelect.closest(".choices__inner").classList.add("invalid")
+            } else {
+                eduFormSelect.closest(".choices__inner").classList.remove("invalid")
+            }
 
+            if (!kafedras) {
+                isValidForm = false
+                kafedraSelect.closest(".choices__inner").classList.add("invalid")
+            } else {
+                kafedraSelect.closest(".choices__inner").classList.remove("invalid")
+            }
+        } else if (modalWindowId == "popup-editText") {
+            let deptId = deptChoiceTwo.getValue(true)
+            let levelEduId = levelEduChoiceTwo.getValue(true)
+            let eduFormId = eduFormChoiceTwo.getValue(true)
+            let kafedras = kafedraChoiceTwo.getValue(true)
+
+            if (!deptId) {
+                isValidForm = false
+                deptSelectTwo.closest(".choices__inner").classList.add("invalid")
+            } else {
+                deptSelectTwo.closest(".choices__inner").classList.remove("invalid")
+            }
+
+            if (!levelEduId) {
+                isValidForm = false
+                levelEduSelectTwo.closest(".choices__inner").classList.add("invalid")
+            } else {
+                levelEduSelectTwo.closest(".choices__inner").classList.remove("invalid")
+            }
+
+            if (!eduFormId) {
+                isValidForm = false
+                eduFormSelectTwo.closest(".choices__inner").classList.add("invalid")
+            } else {
+                eduFormSelectTwo.closest(".choices__inner").classList.remove("invalid")
+            }
+
+            if (!kafedras) {
+                isValidForm = false
+                kafedraSelectTwo.closest(".choices__inner").classList.add("invalid")
+            } else {
+                kafedraSelectTwo.closest(".choices__inner").classList.remove("invalid")
+            }
+        }
 
         if (yearInput.value.trim() == "") {
             isValidForm = false
@@ -622,9 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let isValidateName = nameFileInput.querySelector(".popup-form__input").value.trim() != "" ? true : false
         let isUploadFile = uploadInput.files.length > 0 ? true : false
-        let isValidateLink = linkInput.value.trim() != "" ? true : false
-
-        
+        let isValidateLink = linkInput.value.trim() != "" ? true : false      
 
         let isFormValid = true
 
@@ -751,12 +766,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let profileEdited = profiles[profiles.map(e => e.profile.id).indexOf(+tdElements.dataset.profileid)]
         let year = profileEdited.profile.year
         let profile = profileEdited.profile.profileName
-        let level = profileEdited.profile.levelEdu.name
-        let deptName = profileEdited.caseSDepartment.deptName
-        let eduForm = profileEdited.caseCEdukind.edukind
+        let levelEduId = profileEdited.profile.levelEduId
+        let deptId = profileEdited.caseSDepartment.departmentId
+        let eduFormId = profileEdited.caseCEdukind.edukindId
         let lang = profileEdited.profile.educationLanguage
         let accred = profileEdited.profile.validityPeriodOfStateAccreditasion
-        //let linkToEduDistance = profileEdited.profile.linkToDistanceEducation
 
         let profileIdInput = popupEditText.querySelector("#profileId")
         profileIdInput.value = tdElements.dataset.profileid
@@ -764,62 +778,39 @@ document.addEventListener("DOMContentLoaded", () => {
         let yearInp = popupEditText.querySelector("#year")
         yearInp.value = year
         let deptCodeInput = popupEditText.querySelector("#departmentCode")
-        deptCodeInput.value = getDepartmentCodeByDepartmentId(profileEdited.caseSDepartment.departmentId)
+        deptCodeInput.value = profileEdited.caseSDepartment.code
         let profileInp = popupEditText.querySelector("#profile")
         profileInp.value = profile
         let langInput = popupEditText.querySelector("#eduLang")
         langInput.value = lang
         let accredInput = popupEditText.querySelector("#periodAccredistation")
         accredInput.value = accred
-        //let linkToDistanceInput = popupEditText.querySelector("#linkToEduDistance")
-        //linkToDistanceInput.value = linkToEduDistance
 
-        let deptSelectOptions = popupEditText.querySelectorAll("[data-selectfield=dept] .select__option")
-        let levelSelectOptions = popupEditText.querySelectorAll("[data-selectfield=levelEdu] .select__option")
-        let eduFormSelectOptions = popupEditText.querySelectorAll("[data-selectfield=eduForm] .select__option")
-        let kafedraSelectOptions = popupEditText.querySelectorAll("[data-selectfield=kafedra] .select__option")
+        if (deptId) {
+            deptChoiceTwo.setChoiceByValue(deptId)
+        }
 
-        deptSelectOptions.forEach(deptItem => {
-            if (deptItem.textContent.trim().toLowerCase() == deptName.toLowerCase()) {
-                deptItem.click()
-            }
+        deptSelectTwo.addEventListener("choice", function(evt) {
+            let selectedEl = this.nextElementSibling
+            selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
+            deptCodeInput.value = evt.detail.choice.customProperties.deptCode
         })
 
-        deptSelectOptions.forEach(deptSelect => {
-            deptSelect.addEventListener("click", function(e) {
-                let deptId = deptSelect.dataset.id
-                deptCodeInput.value = getDepartmentCodeByDepartmentId(deptId)
-            })
-        })
+        if (levelEduId) {
+            levelEduChoiceTwo.setChoiceByValue(levelEduId)
+        }
 
-        levelSelectOptions.forEach(levelItem => {
-            if (levelItem.textContent.trim().toLowerCase() == level.toLowerCase()) {
-                levelItem.click()
-            }
-        })
+        if (eduFormId) {
+            eduFormChoiceTwo.setChoiceByValue(eduFormId)
+        }
 
-        eduFormSelectOptions.forEach(eduFormItem => {
-            if (eduFormItem.textContent.trim().toLowerCase() == eduForm.toLowerCase()) {
-                eduFormItem.click()
-            }
-        })
 
         //нахождение привязанных к профилю кафедр 
         let listKafedrasProfileEdited = profileEdited.profile.listPersDepartmentsId
         let listKafedrasId = listKafedrasProfileEdited.map(x => x.persDepartmentId)
-        let listKafedrasName = []
-
-        listKafedrasId.forEach(kafedraId => {
-            let profileName = listKafedras[listKafedras.map(e => e.depId).indexOf(kafedraId)].depName
-            listKafedrasName.push(profileName.toLowerCase())
-        })
-
-
-        kafedraSelectOptions.forEach(kafedraItem => {
-            if (listKafedrasName.includes(kafedraItem.textContent.trim().toLowerCase())) {
-                kafedraItem.click()
-            }
-        })
+        if (listKafedrasId) {
+            kafedraChoiceTwo.setChoiceByValue(listKafedrasId)
+        }
     }
 
     //нажатие на кнопку сохранения изменений в модальном окне изменения профиля
@@ -829,28 +820,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //если форма заполнена верно, то собираем данные с формы и отправляем запрос на изменение профиля
         if (isFormValid) {
-            let selectedDeptItem = popupEditText.querySelector("[data-selectfield='dept'] .select__text")
-
-            let selectedLevelItem = popupEditText.querySelector("[data-selectfield='levelEdu'] .select__text")
-            let levelEduId = selectedLevelItem.dataset.id
-
-            let selectedEduFormItem = popupEditText.querySelector("[data-selectfield='eduForm'] .select__text")
-            let selectedKafedras = popupEditText.querySelector("[data-selectfield='kafedra'] .select__text")
-
             let profileId = popupEditText.querySelector("#profileId").value
             let profileItem = profiles[profiles.map(e => e.profile.id).indexOf(+profileId)]
 
             profileItem.profile.year = popupEditText.querySelector("#year").value
             profileItem.profile.profileName = popupEditText.querySelector("#profile").value.trim()
-            profileItem.profile.caseSDepartmentId = selectedDeptItem.dataset.id
-            profileItem.profile.caseCEdukindId = selectedEduFormItem.dataset.id
-            profileItem.profile.levelEduId = levelEduId
+            profileItem.profile.caseSDepartmentId = deptChoiceTwo.getValue(true)
+            profileItem.profile.caseCEdukindId = eduFormChoiceTwo.getValue(true)
+            profileItem.profile.levelEduId = levelEduChoiceTwo.getValue(true)
             profileItem.profile.educationLanguage = popupEditText.querySelector("#eduLang").value
             profileItem.profile.validityPeriodOfStateAccreditasion = popupEditText.querySelector("#periodAccredistation").value
             //profileItem.profile.linkToDistanceEducation = popupEditText.querySelector("#linkToEduDistance").value
 
             let listPersDepartmentsId = []
-            let selectedKafedrasId = [...selectedKafedras.dataset.id.split(", ")].map(id => parseInt(id))
+            let selectedKafedrasId = kafedraChoiceTwo.getValue(true)
             selectedKafedrasId.forEach(facItem => {
                 listPersDepartmentsId.push({
                     id: 0,
@@ -947,84 +930,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         })
     })
-
-    //функционал выпадающих списков
-    const select = document.querySelectorAll('.select');
-    select.forEach(selectItem => {
-        selectItem.querySelector('.select__btn').addEventListener('click', function () {
-            selectItem.classList.toggle('active');
-        })
-        let options = selectItem.querySelector('.select__options');
-        options.addEventListener("click", function (e) {
-            if (e.target.closest(".select__option")) {
-                let selectedOption = e.target.closest(".select__option")
-                let selectedOptionText = selectedOption.querySelector('.select__option-text').textContent;
-                let selectText = selectItem.querySelector('.select__text')
-                let selectedElemId = parseInt(selectedOption.dataset.id)
-
-                //если выпадающий список не предусматривает выбор нескольких элементов
-                if (!selectItem.hasAttribute("data-multiple")) {
-                    //если мы нажали на не выбранный элемент списка
-                    if (!selectedOption.classList.contains("selected")) {
-                        //помечаем все элементы списка как не выбранные
-                        options.querySelectorAll(".select__option").forEach(optionItem => {
-                            optionItem.classList.remove("selected")
-                        })
-
-
-
-                        //помечаем выбранный нами элемент как выбранный
-                        selectedOption.classList.add("selected")
-                        selectText.textContent = selectedOptionText;
-                        selectText.dataset.id = selectedElemId
-                    } else { //если же мы выбрали уже выбранный элемент списка, 
-                        selectedOption.classList.remove("selected")
-                        selectText.textContent = selectText.dataset.placeholder
-                        selectText.removeAttribute("data-id")
-                    }
-                } else { //если в выпадающем списке можно выбрать несколько элементов  
-                    //если мы нажимаем на не выбранный элемент
-                    if (!selectedOption.classList.contains("selected")) {
-                        //помечаем его как выбранный элемент
-                        selectedOption.classList.add("selected")
-
-                        //если мы выбрали второй или более элемент списка
-                        if (selectText.textContent != selectText.dataset.placeholder) {
-                            selectText.textContent += `, ${selectedOptionText}`;
-                            selectText.dataset.id += `, ${selectedElemId}`
-                        } else { // если впервые выбрали элемент списка
-                            selectText.textContent = selectedOptionText;
-                            selectText.dataset.id = selectedElemId
-                        }
-                    } else { //логика удаления элемента из списка
-
-                        selectedOption.classList.remove("selected")
-
-                        //создаем массив айди выбранных элементов списка, а также массив их названия
-                        let arrayId = [...selectText.dataset.id.split(", ")]
-                        let listElem = selectText.textContent.split(", ")
-
-                        //если было выбрано больше одного элемента списка
-                        if (arrayId.length > 1) {
-
-                            //создаем строку названий элементов, не включая в него выбранный нами элемент
-                            selectText.textContent = listElem.filter(el => el != selectedOptionText).join(", ")
-
-                            //создаем строку айди элементов, не включая в него выбранный нами элемент
-                            selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
-                        } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
-                            selectText.textContent = selectText.dataset.placeholder
-                            selectText.removeAttribute("data-id")
-                        }
-                    }
-                }
-
-                selectItem.classList.remove('active');
-            }
-        })
-
-    })
-
 
     //создать файл профиля
     const saveFile = async (formData, el) => {
@@ -1319,19 +1224,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </td>
                 `
 
-                // res += `
-                //     <td itemprop="eduEl">
-                //         ${el.profile.linkToDistanceEducation != ""
-                //         ? `<a href=${el.profile.linkToDistanceEducation}>Дистанционное обучение</a>`
-                //         : "<span>не используется</span>"
-                //     }
-                //         <div class="actions">
-                //             <button type="button" class="edit edit-item--text">
-                //             <span class="edit__btn btn"></span>
-                //             </button>
-                //         </div>
-                //     </td>
-                // `
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Дистанционное обучение")) // дистанционное обучение
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
@@ -1472,25 +1364,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //получить направления кафедры
-    const getCaseSDepartments = async () => {
+    const getCaseSDepartmentsIncludeFaculty = async () => {
         if (kafedra_id) {
-            let response = await fetch(`${URL}/api/DekanatData/GetCaseSDepartments`, {
+            let response = await fetch(`${URL}/api/DekanatData/GetCaseSDepartmentsIncludeFaculty`, {
                 credentials: "include"
             })
 
             if (response.ok) {
                 departments = await response.json()
-                let res = ""
-
+  
+                const deptChoices = []
                 for (let el of departments) {
-                    res += `
-                        <li class="select__option" data-id=${el.departmentId}>
-                            <span class="select__option-text">${el.deptName}</span>
-                        </li>
-                    `
+                    deptChoices.push({
+                        value: el.caseSDepartment.departmentId,
+                        label: el.caseSDepartment.deptName,
+                        selected: false,
+                        disabled: false,
+                        customProperties: {
+                            facName: el.caseCFaculty.facName,
+                            deptCode: el.caseSDepartment.code
+                        }
+                    });
                 }
-                modalUchPlan.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
-                popupEditText.querySelector("[data-selectfield=dept] .select__options").innerHTML = res
+                deptChoice.setChoices(deptChoices, "value", "label", true);
+                deptChoiceTwo.setChoices(deptChoices, "value", "label", true);
             }
         } else {
             window.location.assign(`${URL}/sved/login.html`)
@@ -1505,18 +1402,19 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         if (response.ok) {
-            let data = await response.json()
-            let res = ""
-
-            for (let el of data) {
-                res += `
-                    <li class="select__option" data-id=${el.id}>
-                        <span class="select__option-text">${el.name}</span>
-                    </li>
-                `
+            let levelEdues = await response.json()
+            
+            const levelEduChoices = []
+            for (let el of levelEdues) {
+                levelEduChoices.push({
+                    value: el.id,
+                    label: el.name,
+                    selected: false,
+                    disabled: false
+                });
             }
-            modalUchPlan.querySelector("[data-selectfield=levelEdu] .select__options").innerHTML = res
-            popupEditText.querySelector("[data-selectfield=levelEdu] .select__options").innerHTML = res
+            levelEduChoice.setChoices(levelEduChoices, "value", "label", true);
+            levelEduChoiceTwo.setChoices(levelEduChoices, "value", "label", true);
         }
     }
 
@@ -1527,17 +1425,19 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         if (response.ok) {
-            let data = await response.json()
-            let res = ""
-            for (let el of data) {
-                res += `
-                    <li class="select__option" data-id=${el.edukindId}>
-                        <span class="select__option-text">${el.edukind}</span>
-                    </li>
-                `
+            let eduForms = await response.json()
+
+            const eduFormChoices = []
+            for (let el of eduForms) {
+                eduFormChoices.push({
+                    value: el.edukindId,
+                    label: el.edukind,
+                    selected: false,
+                    disabled: false
+                });
             }
-            modalUchPlan.querySelector("[data-selectfield=eduForm] .select__options").innerHTML = res
-            popupEditText.querySelector("[data-selectfield=eduForm] .select__options").innerHTML = res
+            eduFormChoice.setChoices(eduFormChoices, "value", "label", true);
+            eduFormChoiceTwo.setChoices(eduFormChoices, "value", "label", true);
         }
     }
 
@@ -1548,17 +1448,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok) {
             listKafedras = await response.json()
-            let res = ""
 
+            const kafedraChoices = []
             for (let el of listKafedras) {
-                res += `
-                    <li class="select__option" data-id=${el.depId}>
-                        <span class="select__option-text">${el.depName}</span>
-                    </li>
-                `
+                kafedraChoices.push({
+                    value: el.depId,
+                    label: el.depName,
+                    selected: false,
+                    disabled: false
+                });
             }
-            modalUchPlan.querySelector("[data-selectfield=kafedra] .select__options").innerHTML = res
-            popupEditText.querySelector("[data-selectfield=kafedra] .select__options").innerHTML = res
+            kafedraChoice.setChoices(kafedraChoices, "value", "label", true);
+            kafedraChoiceTwo.setChoices(kafedraChoices, "value", "label", true);
         }
     }
 
@@ -1612,7 +1513,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setUserName(userName)
             getFileTypes().
                 then(_ => getAllKafedra()).
-                then(_ => getCaseSDepartments()).
+                then(_ => getCaseSDepartmentsIncludeFaculty()).
                 then(_ => getProfilesById()).
                 then(_ => getLevelEdues()).
                 then(_ => getEduForms()).
