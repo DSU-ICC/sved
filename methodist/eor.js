@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://oop.dgu.ru"
-    //const URL = "https://localhost:44370"
+    //const URL = "https://oop.dgu.ru"
+    const URL = "https://localhost:44370"
     let logoutBtn = document.querySelector(".header .action__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupUploadFileRpd = document.querySelector("#popup-createRpd")
@@ -36,6 +36,22 @@ document.addEventListener("DOMContentLoaded", () => {
     let disciplineList;
     let authors;
     let userId
+
+    let choiceOptions = {
+        noResultsText: "Результат не найден",
+        itemSelectText: "",
+        loadingText: "Загрузка данных...",
+        noChoicesText: "Элементы списка отсутствуют",
+        removeItemButton: true, 
+        position: "bottom",
+        searchResultLimit: 9999,
+    }
+
+    let statusDisciplineSelect = document.querySelector("#status-discipline")
+    let statusDisciplineChoice = new Choices(statusDisciplineSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите название статуса дисциплины"
+    });
     
     //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
@@ -518,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
     popupCreateDisciplineBtn.addEventListener("click", function(e) {
         let newDisciplineCode = popupCreateDiscipline.querySelector("#codeDiscipline")
         let newDisciplineName = popupCreateDiscipline.querySelector("#disciplineName")
-        let selectedStatusDiscipline = popupCreateDiscipline.querySelector("[data-selectfield=statusDiscipline] .select__text")
+        let statusDisciplineId = statusDisciplineChoice.getValue(true)
 
         let isValidForm = true
         if (newDisciplineCode.value.trim() == "") {
@@ -535,17 +551,15 @@ document.addEventListener("DOMContentLoaded", () => {
             newDisciplineName.closest(".popup-form__label").classList.remove("invalid")
         }
 
-        if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
+        if (!statusDisciplineId) {
             isValidForm = false
-            selectedStatusDiscipline.closest(".popup-form__label").classList.add("invalid")
+            statusDisciplineSelect.closest(".choices__inner").classList.add("invalid")
         } else {
-            selectedStatusDiscipline.closest(".popup-form__label").classList.remove("invalid")
+            statusDisciplineSelect.closest(".choices__inner").classList.remove("invalid")
         }
 
         if (isValidForm) {
-            let statusDisciplineId = selectedStatusDiscipline.dataset.id
             let newDisciplineProfileId = profileId
-
             let newDiscipline = {
                 id: 0,
                 disciplineName: newDisciplineName.value,
@@ -559,6 +573,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 //createDate: "0001-01-01T00:00:00",
                 //updateDate: "0001-01-01T00:00:00"
             }
+
+            console.log(newDiscipline)
 
             createDiscipline(newDiscipline, e.target)
         }   
@@ -1058,14 +1074,16 @@ document.addEventListener("DOMContentLoaded", () => {
         let res = ""
         if (response.ok) {
             let statusDisciplines = await response.json() 
-            for (let statusItem of statusDisciplines) {
-                res += `
-                    <li class="select__option" data-id=${statusItem.id}>
-                        <span class="select__option-text">${statusItem.name}</span>
-                    </li>
-                `
+            const statusChoices = []
+            for (let el of statusDisciplines) {
+                statusChoices.push({
+                    value: el.id,
+                    label: el.name,
+                    selected: false,
+                    disabled: false
+                });
             }
-            popupCreateDiscipline.querySelector("[data-selectfield=statusDiscipline] .select__options").innerHTML = res
+            statusDisciplineChoice.setChoices(statusChoices, "value", "label", true);
             //document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
         } else if (response.status == 405) {
             window.location.assign(`${URL}/sved/login.html`)

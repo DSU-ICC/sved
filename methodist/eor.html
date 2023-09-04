@@ -7,6 +7,7 @@
     <link rel="icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/choices.min.css" integrity="sha512-oW+fEHZatXKwZQ5Lx5td2J93WJnSFLbnALFOFqy/pTuQyffi9gsUylGGZkD3DTSv8zkoOdU7MT7I6LTDcV8GBQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../admin.css">
     <title>Электронные образовательные ресурсы</title>
 </head>
@@ -403,12 +404,7 @@
                         </label>
                         <label class="popup-form__label">
                             <span class="popup-form__text">Статус дисциплины</span>
-                            <div data-selectField="statusDiscipline" class="popup-form__select select">
-                                <div class="select__btn">
-                                    <span class="select__text" data-placeholder="Выберите статус дисциплины">Выберите статус дисциплины</span>
-                                </div>
-                                <ul class="select__options"></ul>
-                            </div>
+                            <select id="status-discipline"></select>
                         </label>
                         <div>
                             <button type="button" class="popup-form__btn btn popup-form__btn--create-discipline">Создать дисциплину</button>
@@ -557,6 +553,7 @@
     </div>
     
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/choices.min.js" integrity="sha512-OrRY3yVhfDckdPBIjU2/VXGGDjq3GPcnILWTT39iYiuV6O3cEcAxkgCBVR49viQ99vBFeu+a6/AoFAkNHgFteg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="eor.js"></script>
 </body>
 </html>
