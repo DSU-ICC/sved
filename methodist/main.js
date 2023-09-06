@@ -581,7 +581,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 eduFormSelectTwo.closest(".choices__inner").classList.remove("invalid")
             }
 
-            if (!kafedras) {
+            if (!kafedras.length > 0) {
                 isValidForm = false
                 kafedraSelectTwo.closest(".choices__inner").classList.add("invalid")
             } else {
@@ -887,7 +887,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupLabels.forEach(popupLabel => {
                     popupLabel.classList.remove("invalid")
                     let popupLabelInput = popupLabel.querySelector(".popup-form__input")
-                    let popupLabelSelect = popupLabel.querySelector(".select")
+                    let popupLabelSelect = popupLabel.querySelector("select")
                     let popupLabelUploadFile = popupLabel.querySelector(".file-upload__btn")
                     let popupLabelRadioBtns = popupLabel.querySelector(".radio")
 
@@ -895,17 +895,31 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (popupLabelInput) {
                         popupLabelInput.value = ""
                     } else if (popupLabelSelect) { // сброс значений выпадоющего списка
-                        let popupLabelSelectedEl = popupLabelSelect.querySelectorAll(".select__option.selected")
-                        if (popupLabelSelectedEl) {
-                            popupLabelSelectedEl.forEach(selectedItem => {
-                                selectedItem.classList.remove("selected")
-                            })
-                        }
+                        if (popupClosed.getAttribute("id") == "popup-uchplan") {
+                            deptSelect.closest(".choices__inner").classList.remove("invalid")
+                            deptChoice.removeActiveItems()
 
-                        let popupLabelSelectText = popupLabelSelect.querySelector(".select__text")
-                        popupLabelSelect.classList.remove("invalid")
-                        popupLabelSelectText.removeAttribute("data-id")
-                        popupLabelSelectText.textContent = popupLabelSelectText.dataset.placeholder
+                            levelEduSelect.closest(".choices__inner").classList.remove("invalid")
+                            levelEduChoice.removeActiveItems()
+
+                            eduFormSelect.closest(".choices__inner").classList.remove("invalid")
+                            eduFormChoice.removeActiveItems()
+
+                            kafedraSelect.closest(".choices__inner").classList.remove("invalid")
+                            kafedraChoice.removeActiveItems()
+                        } else {
+                            deptSelectTwo.closest(".choices__inner").classList.remove("invalid")
+                            deptChoiceTwo.removeActiveItems()
+
+                            levelEduSelectTwo.closest(".choices__inner").classList.remove("invalid")
+                            levelEduChoiceTwo.removeActiveItems()
+
+                            eduFormSelectTwo.closest(".choices__inner").classList.remove("invalid")
+                            eduFormChoiceTwo.removeActiveItems()
+
+                            kafedraSelectTwo.closest(".choices__inner").classList.remove("invalid")
+                            kafedraChoiceTwo.removeActiveItems()
+                        }
                     } else if (popupLabelUploadFile) {
                         popupLabelUploadFile.classList.remove("invalid")
                         popupLabelUploadFile.previousElementSibling.value = ''
