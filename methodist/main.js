@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 eduFormSelect.closest(".choices__inner").classList.remove("invalid")
             }
 
-            if (!kafedras) {
+            if (!kafedras.length > 0) {
                 isValidForm = false
                 kafedraSelect.closest(".choices__inner").classList.add("invalid")
             } else {
