@@ -78,11 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
         searchPlaceholderValue: "Введите название направления"
     });
 
-    deptSelectTwo.addEventListener("choice", function(evt) {
-        let selectedEl = this.nextElementSibling
-        selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
-    })
-
     let levelEduSelectTwo = document.querySelector("#levelEdu-2")
     let levelEduChoiceTwo = new Choices(levelEduSelectTwo, {
         ...choiceOptions,
