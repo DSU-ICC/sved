@@ -45,8 +45,11 @@
                             <p class="page__subtitle page__subtitle--year">Год: </p>
                             <p class="page__subtitle page__subtitle--edu-form">Форма обучения: </p>
                         </div>
-                        <button type="button" class="action-eor btn">
+                        <button type="button" class="action-eor action-eor--create-discipline btn">
                             Создать дисциплину
+                        </button>
+                        <button type="button" class="action-eor action-eor--sync btn">
+                            Синхронизировать
                         </button>
                     </div>
                     <div class="page__accordeon accordeon">
@@ -412,6 +415,18 @@
                     </div>
                     <button type="button" class="popup-form__btn btn popup-form__btn--create-status">Создать статус дисциплины</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-sync" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Синхронизация</h2>
+                <form class="popup__form popup-form"></form>
             </div>
         </div>
     </div>

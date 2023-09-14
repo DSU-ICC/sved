@@ -1,16 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
-    const URL = "https://oop.dgu.ru"
-    //const URL = "https://localhost:44370"
+    //const URL = "https://oop.dgu.ru"
+    const URL = "https://localhost:44370"
     let logoutBtn = document.querySelector(".header .action__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupUploadFileRpd = document.querySelector("#popup-createRpd")
     let popupUploadFileRpdBtn = document.querySelector("#popup-createRpd .popup-form__btn")
     let popupUploadFileFos = document.querySelector("#popup-createFos")
     let popupUploadFileFosBtn = document.querySelector("#popup-createFos .popup-form__btn")
-    let createDisciplineBtn = document.querySelector(".page__header .action-eor")
+    let createDisciplineBtn = document.querySelector(".page__header .action-eor--create-discipline")
     let createStatusBtn = document.querySelector(".popup-form__btn--create-status")
+    let syncBtn = document.querySelector(".page__header .action-eor--sync")
     let popupCreateStatus = document.querySelector("#popup-createStatus")
     let popupCreateStatusBtn = document.querySelector("#popup-createStatus .popup-form__btn")
     let popupCreateDiscipline = document.querySelector("#popup-createDiscipline")
@@ -19,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupEditStatusBtn = document.querySelector("#popup-editStatus .popup-form__btn")
     let popupEditDiscipline = document.querySelector("#popup-editDiscipline")
     let popupEditDisciplineBtn = document.querySelector("#popup-editDiscipline .popup-form__btn")
+    let popupSync = document.querySelector("#popup-sync")
+    let popupSyncForm = document.querySelector("#popup-sync .popup-form")
     let popupDeleteRpd = document.querySelector("#popup-deleteRpd")
     let popupDeleteRpdYesBtn = document.querySelector("#popup-deleteRpd .confirm-button--yes")
     let popupDeleteRpdNoBtn = document.querySelector("#popup-deleteRpd .confirm-button--no")
@@ -147,6 +150,151 @@ document.addEventListener("DOMContentLoaded", () => {
         actionText.textContent = userName
     }
 
+    //кнопка синхронизации профилей
+    syncBtn.addEventListener("click", function() {
+        popupSync.classList.add("open")
+        document.body.classList.add("no-scroll")
+
+        getProfilesForSync(profileId)
+    })
+
+    const getProfilesForSync = async (profileId) => {
+        let response = await fetch(`${URL}/api/Profiles/GetProfilesWithEdukindByProfileId?profileId=${profileId}`, {
+            credentials: "include"
+        })
+
+        if (response.ok) {
+            syncProfiles = await response.json()
+            showOptionsForSync(syncProfiles)
+        } else if (response.status == 400) {
+            popupSyncForm.innerHTML = '<span style="font-size: 24px; text-align: center;">Не найдено профилей для синхронизации</span>'
+        } else {
+            popupSyncForm.innerHTML = '<span style="font-size: 24px; text-align: center;">Ошибка загрузки профиля</span>'
+        }
+    }
+
+    const showOptionsForSync = (syncProfiles) => {
+        let res = ""
+        
+        let popupChooseEduForms = `
+            <div class="popup-form__label">
+                <span class="popup-form__text">Форма обучения</span>
+        `
+        for (let i = 0; i < syncProfiles.length; i++) {
+            popupChooseEduForms += `
+                <div class="checkbox">
+                    <input type="checkbox" id="checkbox-${i + 1}" data-profileId="${syncProfiles[i].profile.id}">
+                    <label for="checkbox-${i + 1}">${syncProfiles[i].caseCEdukind.edukind}</label>
+                </div>
+            `
+        }
+        popupChooseEduForms += "</div>"
+
+        let popupChooseCopy = `
+            <div class="popup-form__label">
+                <span class="popup-form__text">Копирование</span>
+                <div class="checkbox">
+                    <input type="checkbox" id="checkbox-4" data-copy="rpd">
+                    <label for="checkbox-4">РПД</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="checkbox-5" data-copy="fos">
+                    <label for="checkbox-5">ФОС</label>
+                </div>
+            </div>    
+        `
+
+        res += popupChooseEduForms
+        res += popupChooseCopy
+        res += '<button type="button" class="popup-form__btn btn">Синхронизировать</button>'
+
+        popupSyncForm.innerHTML = res
+
+        let popupSyncBtn = document.querySelector("#popup-sync .popup-form__btn")
+        popupSyncBtn.addEventListener("click", function() {
+            let chooseEduForms = popupSync.querySelectorAll('input[data-profileid]')
+            let listProfileId = []
+            chooseEduForms.forEach(eduForm => {
+                if (eduForm.checked) {
+                    listProfileId.push(parseInt(eduForm.dataset.profileid))
+                }
+            })
+
+            if (!listProfileId.length > 0) {
+                alert("Выберите хотя бы одну форму обучения")
+                return
+            }
+
+            let copyChoose = popupSync.querySelectorAll('input[data-copy]:checked')
+            if (copyChoose.length > 0) {
+                if (copyChoose.length == 2) {
+                    syncProfileFileRPD(profileId, userId, listProfileId, popupSyncBtn, false)                    
+                } else {
+                    if (copyChoose[0].dataset.copy == "rpd") {
+                        syncProfileFileRPD(profileId, userId, listProfileId, popupSyncBtn)
+                    } else if (copyChoose[0].dataset.copy == "fos") {
+                        syncProfileFileFOS(profileId, userId, listProfileId, popupSyncBtn)
+                    }
+                }
+            } else {
+                alert("Выберите что вы хотите копировать")
+            }
+        })
+    }
+
+    const syncProfileFileRPD = async (profileId, userId, listProfileId, popupSyncBtn, isCloseModal = true) => {
+        popupSyncBtn.classList.add("loading")
+        popupSyncBtn.textContent = "Синхронизация РПД..."
+
+        let response = await fetch(`${URL}/api/FileRPD/SyncProfileFileRPD?profileId=${profileId}&userId=${userId}`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(listProfileId)
+        })
+
+        if (response.ok) {
+            alert("Синхронизация файлов РПД прошла успешно")
+        } else {
+            alert("Не удалось синхронизировать РПД. Попробуйте еще раз")
+        }
+
+        if (isCloseModal) {
+            popupSyncBtn.classList.remove("loading")
+            popupSyncBtn.textContent = "Синхронизировать"
+            popupSync.querySelector(".popup__close").click()
+        } else {
+            syncProfileFileFOS(profileId, userId, listProfileId, popupSyncBtn)
+        }
+    }
+
+    const syncProfileFileFOS = async (profileId, userId, listProfileId, popupSyncBtn) => {
+        popupSyncBtn.classList.add("loading")
+        popupSyncBtn.textContent = "Синхронизация ФОС..."
+
+        let response = await fetch(`${URL}/api/FileFOS/SyncProfileFileFOS?profileId=${profileId}&userId=${userId}`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(listProfileId)
+        })
+
+        if (response.ok) {
+            alert("Синхронизация файлов ФОС прошла успешно")         
+        } else {
+            alert("Не удалось синхронизировать РПД. Попробуйте еще раз")
+        }
+
+        popupSyncBtn.classList.remove("loading")
+        popupSyncBtn.textContent = "Синхронизировать"
+        popupSync.querySelector(".popup__close").click() 
+    }
+
+
     //вывод дисциплин пользователю 
     const showDisciplines = (disciplineList) => {
         let statusList = new Set(disciplineList.map(e => e.statusDiscipline.name))
@@ -174,9 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <th>Удаление дисциплины</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                
-                           
+                            <tbody>  
             `
             for (let discipline of disciplineList) {
                 if (discipline.statusDiscipline.name == statusItem) {

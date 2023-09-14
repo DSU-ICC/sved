@@ -1111,6 +1111,14 @@ td[colspan] {
     margin-left: auto;
 }
 
+.action-eor--sync {
+    margin-left: 0;
+}
+
+.action-eor--create-discipline {
+    margin-left: auto;
+}
+
 .action-eor--edit-status {
     background-color: #10cf50;
 }
@@ -1127,9 +1135,9 @@ td[colspan] {
     background-color: #e70a20;
 }
 
-.action-eor:not(:last-child) {
+/* .action-eor:not(:last-child) {
     margin-bottom: 16px;
-}
+} */
 
 .accordeon__content .action-eor {
     margin-left: 0;
@@ -1526,6 +1534,11 @@ datalist option:hover::before {
 .radio__item .checked~label:before {
     border-color: #fff;
     background-color: #0050cf;
+}
+
+#popup-sync .popup-form__label {
+    justify-content: start;
+    gap: 20px;
 }
 
 /* Страница для УМУ*/
