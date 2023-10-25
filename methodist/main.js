@@ -436,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (selectedOption == "Загрузить файл") {
                 formData.append("formFile", uploadInput.files[0])
             } else if (selectedOption == "Загрузить ссылку") {
-                formData.append("linkToFile", linkInput.value)
+                formData.append("linkToFile", encodeURIComponent(linkInput.value))
             }
                   
             e.target.classList.add("loading")
@@ -674,7 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } else if (selectedOption == "Загрузить ссылку") {
                 if (isValidateLink) {
-                    formData.append("linkToFile", linkInput.value)
+                    formData.append("linkToFile", encodeURIComponent(linkInput.value))
                 } 
             }
             
