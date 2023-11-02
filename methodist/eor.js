@@ -297,18 +297,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //вывод дисциплин пользователю 
     const showDisciplines = (disciplineList) => {
-        let statusList = new Set(disciplineList.map(e => e.statusDiscipline.name))
+        let statusListId = new Set(disciplineList.map(e => e.statusDiscipline.id))
         let res = ""
-        for (let statusItem of statusList) {
+        for (let statusItemId of statusListId) {
+            const statusName = disciplineList[disciplineList.map(e => e.statusDiscipline.id).indexOf(statusItemId)].statusDiscipline.name
             res += `
                 <li class="accordeon__item">
                     <div class="accordeon__control" aria-expanded="false">               
-                        <p class="accordeon__title">${statusItem}</p>
+                        <p class="accordeon__title">${statusName}</p>
                         <div class="accordeon__icon"></div>
                     </div>
                     <div class="accordeon__content" aria-hidden="true">
                         <div class="actions-eor">
-                            <button type="button" data-statusDisciplineId=${disciplineList[disciplineList.map(e => e.statusDiscipline.name).indexOf(statusItem)].statusDiscipline.id} class="action-eor action-eor--edit-status btn">
+                            <button type="button" data-statusDisciplineId=${statusItemId} class="action-eor action-eor--edit-status btn">
                                 Изменить статус дисциплины
                             </button>
                         </div>
@@ -325,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <tbody>  
             `
             for (let discipline of disciplineList) {
-                if (discipline.statusDiscipline.name == statusItem) {
+                if (discipline.statusDiscipline.id == statusItemId) {
                     let disciplineMarkup = "";
                     disciplineMarkup += 
                         `

@@ -39,15 +39,14 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const showDisciplines = (disciplineList) => {
-        //получение уникальных имен статусов дисциплин
-        let statusList = new Set(disciplineList.map(e => e.statusDiscipline.name))
+        let statusListId = new Set(disciplineList.map(e => e.statusDiscipline.id))
         let res = ""
-
-        for (let statusItem of statusList) {
+        for (let statusItemId of statusListId) {
+            const statusName = disciplineList[disciplineList.map(e => e.statusDiscipline.id).indexOf(statusItemId)].statusDiscipline.name
             res += `
                 <li class="accordeon__item">
                     <div class="accordeon__control" aria-expanded="false">               
-                        <p class="accordeon__title">${statusItem}</p>
+                        <p class="accordeon__title">${statusName}</p>
                         <div class="accordeon__icon"></div>
                     </div>
                     <div class="accordeon__content" aria-hidden="true">
@@ -60,12 +59,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                     <th>ФОС</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                
-                           
+                            <tbody>  
             `
             for (let discipline of disciplineList) {
-                if (discipline.statusDiscipline.name == statusItem) {
+                if (discipline.statusDiscipline.id == statusItemId) {
                     let disciplineMarkup = "";
                     disciplineMarkup += 
                         `
