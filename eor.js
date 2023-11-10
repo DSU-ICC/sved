@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
             let headerSubTitleProfileName = document.querySelector(".page__subtitle--profile-name")
             headerSubTitleProfileName.textContent = `Профиль: ${data.profile.profileName}`
 
+            let isLicey = ['Начальное общее образование', 'Начальное общее образовние', 'Основное общее образование', 'Среднее общее образование'].includes(data.profile.profileName.trim())
+
             //вывод пользователю года реализации профиля
             let headerSubTitleYear = document.querySelector(".page__subtitle--year")
             headerSubTitleYear.textContent = `Год: ${data.profile.year}`
@@ -34,11 +36,11 @@ document.addEventListener("DOMContentLoaded", function() {
             let headerSubTitleEduForm = document.querySelector(".page__subtitle--edu-form")
             headerSubTitleEduForm.textContent = `Форма обучения: ${data.caseCEdukind.edukind}`
 
-            showDisciplines(disciplineList)
+            showDisciplines(disciplineList, isLicey)
         } 
     }
 
-    const showDisciplines = (disciplineList) => {
+    const showDisciplines = (disciplineList, isLicey = false) => {
         let statusListId = new Set(disciplineList.map(e => e.statusDiscipline.id))
         let res = ""
         for (let statusItemId of statusListId) {
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     <th>Код</th>
                                     <th>Название</th>
                                     <th>РПД</th>
-                                    <th>ФОС</th>
+                                    ${!isLicey ? "<th>ФОС</th>": ""}
                                 </tr>
                             </thead>
                             <tbody>  
@@ -103,34 +105,36 @@ document.addEventListener("DOMContentLoaded", function() {
                         `
                     }
 
-                    if (discipline.fileFOS != null) {
-                        disciplineMarkup += `
-                            <td>
-                                <div class="wrapper">
-                                    <div class="item-file__inner">
-                                        <span class="key-icon"></span>
-                                        <div class="document-key">
-                                            <p class="document-key__text">Документ подписан</p>
-                                            <p class="document-key__text">Простая электронная подпись</p>
-                                            <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
-                                            <p class="document-key__text">Ректор</p>
-                                            <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${discipline.fileFOS.codeECP}</p>
-                                        </div>
-                                        <a href=${discipline.fileFOS.linkToFile != null
-                                            ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
-                                            : `${URL}/sved/files-oop/${discipline.fileFOS.name.replace(/\s/g, "%20")}`}
-                                                >ФОС
-                                        </a>
-                                    </div>                             
-                                </div>
-                            </td>                           
-                        `   
-                    } else {
-                        disciplineMarkup += `
-                            <td>
-                            </td>
-                        `
+                    if (!isLicey) {
+                        if (discipline.fileFOS != null) {
+                            disciplineMarkup += `
+                                <td>
+                                    <div class="wrapper">
+                                        <div class="item-file__inner">
+                                            <span class="key-icon"></span>
+                                            <div class="document-key">
+                                                <p class="document-key__text">Документ подписан</p>
+                                                <p class="document-key__text">Простая электронная подпись</p>
+                                                <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
+                                                <p class="document-key__text">Ректор</p>
+                                                <p class="document-key__text">Ключ (SHA-256):</p>
+                                                <p class="document-key__text">${discipline.fileFOS.codeECP}</p>
+                                            </div>
+                                            <a href=${discipline.fileFOS.linkToFile != null
+                                                ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
+                                                : `${URL}/sved/files-oop/${discipline.fileFOS.name.replace(/\s/g, "%20")}`}
+                                                    >ФОС
+                                            </a>
+                                        </div>                             
+                                    </div>
+                                </td>                           
+                            `   
+                        } else {
+                            disciplineMarkup += `
+                                <td>
+                                </td>
+                            `
+                        }
                     }
 
                     disciplineMarkup += `
