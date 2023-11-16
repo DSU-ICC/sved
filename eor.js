@@ -27,7 +27,9 @@ document.addEventListener("DOMContentLoaded", function() {
             headerSubTitleProfileName.textContent = `Профиль: ${data.profile.profileName}`
 
             let isLicey = ['Начальное общее образование', 'Начальное общее образовние', 'Основное общее образование', 'Среднее общее образование'].includes(data.profile.profileName.trim())
+            let isAspiranture = data.profile.levelEdu.name == "Аспирантура"
 
+            let isFosVisible = (!isLicey && !isAspiranture)
             //вывод пользователю года реализации профиля
             let headerSubTitleYear = document.querySelector(".page__subtitle--year")
             headerSubTitleYear.textContent = `Год: ${data.profile.year}`
@@ -36,11 +38,11 @@ document.addEventListener("DOMContentLoaded", function() {
             let headerSubTitleEduForm = document.querySelector(".page__subtitle--edu-form")
             headerSubTitleEduForm.textContent = `Форма обучения: ${data.caseCEdukind.edukind}`
 
-            showDisciplines(disciplineList, isLicey)
+            showDisciplines(disciplineList, isFosVisible)
         } 
     }
 
-    const showDisciplines = (disciplineList, isLicey = false) => {
+    const showDisciplines = (disciplineList, isFosVisible = true) => {
         let statusListId = new Set(disciplineList.map(e => e.statusDiscipline.id))
         let res = ""
         for (let statusItemId of statusListId) {
@@ -58,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     <th>Код</th>
                                     <th>Название</th>
                                     <th>РПД</th>
-                                    ${!isLicey ? "<th>ФОС</th>": ""}
+                                    ${isFosVisible ? "<th>ФОС</th>": ""}
                                 </tr>
                             </thead>
                             <tbody>  
@@ -105,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         `
                     }
 
-                    if (!isLicey) {
+                    if (isFosVisible) {
                         if (discipline.fileFOS != null) {
                             disciplineMarkup += `
                                 <td>
