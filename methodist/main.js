@@ -1244,13 +1244,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (String(el.profile.linkToRPD).toString() != "NULL" && el.profile.linkToRPD != null) {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="${el.profile.linkToRPD}">РПД и ФОС</a>
+                            <a href="${el.profile.linkToRPD}" target="_blank">РПД и ФОС</a>
                         </td>
                     `
                 } else {
                     res += `
                         <td itemprop="educationRpd">
-                            <a href="${URL}/sved/methodist/eor.html?profileId=${el.profile.id}">РПД и ФОС</a>
+                            <a href="${URL}/sved/methodist/eor.html?profileId=${el.profile.id}" target="_blank">РПД и ФОС</a>
                         </td>
                     `
                 }
