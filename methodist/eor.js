@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </td>
                     `
                     //если файл рпд загружен для данной дисциплины, то выводим его вместе с ключом эцп
-                    if (discipline.fileRPD != null) {
+                    if (discipline.fileRPD.length > 0) {
                         disciplineMarkup += `
                             <td>
                                 <div class="wrapper">
@@ -352,16 +352,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                             <p class="document-key__text">Ректор</p>
                                             <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
+                                            <p class="document-key__text">${discipline.fileRPD[0]?.codeECP}</p>
                                         </div>
                                         <a href=${discipline.fileRPD.linkToFile != null
                                             ? discipline.fileRPD.linkToFile.replace(/\s/g, "%20")
-                                            : `${URL}/sved/files-oop/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                            : `${URL}/sved/files-oop/${discipline.fileRPD[0]?.name.replace(/\s/g, "%20")}`}
                                                 >РПД
                                         </a>
                                     </div> 
                                     <button type="button" class="delete delete-rpd">
-                                        <span data-filerpdid="${discipline.fileRPD.id}" class="delete__btn btn"></span>
+                                        <span data-filerpdid="${discipline.fileRPD[0]?.id}" class="delete__btn btn"></span>
                                     </button>                             
                                 </div>
                             </td>                           
@@ -377,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         `
                     }
 
-                    if (discipline.fileFOS != null) {
+                    if (discipline.fileFOS.length > 0) {
                         disciplineMarkup += `
                             <td>
                                 <div class="wrapper">
@@ -389,16 +389,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                             <p class="document-key__text">Ректор</p>
                                             <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${discipline.fileFOS.codeECP}</p>
+                                            <p class="document-key__text">${discipline.fileFOS[0]?.codeECP}</p>
                                         </div>
                                         <a href=${discipline.fileFOS.linkToFile != null
                                             ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
-                                            : `${URL}/sved/files-oop/${discipline.fileFOS.name.replace(/\s/g, "%20")}`}
+                                            : `${URL}/sved/files-oop/${discipline.fileFOS[0]?.name.replace(/\s/g, "%20")}`}
                                                 >ФОС
                                         </a>
                                     </div> 
                                     <button type="button" class="delete delete-fos">
-                                        <span data-filefosid="${discipline.fileFOS.id}" class="delete__btn btn"></span>
+                                        <span data-filefosid="${discipline.fileFOS[0]?.id}" class="delete__btn btn"></span>
                                     </button>                            
                                 </div>
                             </td>                           
@@ -859,7 +859,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //нажатие на кнопку да в модальном окне удаления файла РПД
     popupDeleteRpdYesBtn.addEventListener("click", function(e) {
         let fileRpdId = popupDeleteRpd.querySelector("#fileRPDId").value
-        deleteRpd(fileRpdId, e.target)
+        let lastChangeAuthorId = userId
+        deleteRpd(fileRpdId, lastChangeAuthorId, e.target)
     })
 
     //нажатие на кнопку нет в модальном окне удаления файла РПД
@@ -868,11 +869,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //удаление файла РПД
-    const deleteRpd = async (fileRPDId, el) => {
+    const deleteRpd = async (fileRPDId, lastChangeAuthorId, el) => {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/api/FileRPD/DeleteRPD?fileRPDId=${fileRPDId}`, {
+        let response = await fetch(`${URL}/api/FileRPD/DeleteRPD?fileRPDId=${fileRPDId}&lastChangeAuthorId=${lastChangeAuthorId}`, {
             method: "POST",
             credentials: "include"
         })
@@ -899,7 +900,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //нажатие на кнопку да в модальном окне удаления файла РПД
     popupDeleteFosYesBtn.addEventListener("click", function(e) {
         let fileFosId = popupDeleteFos.querySelector("#fileFOSId").value
-        deleteFos(fileFosId, e.target)
+        let lastChangeAuthorId = userId
+        deleteFos(fileFosId, lastChangeAuthorId, e.target)
     })
 
     //нажатие на кнопку нет в модальном окне удаления файла РПД
@@ -908,11 +910,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //удаление файла РПД
-    const deleteFos = async (fileFOSId, el) => {
+    const deleteFos = async (fileFOSId, lastChangeAuthorId, el) => {
         el.classList.add("loading")
         el.disabled = true
 
-        let response = await fetch(`${URL}/api/FileFOS/DeleteFOS?fileFOSId=${fileFOSId}`, {
+        let response = await fetch(`${URL}/api/FileFOS/DeleteFOS?fileFOSId=${fileFOSId}&lastChangeAuthorId=${lastChangeAuthorId}`, {
             method: "POST",
             credentials: "include"
         })

@@ -623,7 +623,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //валидация и отправка формы если валидация прошла успешно
     const validateAndEditFileOpop = (el) => {
         let fileId = popupEditFile.querySelector("#fileId").value
-        let fileTypeId = popupEditFile.querySelector("#fileTypeId").value
         let profileId = popupEditFile.querySelector("#profileId").value
 
         let uploadInput = el.closest(".popup-form").querySelector('input[type="file"]')
@@ -680,7 +679,6 @@ document.addEventListener("DOMContentLoaded", () => {
             
 
             formData.append("fileName", fileName)
-            formData.append("fileType", fileTypeId)
             formData.append("fileId", fileId)
             formData.append("profileId", profileId)
 
@@ -983,7 +981,7 @@ document.addEventListener("DOMContentLoaded", () => {
             linkToFile = `&linkToFile=${formData.get("linkToFile")}`
         }
 
-        let response = await fetch(`${URL}/api/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileType=${formData.get("fileType")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
+        let response = await fetch(`${URL}/api/FileModel/EditFileModel?fileId=${formData.get("fileId")}&fileName=${formData.get("fileName")}&profileId=${formData.get("profileId")}${linkToFile}`, {
             method: "POST",
             credentials: "include",
             body: formData
