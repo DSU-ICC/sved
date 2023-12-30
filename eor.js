@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             </td>
                     `
                     //если файл рпд загружен для данной дисциплины, то выводим его вместе с ключом эцп
-                    if (discipline.fileRPD != null) {
+                    if (discipline.fileRPD.length > 0) {
                         disciplineMarkup += `
                             <td>
                                 <div class="wrapper">
@@ -89,11 +89,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                             <p class="document-key__text">Ректор</p>
                                             <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${discipline.fileRPD.codeECP}</p>
+                                            <p class="document-key__text">${discipline.fileRPD[0]?.codeECP}</p>
                                         </div>
-                                        <a href=${discipline.fileRPD.linkToFile != null
-                                            ? discipline.fileRPD.linkToFile.replace(/\s/g, "%20")
-                                            : `${URL}/sved/files-oop/${discipline.fileRPD.name.replace(/\s/g, "%20")}`}
+                                        <a href=${discipline.fileRPD[0]?.linkToFile != null
+                                            ? discipline.fileRPD[0]?.linkToFile.replace(/\s/g, "%20")
+                                            : `${URL}/sved/files-oop/${discipline.fileRPD[0]?.name.replace(/\s/g, "%20")}`}
                                                 >РПД
                                         </a>
                                     </div>                              
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
 
                     if (isFosVisible) {
-                        if (discipline.fileFOS != null) {
+                        if (discipline.fileFOS.length > 0) {
                             disciplineMarkup += `
                                 <td>
                                     <div class="wrapper">
@@ -120,11 +120,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                                 <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                                 <p class="document-key__text">Ректор</p>
                                                 <p class="document-key__text">Ключ (SHA-256):</p>
-                                                <p class="document-key__text">${discipline.fileFOS.codeECP}</p>
+                                                <p class="document-key__text">${discipline.fileFOS[0]?.codeECP}</p>
                                             </div>
-                                            <a href=${discipline.fileFOS.linkToFile != null
-                                                ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
-                                                : `${URL}/sved/files-oop/${discipline.fileFOS.name.replace(/\s/g, "%20")}`}
+                                            <a href=${discipline.fileFOS[0]?.linkToFile != null
+                                                ? discipline.fileFOS[0]?.linkToFile.replace(/\s/g, "%20")
+                                                : `${URL}/sved/files-oop/${discipline.fileFOS[0]?.name.replace(/\s/g, "%20")}`}
                                                     >ФОС
                                             </a>
                                         </div>                             

@@ -354,8 +354,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileRPD[0]?.codeECP}</p>
                                         </div>
-                                        <a href=${discipline.fileRPD.linkToFile != null
-                                            ? discipline.fileRPD.linkToFile.replace(/\s/g, "%20")
+                                        <a href=${discipline.fileRPD[0]?.linkToFile != null
+                                            ? discipline.fileRPD[0]?.linkToFile.replace(/\s/g, "%20")
                                             : `${URL}/sved/files-oop/${discipline.fileRPD[0]?.name.replace(/\s/g, "%20")}`}
                                                 >РПД
                                         </a>
@@ -391,8 +391,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Ключ (SHA-256):</p>
                                             <p class="document-key__text">${discipline.fileFOS[0]?.codeECP}</p>
                                         </div>
-                                        <a href=${discipline.fileFOS.linkToFile != null
-                                            ? discipline.fileFOS.linkToFile.replace(/\s/g, "%20")
+                                        <a href=${discipline.fileFOS[0]?.linkToFile != null
+                                            ? discipline.fileFOS[0]?.linkToFile.replace(/\s/g, "%20")
                                             : `${URL}/sved/files-oop/${discipline.fileFOS[0]?.name.replace(/\s/g, "%20")}`}
                                                 >ФОС
                                         </a>
