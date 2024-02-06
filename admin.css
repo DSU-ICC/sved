@@ -257,6 +257,7 @@ main {
 }
 
 .file-upload__btn,
+.manual-btn,
 .edit__btn,
 .delete__btn {
     position: relative;
@@ -264,7 +265,14 @@ main {
     padding: 5px 6px 7px;
 }
 
-.file-upload--big .file-upload__btn {
+.page__load-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload--big .file-upload__btn,
+.manual-btn {
     font-weight: 500;
     font-size: 20px;
     display: flex;

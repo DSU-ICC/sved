@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let logoutBtn = document.querySelector(".header .action__btn")
 
+    let manualBtn = document.querySelector(".manual-btn")
     let uploadUchPlan = document.querySelector(".file-upload--big input[type=file]")
     let modalUchPlan = document.querySelector("#popup-uchplan")
 
@@ -117,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
         parsingUchPlan(e.target)
     })
 
+    manualBtn.addEventListener("click", function() {
+        fillUchPlanData()
+    })
+
     //парсинг excel файла учебного плана
     const parsingUchPlan = async (el) => {
         el.previousElementSibling.textContent = "Загрузка..."
@@ -155,31 +160,81 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //функция заполнение модального окна данными полученными при парсинге учебного плана 
+    //функция заполнение модального окна данными
     const fillUchPlanData = (data) => {
         document.body.classList.add("no-scroll")
         modalUchPlan.classList.add("open")
-        dataUchPlanFinal = data
-
-        let year = data.profile.year ?? ""
-        let profile = data.profile.profileName ?? ""
-        let levelId = data.profile.levelEdu?.id
-        let deptId = data.caseSDepartment?.departmentId
-        let eduFormId = data.caseCEdukind?.edukindId
-
-        let kafedraId = listKafedras.find(x => x.depId == kafedra_id).depId
-
-        let yearInp = modalUchPlan.querySelector("#year")
-        yearInp.value = year
+        
         let deptCodeInput = modalUchPlan.querySelector("#departmentCode")
-        deptCodeInput.value = data.caseSDepartment?.code
-        let profileInp = modalUchPlan.querySelector("#profile")
-        profileInp.value = profile
         let langInput = modalUchPlan.querySelector("#eduLang")
         langInput.value = "русский"
 
-        if (deptId) {
-            deptChoice.setChoiceByValue(deptId)
+        if (data) {
+            modalUchPlan.querySelector(".title").textContent = "Проверьте правильность данных УП"
+            
+            dataUchPlanFinal = data
+
+            let year = data.profile.year ?? ""
+            let profile = data.profile.profileName ?? ""
+            let levelId = data.profile.levelEdu?.id
+            let termEdu = data.profile.termEdu
+            let deptId = data.caseSDepartment?.departmentId
+            let eduFormId = data.caseCEdukind?.edukindId
+
+            let kafedraId = listKafedras.find(x => x.depId == kafedra_id).depId
+
+            let yearInp = modalUchPlan.querySelector("#year")
+            yearInp.value = year
+
+            deptCodeInput.value = data.caseSDepartment?.code
+
+            let profileInp = modalUchPlan.querySelector("#profile")
+            profileInp.value = profile
+            
+            let termEduInp = modalUchPlan.querySelector("#termEdu")
+            termEduInp.value = termEdu
+
+            if (deptId) {
+                deptChoice.setChoiceByValue(deptId)
+            }
+
+            if (levelId) {
+                levelEduChoice.setChoiceByValue(levelId)
+            }
+
+            if (eduFormId) {
+                eduFormChoice.setChoiceByValue(eduFormId)
+            }
+
+            if (kafedraId) {
+                kafedraChoice.setChoiceByValue(kafedraId)
+            }
+        } else {
+            modalUchPlan.querySelector(".title").textContent = "Создание профиля"
+
+            dataUchPlanFinal = {
+                id: 0,
+                eorId: null,
+                profileName: null,
+                termEdu: null,
+                year: null,
+                linkToPriemResult: null,
+                linkToRPD: null,
+                validityPeriodOfStateAccreditasion: null,
+                educationLanguage: null,
+                linkToDistanceEducation: null,
+                disciplines: [],
+                fileModels: [],
+                levelEduId: null,
+                levelEdu: null,
+                caseCEdukindId: null,
+                caseSDepartmentId: null,
+                listPersDepartmentsId: null,
+                createDate: null,
+                updateDate: null,
+                lastChangeAuthorId: null,
+                isDeleted: null
+            }
         }
 
         deptSelect.addEventListener("choice", function(evt) {
@@ -187,18 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
             deptCodeInput.value = evt.detail.choice.customProperties.deptCode
         })
-
-        if (levelId) {
-            levelEduChoice.setChoiceByValue(levelId)
-        }
-
-        if (eduFormId) {
-            eduFormChoice.setChoiceByValue(eduFormId)
-        }
-
-        if (kafedraId) {
-            kafedraChoice.setChoiceByValue(kafedraId)
-        }
     }
 
     //кнопка создания профиля в модальном окне
@@ -221,8 +264,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let profileInput = modalUchPlan.querySelector("#profile")
         let eduLangInput = modalUchPlan.querySelector("#eduLang")
         let accredInput = modalUchPlan.querySelector("#periodAccredistation")
+        let termEduInput = modalUchPlan.querySelector("#termEdu")
 
-        dataUchPlanFinal = data.profile
+        dataUchPlanFinal = "profile" in data ? data.profile : data
 
         if (dataUchPlanFinal.levelEdu) {
             dataUchPlanFinal.levelEdu = null
@@ -234,6 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dataUchPlanFinal.caseCEdukindId = parseInt(eduFormChoice.getValue(true))
         dataUchPlanFinal.educationLanguage = eduLangInput.value
         dataUchPlanFinal.validityPeriodOfStateAccreditasion = accredInput.value
+        dataUchPlanFinal.termEdu = termEduInput.value.trim()
 
         let listPersDepartmentsId = []
         let selectedKafedrasId = kafedraChoice.getValue(true)
@@ -512,6 +557,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let profileInput = modalWindow.querySelector("#profile")
         let eduLangInput = modalWindow.querySelector("#eduLang")
         let accredInput = modalWindow.querySelector("#periodAccredistation")
+        let termEduInput = modalWindow.querySelector("#termEdu")
 
         let isValidForm = true
 
@@ -603,6 +649,13 @@ document.addEventListener("DOMContentLoaded", () => {
             eduLangInput.closest(".popup-form__label").classList.add("invalid")
         } else {
             eduLangInput.closest(".popup-form__label").classList.remove("invalid")
+        }
+
+        if (termEduInput.value.trim() == "") {
+            isValidForm = false
+            termEduInput.closest(".popup-form__label").classList.add("invalid")
+        } else {
+            termEduInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
         if (accredInput.value.trim() == "") {
@@ -763,6 +816,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let deptId = profileEdited.caseSDepartment.departmentId
         let eduFormId = profileEdited.caseCEdukind.edukindId
         let lang = profileEdited.profile.educationLanguage
+        let termEdu = profileEdited.profile.termEdu
         let accred = profileEdited.profile.validityPeriodOfStateAccreditasion
 
         let profileIdInput = popupEditText.querySelector("#profileId")
@@ -776,6 +830,8 @@ document.addEventListener("DOMContentLoaded", () => {
         profileInp.value = profile
         let langInput = popupEditText.querySelector("#eduLang")
         langInput.value = lang
+        let termEduInput = popupEditText.querySelector("#termEdu")
+        termEduInput.value = termEdu
         let accredInput = popupEditText.querySelector("#periodAccredistation")
         accredInput.value = accred
 

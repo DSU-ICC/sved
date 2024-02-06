@@ -34,10 +34,14 @@
                 <div class="page__container container">
                     <div class="page__head">
                         <h1 class="page__title">Загрузите информацию по ОПОП</h1>
-                        <label class="file-upload file-upload--big">
-                            <span class="file-upload__btn btn">Загрузить учебный план</span> 
-                            <input type="file" >
-                        </label>
+                        <div class="page__load-info">
+                            <button class="btn manual-btn">Добавить вручную</button>
+                            <span>или</span>
+                            <label class="file-upload file-upload--big">
+                                <span class="file-upload__btn btn">Загрузить учебный план</span> 
+                                <input type="file" >
+                            </label>
+                        </div>
                     </div>                         
                     <div class="page__table">
                         <table>
@@ -109,6 +113,10 @@
                         <select id="eduForm"></select>
                     </label>
                     <label class="popup-form__label">
+                        <span class="popup-form__text">Срок обучения</span>
+                        <input type="text" id="termEdu" class="popup-form__input">
+                    </label>
+                    <label class="popup-form__label">
                         <span class="popup-form__text">Кафедра</span>
                         <select id="kafedra" multiple></select>
                     </label>
@@ -125,6 +133,7 @@
             </div>
         </div>
     </div>
+
 
     <div id="popup-uploadFile" class="popup">
         <div class="popup__body">
@@ -210,6 +219,10 @@
                     <label class="popup-form__label">
                         <span class="popup-form__text">Форма обучения</span>
                         <select id="eduForm-2"></select>
+                    </label>
+                    <label class="popup-form__label">
+                        <span class="popup-form__text">Срок обучения</span>
+                        <input type="text" id="termEdu" class="popup-form__input">
                     </label>
                     <label class="popup-form__label">
                         <span class="popup-form__text">Кафедра</span>
