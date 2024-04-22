@@ -1434,20 +1434,22 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             if (response.ok) {
-                departments = await response.json()
+                data = await response.json()
   
                 const deptChoices = []
-                for (let el of departments) {
-                    deptChoices.push({
-                        value: el.caseSDepartment.departmentId,
-                        label: el.caseSDepartment.deptName,
-                        selected: false,
-                        disabled: false,
-                        customProperties: {
-                            facName: el.caseCFaculty.facName,
-                            deptCode: el.caseSDepartment.code
-                        }
-                    });
+                for (let el of data) {
+                    for (let departmentEl of el.caseSDepartments) {
+                        deptChoices.push({
+                            value: departmentEl.departmentId,
+                            label: departmentEl.deptName,
+                            selected: false,
+                            disabled: false,
+                            customProperties: {
+                                facName: el.caseCFaculty.facName,
+                                deptCode: departmentEl.code
+                            }
+                        });
+                    }
                 }
                 deptChoice.setChoices(deptChoices, "value", "label", true);
                 deptChoiceTwo.setChoices(deptChoices, "value", "label", true);

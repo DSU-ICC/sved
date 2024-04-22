@@ -329,12 +329,19 @@ main {
     }
 }
 
-.profile-recovery-btn {
+.profile-recovery-btn,
+.profile-statistics-btn {
     font-size: 18px;
     font-weight: 500;
     padding: 10px 16px;
     border-radius: 5px;
     margin-bottom: 20px;
+}
+
+.page__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .file-upload input[type=file] {
@@ -462,10 +469,30 @@ main {
 }
 
 .popup-form__label.invalid .popup-form__input,
+.report-form__label.invalid .report-form__input,
 .login-form__label.invalid .login-form__input,
 .choices__inner.invalid {
     border-color: #dc3545;
     border-width: 2px;
+}
+
+.report-form {
+    max-width: 750px;
+    margin-bottom: 40px;
+}
+
+.report__title {
+    margin-bottom: 40px;
+}
+
+.report__result th,
+.report__result td[colspan] {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.report__result ol {
+    padding-left: 17px;
 }
 
 .choices__inner::after {
@@ -772,17 +799,23 @@ td a {
     margin-bottom: 75px;
 }
 
-.popup-form {
+.popup-form,
+.report-form {
     display: flex;
     flex-direction: column;
 }
 
 .popup-form__label,
+.report-form__label,
 .login-form__label {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
+}
+
+.report-form__label {
+    gap: 10px;
 }
 
 .popup-form__label .file-upload__btn {
@@ -791,18 +824,24 @@ td a {
 }
 
 .popup-form__label:not(:last-child),
+.report-form__label:not(:last-child),
 .login-form__label:not(:last-child) {
     margin-bottom: 17px;
 }
 
-
-.popup-form__text {
+.popup-form__text,
+.report-form__text {
     color: #4b4b4b;
     display: block;
     max-width: 116px;
 }
 
+.report-form__text {
+    max-width: initial;
+}
+
 .popup-form__input,
+.report-form__input,
 .login-form__input,
 .select__btn {
     width: 100%;
@@ -888,6 +927,7 @@ td a {
 }
 
 .popup-form__btn,
+.report-form__btn,
 .login-form__btn {
     padding: 15px 21px;
     border-radius: 10px;
@@ -898,6 +938,11 @@ td a {
     color: #fff;
     align-self: center;
     margin-top: 87px;
+}
+
+.report-form__btn {
+    align-self: flex-start;
+    margin-top: 0;
 }
 
 .popup-form__btn::before {
