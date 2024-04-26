@@ -25,6 +25,14 @@ document.addEventListener("DOMContentLoaded", function() {
     let popupRejectDisciplineYesBtn = document.querySelector("#popup-rejectDiscipline .confirm-button--yes")
     let popupRejectDisciplineNoBtn = document.querySelector("#popup-rejectDiscipline .confirm-button--no")
 
+    let rejectMultipleDisciplinesBtn = document.querySelector(".reject-disciplines-btn")
+    let popupRejectMultipleDisciplines = document.querySelector("#popup-reject-disciplines")
+    let popupRejectMultipleDisciplinesBtn = document.querySelector("#popup-reject-disciplines .popup__reject-btn")
+
+    let approveMultipleDisciplinesBtn = document.querySelector(".approve-disciplines-btn")
+    let popupApproveMultipleDisciplines = document.querySelector("#popup-approve-disciplines")
+    let popupApproveMultipleDisciplinesBtn = document.querySelector("#popup-approve-disciplines .popup__approve-btn")
+
     let popupApproveStatusDiscipline = document.querySelector("#popup-approveStatusDiscipline")
     let popupApproveStatusDisciplineYesBtn = document.querySelector("#popup-approveStatusDiscipline .confirm-button--yes")
     let popupApproveStatusDisciplineNoBtn = document.querySelector("#popup-approveStatusDiscipline .confirm-button--no")
@@ -214,13 +222,26 @@ document.addEventListener("DOMContentLoaded", function() {
         if (response.ok) {
             disciplineList = await response.json()
             showRemovableDisciplines(disciplineList)
+            showRemovableDisciplinesForPopups(disciplineList)
         } else {
             let error = await response.text()
             if (error.startsWith("{")) {
+                popupRejectMultipleDisciplines.querySelector(".rejectable-disciplines tbody").innerHTML = `
+                    <tr><td>Ошибка получения данных</td></tr>
+                `
+                popupApproveMultipleDisciplines.querySelector(".approvable-disciplines tbody").innerHTML = `
+                    <tr><td>Ошибка получения данных</td></tr>
+                `
                 document.querySelector(".disciplines tbody").innerHTML = `
-                <tr><td>Ошибка получения данных</td></tr>
-            `
+                    <tr><td>Ошибка получения данных</td></tr>
+                `
             } else {
+                popupRejectMultipleDisciplines.querySelector(".rejectable-disciplines tbody").innerHTML = `
+                    <tr><td>${error}</td></tr>
+                `
+                popupApproveMultipleDisciplines.querySelector(".approvable-disciplines tbody").innerHTML = `
+                    <tr><td>${error}</td></tr>
+                `
                 document.querySelector(".disciplines tbody").innerHTML = `
                     <tr><td>${error}</td></tr>
                 `
@@ -280,6 +301,141 @@ document.addEventListener("DOMContentLoaded", function() {
                 popupRejectDiscipline.querySelector("#disciplineId").value = e.target.dataset.disciplineid
             })
         })
+    }
+
+    
+    const showRemovableDisciplinesForPopups = (disciplineList) => {
+        let res = ""
+        for (let discipline of disciplineList) {
+            res += `
+                <tr data-id="${discipline.discipline.id}">
+                    <td>${discipline.profile.year}</td>
+                    <td>${discipline.profile.profileName}</td>
+                    <td>${discipline.discipline.disciplineName}</td>      
+                    <td>${discipline.caseCEdukind.edukind}</td>
+                    <td>${discipline.levelEdu.name}</td>
+                    <td>
+                        <input type="checkbox" name="disciplines">
+                    </td>
+                </tr>
+            `
+        }
+
+        if (res.length > 0) {
+            popupRejectMultipleDisciplines.querySelector(".rejectable-disciplines tbody").innerHTML = res
+            popupApproveMultipleDisciplines.querySelector(".approvable-disciplines tbody").innerHTML = res
+        } else {
+            popupRejectMultipleDisciplines.querySelector(".rejectable-disciplinees tbody").innerHTML = ""
+            popupApproveMultipleDisciplines.querySelector(".approvable-disciplines tbody").innerHTML = ""
+        } 
+    }
+
+    rejectMultipleDisciplinesBtn.addEventListener("click", function() {
+        popupRejectMultipleDisciplines.classList.add("open")
+        document.body.classList.add("no-scroll")
+    })
+
+    popupRejectMultipleDisciplinesBtn.addEventListener("click", function() {
+        let rejectableDisciplineIds = []
+
+        let confirmCancelDelete = confirm("Вы действительно хотите отклонить удаление дисциплин?")
+        if (confirmCancelDelete) {
+            popupRejectMultipleDisciplines.querySelectorAll("tbody tr").forEach(rejectableDiscipline => {
+                let isChecked = rejectableDiscipline.querySelector('input')?.checked
+                if (isChecked) {
+                    let disciplineId = parseInt(rejectableDiscipline.dataset.id)
+                    rejectableDisciplineIds.push(disciplineId)
+                }
+            })
+            
+            cancelManyRequestDeleteDiscipline(rejectableDisciplineIds, userId, popupRejectMultipleDisciplinesBtn)
+        }
+    })
+
+    const cancelManyRequestDeleteDiscipline = async (disciplineIds, userId, el) => {
+        el.classList.add("loading")
+        el.disabled = true
+
+        let response = await fetch(`${URL}/api/Discipline/CancelManyRequestDeleteDiscipline?userId=${userId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(disciplineIds)
+        })
+
+        if (response.ok) {
+            alert("Отклонение удаления дисциплин прошло успешно")
+            el.classList.remove("loading")
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getRemovableDisciplines()
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось удалить дисциплины. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+
+            el.classList.remove("loading")
+            el.disabled = false
+        }
+    }
+
+    approveMultipleDisciplinesBtn.addEventListener("click", function() {
+        popupApproveMultipleDisciplines.classList.add("open")
+        document.body.classList.add("no-scroll")
+    })
+
+    popupApproveMultipleDisciplinesBtn.addEventListener("click", function() {
+        let approvableDisciplineIds = []
+
+        let confirmDelete = confirm("Вы действительно хотите удалить дисциплины?")
+        if (confirmDelete) {
+            popupApproveMultipleDisciplines.querySelectorAll("tbody tr").forEach(approvableDiscipline => {
+                let isChecked = approvableDiscipline.querySelector('input')?.checked
+                if (isChecked) {
+                    let disciplineId = parseInt(approvableDiscipline.dataset.id)
+                    approvableDisciplineIds.push(disciplineId)
+                }
+            })
+            
+            deleteManyDisciplines(approvableDisciplineIds, userId, popupApproveMultipleDisciplinesBtn)
+        }
+    })
+
+    const deleteManyDisciplines = async (disciplineIds, userId, el) => {
+        el.classList.add("loading")
+        el.disabled = true
+
+        let response = await fetch(`${URL}/api/Discipline/DeleteManyDisciplines?userId=${userId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(disciplineIds)
+        })
+
+        if (response.ok) {
+            alert("Удаление дисциплин прошло успешно")
+            el.classList.remove("loading")
+            el.disabled = false
+            el.closest(".popup__content").querySelector(".popup__close").click()
+            getRemovableDisciplines()
+        } else {
+            let error = await response.text()
+            if (error.startsWith("{")) {
+                alert("Не удалось удалить дисциплины. Попробуйте еще раз")
+            } else {
+                alert(error)
+            }
+
+            el.classList.remove("loading")
+            el.disabled = false
+        }
     }
 
     // //функция получения удаляемых статусов дисциплин

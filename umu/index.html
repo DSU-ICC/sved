@@ -32,7 +32,9 @@
                         <h1 class="page__title">Список запросов</h1>
                         <div class="page__actions">
                             <button class="profile-recovery-btn btn">Восстановить профиль</button>
-                            <a href='/sved/umu/report.html' class="profile-statistics-btn btn">Посмотреть статистику</a>
+                            <a href='/sved/umu/report.html' target="_blank" class="profile-statistics-btn btn">Посмотреть статистику</a>
+                            <button class="reject-disciplines-btn btn">Отклонить удаление множества дисциплин</button>
+                            <button class="approve-disciplines-btn btn">Удалить множество дисциплин</button>
                         </div>
                         <div class="tabs-wrapper page__tabs-wrapper">
                            <div class="tabs page__tabs">
@@ -98,6 +100,64 @@
                 <h2 class="popup__title title">Восстановление профиля</h2>
                 <div class="popup__profiles profiles-deleted">
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-reject-disciplines" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Отклонение удаления дисциплин</h2>
+                <div class="popup__disciplines rejectable-disciplines">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Год</th>
+                                <th>Профиль</th>
+                                <th>Дисциплина</th>                                           
+                                <th>Форма обучения</th>
+                                <th>Уровень образования</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>       
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="popup__reject-btn btn"><span>Отклонить удаление</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-approve-disciplines" class="popup">
+        <div class="popup__body">
+            <div class="popup__content">
+                <button type="button" class="popup__close">
+                    <img src="../img/close.svg" alt="">
+                </button>
+                <h2 class="popup__title title">Удаление множества дисциплин</h2>
+                <div class="popup__disciplines approvable-disciplines">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Год</th>
+                                <th>Профиль</th>
+                                <th>Дисциплина</th>                                           
+                                <th>Форма обучения</th>
+                                <th>Уровень образования</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>       
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="popup__approve-btn btn"><span>Удалить</span></button>
             </div>
         </div>
     </div>

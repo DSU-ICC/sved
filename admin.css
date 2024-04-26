@@ -330,12 +330,54 @@ main {
 }
 
 .profile-recovery-btn,
-.profile-statistics-btn {
+.profile-statistics-btn,
+.reject-disciplines-btn,
+.approve-disciplines-btn,
+.popup__reject-btn,
+.popup__approve-btn {
     font-size: 18px;
     font-weight: 500;
     padding: 10px 16px;
     border-radius: 5px;
     margin-bottom: 20px;
+}
+
+.reject-disciplines-btn {
+    background-color: #10cf50;
+}
+
+.reject-disciplines-btn:hover {
+    background-color: #0ebe49;
+}
+
+.popup__approve-btn,
+.approve-disciplines-btn {
+    background-color: #ec071e;
+}
+
+.popup__approve-btn:hover,
+.approve-disciplines-btn:hover {
+    background-color: #e70a20;
+}
+
+.popup__reject-btn,
+.popup__approve-btn {
+    display: flex;
+    gap: 10px;
+    margin: 15px auto 0;
+}
+
+.popup__reject-btn::before,
+.popup__approve-btn::before {
+    content: "";
+    width: 21px;
+    height: 22px;
+    display: none;
+}
+
+.popup__reject-btn.loading::before,
+.popup__approve-btn.loading::before {
+    display: block;
 }
 
 .page__actions {
@@ -485,14 +527,55 @@ main {
     margin-bottom: 40px;
 }
 
+
+.report__result table,
+.report__result th,
+.report__result td {
+    border: 0;
+}
+
+.report__result table {
+    border-collapse: separate !important; 
+    border-spacing: 0;
+  }
+
 .report__result th,
 .report__result td[colspan] {
     vertical-align: middle;
     text-align: center;
 }
 
+.report__result th {
+  border-top: 1px solid #d2d2d2;
+  border-bottom: 1px solid #d2d2d2;
+  border-right: 1px solid #d2d2d2;
+}
+
+.report__result th[colspan] {
+    border-bottom: 0
+}
+
+.report__result td {
+  border-bottom: 1px solid #d2d2d2;
+  border-right: 1px solid #d2d2d2;
+}
+
+.report__result th:first-child,
+.report__result td:first-child {
+  border-left: 1px solid #d2d2d2;
+}
+
+.report__result thead tr:nth-child(2) th:first-child  {
+    border-left: 0
+}
+
+.report__result thead {
+  position: sticky;
+  top: 0;
+}
+
 .report__result ol {
-    padding-left: 17px;
+    list-style-position: inside;
 }
 
 .choices__inner::after {
@@ -1442,8 +1525,6 @@ td[colspan] {
 .search__input:focus {
     border-color: #0050cf;
 }
-
-
 
 .delete-discipline span[disabled],
 .delete-discipline:hover span[disabled] {

@@ -294,8 +294,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         <th rowspan="2">Образовательная программа</th>
                         <th rowspan="2">Форма обучения</th>
                         <th colspan="4">РПД</th>
+                        <th colspan="4">ФОС</th>
                     </tr>
                     <tr>
+                        <th>Всего</th>
+                        <th>Загружено</th>
+                        <th>% заполненности</th>
+                        <th>Перечень дисциплин, по которым не загружены РПД</th>
                         <th>Всего</th>
                         <th>Загружено</th>
                         <th>% заполненности</th>
@@ -337,7 +342,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     res += `
-                        </ol>
+                            </ol>
+                        </td>
+                        <td>${profileItem.disciplineCount}</td>
+                        <td>${profileItem.fileFosCount}</td>
+                        <td>${profileItem.downloadPercentFileFos * 100}%</td>
+                        <td>
+                                <ol>
+                    `
+
+                    if (profileItem.unloadedFileFosDisciplines.length > 0) {
+                        for (let discipline of profileItem.unloadedFileFosDisciplines) {
+                            res += `<li>${discipline}</li>`
+                        }
+                    }
+
+                    res += `
+                            </ol>
                         </td>
                     </tr>
                     `
