@@ -348,7 +348,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             })
             
-            cancelManyRequestDeleteDiscipline(rejectableDisciplineIds, userId, popupRejectMultipleDisciplinesBtn)
+            if (rejectableDisciplineIds.length > 0) {
+                cancelManyRequestDeleteDiscipline(rejectableDisciplineIds, userId, popupRejectMultipleDisciplinesBtn)
+            } else {
+                alert("Выберите хотя бы одну дисциплину для отклонения удаления")
+            }
         }
     })
 
@@ -402,7 +406,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             })
             
-            deleteManyDisciplines(approvableDisciplineIds, userId, popupApproveMultipleDisciplinesBtn)
+            if (approvableDisciplineIds.length > 0) {
+                deleteManyDisciplines(approvableDisciplineIds, userId, popupApproveMultipleDisciplinesBtn)
+            } else {
+                alert("Выберите хотя бы одну дисциплину для удаления")
+            }
         }
     })
 
