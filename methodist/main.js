@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let profiles
     let kafedra_id
     let listKafedras
-    let departments
+    let departmentsIncludeFaculty
     let fileTypes
     let userId
     let userName
@@ -49,11 +49,19 @@ document.addEventListener("DOMContentLoaded", () => {
         searchResultLimit: 9999,
     }
 
+    let facSelect = document.querySelector("#faculty")
+    let facChoice = new Choices(facSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите название факультета"
+    });
+
     let deptSelect = document.querySelector("#dept")
     let deptChoice = new Choices(deptSelect, {
         ...choiceOptions,
         searchPlaceholderValue: "Введите название направления"
     });
+
+    deptChoice.disable()
 
     let levelEduSelect = document.querySelector("#levelEdu")
     let levelEduChoice = new Choices(levelEduSelect, {
@@ -73,11 +81,19 @@ document.addEventListener("DOMContentLoaded", () => {
         searchPlaceholderValue: "Введите каферу"
     })
 
+    let facSelectTwo = document.querySelector("#faculty-2")
+    let facChoiceTwo = new Choices(facSelectTwo, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите название факультета"
+    });
+
     let deptSelectTwo = document.querySelector("#dept-2")
     let deptChoiceTwo = new Choices(deptSelectTwo, {
         ...choiceOptions,
         searchPlaceholderValue: "Введите название направления"
     });
+
+    deptChoiceTwo.disable()
 
     let levelEduSelectTwo = document.querySelector("#levelEdu-2")
     let levelEduChoiceTwo = new Choices(levelEduSelectTwo, {
@@ -122,6 +138,10 @@ document.addEventListener("DOMContentLoaded", () => {
         fillUchPlanData()
     })
 
+    const getDepartmentsByFacultyId = (facultyId) => {
+        return departmentsIncludeFaculty.find(d => d.caseCFaculty.facId == facultyId)
+    }
+
     //парсинг excel файла учебного плана
     const parsingUchPlan = async (el) => {
         el.previousElementSibling.textContent = "Загрузка..."
@@ -160,6 +180,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    const setDepartmentChoicesByFacId = (facId, deptChoice) => {
+        const departments = getDepartmentsByFacultyId(facId)
+        const deptChoices = []
+        for (let el of departments.caseSDepartments) {
+            deptChoices.push({
+                value: el.departmentId,
+                label: el.deptName,
+                selected: false,
+                disabled: false,
+                customProperties: {
+                    deptCode: el.code
+                }
+            });
+        }
+        deptChoice.setChoices(deptChoices, "value", "label", true)
+
+        deptChoice.enable()
+    }
+
     //функция заполнение модального окна данными
     const fillUchPlanData = (data) => {
         document.body.classList.add("no-scroll")
@@ -178,6 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let profile = data.profile.profileName ?? ""
             let levelId = data.profile.levelEdu?.id
             let termEdu = data.profile.termEdu
+            let facId = data.caseSDepartment?.facId
             let deptId = data.caseSDepartment?.departmentId
             let eduFormId = data.caseCEdukind?.edukindId
 
@@ -194,7 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
             let termEduInp = modalUchPlan.querySelector("#termEdu")
             termEduInp.value = termEdu
 
+            if (facId) {
+                facChoice.setChoiceByValue(facId)
+            }
+
             if (deptId) {
+                setDepartmentChoicesByFacId(facId, deptChoice)
                 deptChoice.setChoiceByValue(deptId)
             }
 
@@ -237,9 +282,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        facSelect.addEventListener("choice", function(evt) {
+            deptChoice.clearStore()
+            deptCodeInput.value = ""
+            setDepartmentChoicesByFacId(evt.detail.choice.value, deptChoice)
+        })
+
         deptSelect.addEventListener("choice", function(evt) {
-            let selectedEl = this.nextElementSibling
-            selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
             deptCodeInput.value = evt.detail.choice.customProperties.deptCode
         })
     }
@@ -563,10 +612,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let modalWindowId = modalWindow.getAttribute("id")
         if (modalWindowId == "popup-uchplan") {
+            let facId = facChoice.getValue(true)
             let deptId = deptChoice.getValue(true)
             let levelEduId = levelEduChoice.getValue(true)
             let eduFormId = eduFormChoice.getValue(true)
             let kafedras = kafedraChoice.getValue(true)
+
+            if (!facId) {
+                isValidForm = false
+                facSelect.closest(".choices__inner").classList.add("invalid")
+            } else {
+                facSelect.closest(".choices__inner").classList.remove("invalid")
+            }
 
             if (!deptId) {
                 isValidForm = false
@@ -596,10 +653,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 kafedraSelect.closest(".choices__inner").classList.remove("invalid")
             }
         } else if (modalWindowId == "popup-editText") {
+            let facId = facChoiceTwo.getValue(true)
             let deptId = deptChoiceTwo.getValue(true)
             let levelEduId = levelEduChoiceTwo.getValue(true)
             let eduFormId = eduFormChoiceTwo.getValue(true)
             let kafedras = kafedraChoiceTwo.getValue(true)
+
+            if (!facId) {
+                isValidForm = false
+                facSelectTwo.closest(".choices__inner").classList.add("invalid")
+            } else {
+                facSelectTwo.closest(".choices__inner").classList.remove("invalid")
+            }
 
             if (!deptId) {
                 isValidForm = false
@@ -813,6 +878,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let year = profileEdited.profile.year
         let profile = profileEdited.profile.profileName
         let levelEduId = profileEdited.profile.levelEduId
+        let facId = profileEdited.caseSDepartment.facId
         let deptId = profileEdited.caseSDepartment.departmentId
         let eduFormId = profileEdited.caseCEdukind.edukindId
         let lang = profileEdited.profile.educationLanguage
@@ -835,13 +901,22 @@ document.addEventListener("DOMContentLoaded", () => {
         let accredInput = popupEditText.querySelector("#periodAccredistation")
         accredInput.value = accred
 
+        if (facId) {
+            facChoiceTwo.setChoiceByValue(facId)
+        }
+
         if (deptId) {
+            setDepartmentChoicesByFacId(facId, deptChoiceTwo)
             deptChoiceTwo.setChoiceByValue(deptId)
         }
 
+        facSelectTwo.addEventListener("choice", function(evt) {
+            deptChoiceTwo.clearStore()
+            deptCodeInput.value = ""
+            setDepartmentChoicesByFacId(evt.detail.choice.value, deptChoiceTwo)
+        })
+
         deptSelectTwo.addEventListener("choice", function(evt) {
-            let selectedEl = this.nextElementSibling
-            selectedEl.setAttribute("title", evt.detail.choice.customProperties.facName)
             deptCodeInput.value = evt.detail.choice.customProperties.deptCode
         })
 
@@ -1434,25 +1509,19 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             if (response.ok) {
-                data = await response.json()
+                departmentsIncludeFaculty = await response.json()
   
-                const deptChoices = []
-                for (let el of data) {
-                    for (let departmentEl of el.caseSDepartments) {
-                        deptChoices.push({
-                            value: departmentEl.departmentId,
-                            label: departmentEl.deptName,
-                            selected: false,
-                            disabled: false,
-                            customProperties: {
-                                facName: el.caseCFaculty.facName,
-                                deptCode: departmentEl.code
-                            }
-                        });
-                    }
+                const facChoices = []
+                for (let el of departmentsIncludeFaculty.map(d => d.caseCFaculty)) {
+                    facChoices.push({
+                        value: el.facId,
+                        label: el.facName,
+                        selected: false,
+                        disabled: false
+                    });
                 }
-                deptChoice.setChoices(deptChoices, "value", "label", true);
-                deptChoiceTwo.setChoices(deptChoices, "value", "label", true);
+                facChoice.setChoices(facChoices, "value", "label", true);
+                facChoiceTwo.setChoices(facChoices, "value", "label", true);
             }
         } else {
             window.location.assign(`${URL}/sved/login.html`)
