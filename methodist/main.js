@@ -205,8 +205,8 @@ document.addEventListener("DOMContentLoaded", () => {
         modalUchPlan.classList.add("open")
         
         let deptCodeInput = modalUchPlan.querySelector("#departmentCode")
-        let langInput = modalUchPlan.querySelector("#eduLang")
-        langInput.value = "русский"
+        // let langInput = modalUchPlan.querySelector("#eduLang")
+        // langInput.value = "русский"
 
         if (data) {
             modalUchPlan.querySelector(".title").textContent = "Проверьте правильность данных УП"
@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 linkToPriemResult: null,
                 linkToRPD: null,
                 validityPeriodOfStateAccreditasion: null,
-                educationLanguage: null,
+                // educationLanguage: null,
                 linkToDistanceEducation: null,
                 disciplines: [],
                 fileModels: [],
@@ -311,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let yearInput = modalUchPlan.querySelector("#year")
         let profileInput = modalUchPlan.querySelector("#profile")
-        let eduLangInput = modalUchPlan.querySelector("#eduLang")
+        // let eduLangInput = modalUchPlan.querySelector("#eduLang")
         let accredInput = modalUchPlan.querySelector("#periodAccredistation")
         let termEduInput = modalUchPlan.querySelector("#termEdu")
 
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dataUchPlanFinal.profileName = profileInput.value.trim()
         dataUchPlanFinal.caseSDepartmentId = parseInt(deptChoice.getValue(true))
         dataUchPlanFinal.caseCEdukindId = parseInt(eduFormChoice.getValue(true))
-        dataUchPlanFinal.educationLanguage = eduLangInput.value
+        // dataUchPlanFinal.educationLanguage = eduLangInput.value
         dataUchPlanFinal.validityPeriodOfStateAccreditasion = accredInput.value
         dataUchPlanFinal.termEdu = termEduInput.value.trim()
 
@@ -604,7 +604,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const validateProfileForm = (modalWindow) => {
         let yearInput = modalWindow.querySelector("#year")
         let profileInput = modalWindow.querySelector("#profile")
-        let eduLangInput = modalWindow.querySelector("#eduLang")
+        // let eduLangInput = modalWindow.querySelector("#eduLang")
         let accredInput = modalWindow.querySelector("#periodAccredistation")
         let termEduInput = modalWindow.querySelector("#termEdu")
 
@@ -709,12 +709,12 @@ document.addEventListener("DOMContentLoaded", () => {
             profileInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
-        if (eduLangInput.value.trim() == "") {
-            isValidForm = false
-            eduLangInput.closest(".popup-form__label").classList.add("invalid")
-        } else {
-            eduLangInput.closest(".popup-form__label").classList.remove("invalid")
-        }
+        // if (eduLangInput.value.trim() == "") {
+        //     isValidForm = false
+        //     eduLangInput.closest(".popup-form__label").classList.add("invalid")
+        // } else {
+        //     eduLangInput.closest(".popup-form__label").classList.remove("invalid")
+        // }
 
         if (termEduInput.value.trim() == "") {
             isValidForm = false
@@ -881,7 +881,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let facId = profileEdited.caseSDepartment.facId
         let deptId = profileEdited.caseSDepartment.departmentId
         let eduFormId = profileEdited.caseCEdukind.edukindId
-        let lang = profileEdited.profile.educationLanguage
+        // let lang = profileEdited.profile.educationLanguage
         let termEdu = profileEdited.profile.termEdu
         let accred = profileEdited.profile.validityPeriodOfStateAccreditasion
 
@@ -894,8 +894,8 @@ document.addEventListener("DOMContentLoaded", () => {
         deptCodeInput.value = profileEdited.caseSDepartment.code
         let profileInp = popupEditText.querySelector("#profile")
         profileInp.value = profile
-        let langInput = popupEditText.querySelector("#eduLang")
-        langInput.value = lang
+        // let langInput = popupEditText.querySelector("#eduLang")
+        // langInput.value = lang
         let termEduInput = popupEditText.querySelector("#termEdu")
         termEduInput.value = termEdu
         let accredInput = popupEditText.querySelector("#periodAccredistation")
@@ -952,7 +952,7 @@ document.addEventListener("DOMContentLoaded", () => {
             profileItem.profile.caseSDepartmentId = deptChoiceTwo.getValue(true)
             profileItem.profile.caseCEdukindId = eduFormChoiceTwo.getValue(true)
             profileItem.profile.levelEduId = levelEduChoiceTwo.getValue(true)
-            profileItem.profile.educationLanguage = popupEditText.querySelector("#eduLang").value
+            // profileItem.profile.educationLanguage = popupEditText.querySelector("#eduLang").value
             profileItem.profile.validityPeriodOfStateAccreditasion = popupEditText.querySelector("#periodAccredistation").value
             //profileItem.profile.linkToDistanceEducation = popupEditText.querySelector("#linkToEduDistance").value
 
@@ -1340,16 +1340,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     </td>
                 `
 
-                res += `
-                    <td itemprop="language">
-                        <span>${el.profile.educationLanguage}</span>
-                        <div class="actions">
-                            <button type="button" class="edit edit-item--text">
-                            <span class="edit__btn btn"></span>
-                            </button>
-                        </div>
-                    </td>
-                `
+                // res += `
+                //     <td itemprop="language">
+                //         <span>${el.profile.educationLanguage}</span>
+                //         <div class="actions">
+                //             <button type="button" class="edit edit-item--text">
+                //             <span class="edit__btn btn"></span>
+                //             </button>
+                //         </div>
+                //     </td>
+                // `
 
                 res += `
                     <td itemprop="dateEnd">
@@ -1366,7 +1366,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Учебный план")) // учебный план
 
-                res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // Аннотации к РПД
+                // res += generateMarkupFileModelByFileTypeId(el, getFileTypeIdByName("Аннотации к РПД")) // Аннотации к РПД
 
 
                 //если есть ссылка на РПД для аспирантуры, то показываем ее, если нет, то генерируем ссылку на страницу ЭОР
