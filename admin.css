@@ -1011,6 +1011,7 @@ td a {
 
 .popup-form__btn,
 .report-form__btn,
+.report__export-btn,
 .login-form__btn {
     padding: 15px 21px;
     border-radius: 10px;
@@ -1021,6 +1022,10 @@ td a {
     color: #fff;
     align-self: center;
     margin-top: 87px;
+}
+
+.report__export-btn {
+    margin-bottom: 20px;
 }
 
 .report-form__btn {

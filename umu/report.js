@@ -286,9 +286,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    const exportTableToExcel = (tableId, filename = 'the_data_you_needed.xls') => {
+        let dataType = 'application/vnd.ms-excel';
+        let tableSelect = document.getElementById(tableId);
+        let tableHTML = encodeURIComponent(tableSelect.outerHTML.replace(/ or .*?>/g, '>'));
+        let link = document.createElement("a");
+        link.href = `data:${dataType}, ${tableHTML}`;
+        link.download = filename;
+        link.click();
+    }
+
+
     const showStatistic = (dataForStatistic, selectedFacultiesCount) => {
         let res = `
-            <table>
+            <button class="report__export-btn btn">Выгрузить в Excel</button>        
+            <table id="reportTable" border="1" cellspacing="0">
                 <thead>
                     <tr>
                         <th rowspan="2">Образовательная программа</th>
@@ -369,6 +381,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     
         reportResult.innerHTML = res
+
+        const exportBtn = document.querySelector(".report__export-btn")
+        exportBtn.addEventListener("click", function() {
+            exportTableToExcel("reportTable", "statistics.xls")
+        })
     }
 
 
