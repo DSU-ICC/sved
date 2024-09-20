@@ -1260,7 +1260,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("tbody").innerHTML = `
                 <tr><td>Идет загрузка профилей...</td></tr>
             `
-
             let response = await fetch(`${URL}/api/Profiles/GetDataByKafedraId?kafedraId=${kafedra_id}`, {
                 credentials: "include"
             })
@@ -1392,9 +1391,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     rpp += '<div class="item-files">'
 
                     for (let fileRPP of fileModelsRpp) {
+                        console.log(el.profile.id)
                         rpp += `
                             <div class="item-file">
-                            ${fileRPP.fileRPD != null
+                            ${fileRPP.fileRPD != null && fileRPP.fileRPD.length > 0
                                 ? `
                                     <div class="item-file__inner">
                                         <span class="key-icon"></span>
@@ -1404,9 +1404,9 @@ document.addEventListener("DOMContentLoaded", () => {
                                             <p class="document-key__text">Рабаданов Муртазали Хулатаевич</p>
                                             <p class="document-key__text">Ректор</p>
                                             <p class="document-key__text">Ключ (SHA-256):</p>
-                                            <p class="document-key__text">${fileRPP.fileRPD.codeECP}</p>
+                                            <p class="document-key__text">${fileRPP.fileRPD[0].codeECP}</p>
                                         </div>
-                                        <a href='${fileRPP.fileRPD.linkToFile ? fileRPP.fileRPD.linkToFile : `${URL}/sved/files-oop/${fileRPP.fileRPD.name}`}'>${fileRPP.disciplineName}</a>
+                                        <a href='${fileRPP.fileRPD[0].linkToFile ? fileRPP.fileRPD[0].linkToFile : `${URL}/sved/files-oop/${fileRPP.fileRPD[0].name}`}'>${fileRPP.disciplineName}</a>
                                     </div>
                                     
                                 `

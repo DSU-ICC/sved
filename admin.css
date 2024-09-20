@@ -622,7 +622,6 @@ main {
     border: 1px solid #bcbcbc;
     border-radius: 5px;
     top: calc(100% + 6px);
-    height: 280px;
     z-index: 99;
 }
 
