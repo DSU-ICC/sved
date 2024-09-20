@@ -1391,7 +1391,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     rpp += '<div class="item-files">'
 
                     for (let fileRPP of fileModelsRpp) {
-                        console.log(el.profile.id)
                         rpp += `
                             <div class="item-file">
                             ${fileRPP.fileRPD != null && fileRPP.fileRPD.length > 0
