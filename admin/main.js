@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    //const URL = "https://localhost:44370"
     const URL = "https://oop.dgu.ru"
 
     let logoutBtn = document.querySelector(".header .action__btn")
@@ -47,13 +46,13 @@ document.addEventListener("DOMContentLoaded", function() {
     let facultySelect = document.querySelector("#faculty")
     let facultyChoice = new Choices(facultySelect, {
         ...choiceOptions,
-        searchPlaceholderValue: "Введите каферу"
+        searchPlaceholderValue: "Введите факультет"
     })
 
     let facultySelectTwo = document.querySelector("#faculty-2")
     let facultyChoiceTwo = new Choices(facultySelectTwo, {
         ...choiceOptions,
-        searchPlaceholderValue: "Введите каферу"
+        searchPlaceholderValue: "Введите факультет"
     })
 
     //закрытие модального окна
@@ -104,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function() {
         metodistRoleRadioBtn.click()
         metodistRoleRadioBtn.previousElementSibling.classList.add("checked")
 
-        //let facultySelect = popupCreateUser.querySelector(".select[data-selectField=faculty]")
         facultySelect.closest(".popup-form__label").style.display = "none"
 
         popupCreateUser.classList.add("open")
@@ -120,10 +118,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 //скрываем выбор кафедры и факультетов
-                //let kafedraSelect = popupCreateUser.querySelector(".select[data-selectField=kafedra]").closest(".popup-form__label")
                 kafedraSelect.closest(".popup-form__label").style.display = "none"
         
-                //let facultySelect = popupCreateUser.querySelector(".select[data-selectField=faculty]").closest(".popup-form__label")
                 facultySelect.closest(".popup-form__label").style.display = "none"
 
                 //помечаем нажатую кнопку как выбранную
@@ -454,9 +450,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 let userName = e.target.closest("tr").firstElementChild.textContent
                 popupEditUser.querySelector("#userId").value = userId
                 popupEditUser.querySelector("#userLogin").value = userName
-
-                //let facultySelect = popupEditUser.querySelector(".select[data-selectField=faculty]")
-                //let kafedraSelect = popupEditUser.querySelector(".select[data-selectField=kafedra]")
                 
                 //получаем изменяемого пользователя
                 let userEdited = users[users.map(e => e.user.id).indexOf(userId)]
@@ -469,13 +462,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     //скрываем выбор факультетов
                     facultySelectTwo.closest(".popup-form__label").style.display = "none"
 
-                    // let kafedraSelectOptions = kafedraSelect.querySelectorAll(".select__option")
-                    // kafedraSelectOptions.forEach(optionItem => {
-                    //     if (optionItem.textContent.trim() == userEdited.department.depName) {
-                    //         optionItem.click()
-                    //         return
-                    //     }
-                    // })
                     kafedraChoiceTwo.setChoiceByValue(userEdited.department.depId)
                 } else if (userEdited.faculties.length > 0) {
                     let umuRoleRadioBtn = popupEditUser.querySelector(".radio__item:nth-child(2) label")
@@ -594,83 +580,6 @@ document.addEventListener("DOMContentLoaded", function() {
         facultyChoice.setChoices(facultyChoices, "value", "label", true);
         facultyChoiceTwo.setChoices(facultyChoices, "value", "label", true);
     }
-
-    //функционал выпадающих списков
-    // const select = document.querySelectorAll('.select');
-    // select.forEach(selectItem => {
-    //     selectItem.querySelector('.select__btn').addEventListener('click', function () {
-    //         selectItem.classList.toggle('active');
-    //     })
-    //     let options = selectItem.querySelector('.select__options');
-    //     options.addEventListener("click", function(e) {
-    //         if (e.target.closest(".select__option")) { 
-    //             let selectedOption = e.target.closest(".select__option")
-    //             let selectedOptionText = selectedOption.querySelector('.select__option-text').textContent;
-    //             let selectText = selectItem.querySelector('.select__text')
-    //             let selectedElemId = parseInt(selectedOption.dataset.id)
-
-    //             //если выпадающий список не предусматривает выбор нескольких элементов
-    //             if (!selectItem.hasAttribute("data-multiple")) {
-    //                 //если мы нажали на не выбранный элемент списка
-    //                 if (!selectedOption.classList.contains("selected")) {
-    //                     //помечаем все элементы списка как не выбранные
-    //                     options.querySelectorAll(".select__option").forEach(optionItem => {
-    //                         optionItem.classList.remove("selected")
-    //                     })
-
-                        
-
-    //                     //помечаем выбранный нами элемент как выбранный
-    //                     selectedOption.classList.add("selected")
-    //                     selectText.textContent = selectedOptionText;
-    //                     selectText.dataset.id = selectedElemId
-    //                 } else { //если же мы выбрали уже выбранный элемент списка, 
-    //                     selectedOption.classList.remove("selected")
-    //                     selectText.textContent = selectText.dataset.placeholder
-    //                     selectText.removeAttribute("data-id")
-    //                 }
-    //             } else { //если в выпадающем списке можно выбрать несколько элементов  
-    //                 //если мы нажимаем на не выбранный элемент
-    //                 if (!selectedOption.classList.contains("selected")) {
-    //                     //помечаем его как выбранный элемент
-    //                     selectedOption.classList.add("selected")
-
-    //                     //если мы выбрали второй или более элемент списка
-    //                     if (selectText.textContent != selectText.dataset.placeholder) {
-    //                         selectText.textContent += `, ${selectedOptionText}`;
-    //                         selectText.dataset.id += `, ${selectedElemId}`
-    //                     } else { // если впервые выбрали элемент списка
-    //                         selectText.textContent = selectedOptionText;
-    //                         selectText.dataset.id = selectedElemId
-    //                     }
-    //                 } else { //логика удаления элемента из списка
-
-    //                     selectedOption.classList.remove("selected")
-
-    //                     //создаем массив айди выбранных элементов списка, а также массив их названия
-    //                     let arrayId = [...selectText.dataset.id.split(", ")]
-    //                     let listElem = selectText.textContent.split(", ")
-
-    //                     //если было выбрано больше одного элемента списка
-    //                     if (arrayId.length > 1) {
-
-    //                         //создаем строку названий элементов, не включая в него выбранный нами элемент
-    //                         selectText.textContent = listElem.filter(el => el != selectedOptionText).join(", ")
-
-    //                         //создаем строку айди элементов, не включая в него выбранный нами элемент
-    //                         selectText.dataset.id = arrayId.filter(id => parseInt(id) != selectedElemId).join(", ")
-    //                     } else {// если бьл выбран только один элемент, то просто ставим значение списка по умолчанию и удаляем id
-    //                         selectText.textContent = selectText.dataset.placeholder
-    //                         selectText.removeAttribute("data-id")
-    //                     }
-    //                 }
-    //             }
-                
-    //             selectItem.classList.remove('active');
-    //         }
-    //     })
-                    
-    // })
 
     //функция, которая устанавливает имя пользователя в шапку страницы
     const setUserName = (userName) => {

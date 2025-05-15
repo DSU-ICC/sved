@@ -786,8 +786,6 @@ td[colspan] {
     line-height: 1.285;
     background-color: #f2f2f7;
     color: #00235a;
-    /* padding-top: 14px;
-    padding-bottom: 22px; */
     text-align: left;
     padding: 14px 7px;
 }
@@ -935,52 +933,6 @@ td a {
     line-height: 1.2;
     color: #000;
 }
-
-
-/* .popup-form__label.invalid .popup-form__input,
-.login-form__label.invalid .login-form__input,
-.popup-form__label.invalid .select__btn,
-.select.invalid .select__btn {
-    position: relative;
-    border-color: #dc3545;
-    border-width: 2px;
-    position: relative;
-    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") no-repeat;
-    background-size: 28px;
-    background-position: right 6px center;
-}
-
-.popup-form__label.invalid .select__btn,
-.select.invalid .select__btn {
-    background: none;
-}
-
-.popup-form__label.invalid::after,
-.select.invalid::after {
-    content: 'Поле не заполнено';
-    color: #dc3545;
-    width: 165px;
-    height: 12px;
-    display: block;
-    position: absolute;
-    padding: 0 0 0 5px;
-    top: -9px;
-    left: 170px;
-    background-color: #fff;
-}
-
-#popup-editText .popup-form__label:nth-child(3).invalid::after,
-#popup-editText .popup-form__label:nth-child(5).invalid::after,
-#popup-editText .popup-form__label:nth-child(6).invalid::after,
-#popup-uchplan .popup-form__label:nth-child(2).invalid::after,
-#popup-uchplan .popup-form__label:nth-child(4).invalid::after,
-#popup-uchplan .popup-form__label:nth-child(5).invalid::after,
-#popup-createDiscipline .popup-form__label:nth-child(3).invalid::after,
-.select.invalid::after {
-    content: 'Выберите элемент из списка';
-    width: 242px;
-} */
-
 
 
 #popup-recovery .popup__content {
@@ -1275,9 +1227,6 @@ td[colspan] {
     background-color: #e70a20;
 }
 
-/* .action-eor:not(:last-child) {
-    margin-bottom: 16px;
-} */
 
 .accordeon__content .action-eor {
     margin-left: 0;
@@ -1292,7 +1241,6 @@ td[colspan] {
 .page__accordeon .accordeon__item {
     width: 100%;
     cursor: pointer;
-    /* overflow: hidden; */
     height: max-content;
 }
 
@@ -1375,8 +1323,6 @@ td[colspan] {
 }
 
 .discipline td:nth-child(1) {
-    /* border-right: 1px solid #cecece; */
-    /* border-bottom: 1px solid #cecece; */
     width: 103px;
     padding-right: 20px;
 }
@@ -1408,15 +1354,6 @@ td[colspan] {
     gap: 20px;
 }
 
-/* .discipline .actions-rpd {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-} */
-
-/* .actions-rpd .edit__btn::before {
-    background-position: center;
-} */
 
 #popup-delete,
 #popup-deleteRpd,
@@ -1609,15 +1546,6 @@ datalist option:hover::before {
     margin: 0;
 }
 
-/* .status__select.invalid::after {
-    left: 22px;
-} */
-
-/* #popup-createUser .popup-form__label:nth-child(3).invalid::after,
-#popup-editUser .popup-form__label:nth-child(4).invalid::after {
-    content: "Выберите элемент из списка";
-    width: 242px;
-} */
 
 .status__btn {
     margin: 20px 0 0 0;

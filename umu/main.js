@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     
-    //const URL = "https://localhost:44370"
     const URL = "https://oop.dgu.ru"
 
     let disciplineList
@@ -446,83 +445,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // //функция получения удаляемых статусов дисциплин
-    // const getRemovableStatusDisciplines = async () => {
-    //     document.querySelector(".status-disciplines tbody").innerHTML = `
-    //         <tr><td>Идет загрузка удаляемых статусов дисциплин...</td></tr>
-    //     `
-    //     let response = await fetch(`${URL}/StatusDiscipline/GetRemovableStatusDiscipline`, {
-    //         credentials: "include"
-    //     })
-
-    //     if (response.ok) {
-    //         statusDisciplineList = await response.json()
-    //         showRemovableStatusDisciplines(statusDisciplineList)
-
-    //     } else {
-    //         let error = await response.text()
-    //         if (error.startsWith("{")) {
-    //             document.querySelector(".status-disciplines tbody").innerHTML = `
-    //             <tr><td>Ошибка получения данных</td></tr>
-    //         `
-    //         } else {
-    //             document.querySelector(".status-disciplines tbody").innerHTML = `
-    //                 <tr><td>${error}</td></tr>
-    //             `
-    //         }
-    //     }
-    // }
-
-    // //функция вывода удаляемых статусов дисциплин
-    // const showRemovableStatusDisciplines = (statusDisciplineList) => {
-    //     let res = ""
-        
-    //     for (let statusDiscipline of statusDisciplineList) {
-    //         res += `
-    //             <tr>
-    //                 <td>Удаление статуса дисциплины</td>
-    //                 <td>${statusDiscipline.name}</td>
-    //                 <td>
-    //                     <div class="wrapper">
-    //                         <button type="button" class="approve approve-status">
-    //                             <span data-statusDisciplineId=${statusDiscipline.id} class="approve__btn btn"></span>
-    //                         </button>
-    //                         <button type="button" class="reject reject-status">
-    //                             <span data-statusDisciplineId=${statusDiscipline.id} class="reject__btn btn"></span>
-    //                         </button>
-    //                     </div>
-    //                 </td>
-    //             </tr>
-    //         `
-    //     }
-
-
-    //     if (res.length > 0) {
-    //         document.querySelector(".status-disciplines tbody").innerHTML = res
-    //     } else {
-    //         document.querySelector(".status-disciplines tbody").innerHTML = ""
-    //     } 
-
-    //     let approveDeleteStatusDiscipline = document.querySelectorAll(".approve-status .btn")
-    //     approveDeleteStatusDiscipline.forEach(approveStatusDisciplineItem => {
-    //         approveStatusDisciplineItem.addEventListener("click", function(e) {
-    //             popupApproveStatusDiscipline.classList.add("open")
-    //             document.body.classList.add("no-scroll")
-
-    //             popupApproveStatusDiscipline.querySelector("#statusDisciplineId").value = e.target.dataset.statusdisciplineid
-    //         })
-    //     })
-
-    //     let rejectDeleteStatusDiscipline = document.querySelectorAll(".reject-status .btn")
-    //     rejectDeleteStatusDiscipline.forEach(rejectStatusDisciplineItem => {
-    //         rejectStatusDisciplineItem.addEventListener("click", function(e) {
-    //             popupRejectStatusDiscipline.classList.add("open")
-    //             document.body.classList.add("no-scroll")
-
-    //             popupRejectStatusDiscipline.querySelector("#statusDisciplineId").value = e.target.dataset.statusdisciplineid
-    //         })
-    //     })
-    // }
 
     //функционал выпадающих списков
     const select = document.querySelectorAll('.select');
@@ -833,7 +755,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             setUserName(userName)
             getRemovableDisciplines()
-            //getRemovableStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли        
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`${URL}/sved/${redirectPage}/`)

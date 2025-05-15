@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
     const URL = "https://oop.dgu.ru"
-    //const URL = "https://localhost:44370"
+
     let logoutBtn = document.querySelector(".header .action__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
     let popupUploadFileRpd = document.querySelector("#popup-createRpd")
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let popupDeleteDiscipline = document.querySelector("#popup-deleteDiscipline")
     let popupDeleteDisciplineYesBtn = document.querySelector("#popup-deleteDiscipline .confirm-button--yes")
     let popupDeleteDisciplineNoBtn = document.querySelector("#popup-deleteDiscipline .confirm-button--no")
-    //let deleteStatusBtn = document.querySelector(".status__btn")
+
     let popupDeleteStatus = document.querySelector("#popup-deleteStatus")
     let popupDeleteStatusYesBtn = document.querySelector("#popup-deleteStatus .confirm-button--yes")
     let popupDeleteStatusNoBtn = document.querySelector("#popup-deleteStatus .confirm-button--no")
@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
             credentials: "include",
         })
         const userName = localStorage.getItem("userName")
-        const userRole = localStorage.getItem("userRole")
 
         if (response.ok) {
             let data = await response.json()
@@ -478,10 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     document.body.classList.add("no-scroll")
-                }
-
-                
-                
+                }            
             })
         })
 
@@ -717,8 +713,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 code: newDisciplineCode.value,
                 fileRPD: null,
                 lastChangeAuthorId: userId
-                //createDate: "0001-01-01T00:00:00",
-                //updateDate: "0001-01-01T00:00:00"
             }
 
             createDiscipline(newDiscipline, e.target)
@@ -1068,22 +1062,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //кнопка удаления статуса дисциплины
-    // deleteStatusBtn.addEventListener("click", function(e) {
-    //     let selectedStatusDiscipline = e.target.closest(".status").querySelector("[data-selectfield=statusDiscipline] .select__text")
-
-    //     if (selectedStatusDiscipline.textContent == "Выберите статус дисциплины") {
-    //         selectedStatusDiscipline.closest(".select").classList.add("invalid")
-    //     } else {
-    //         selectedStatusDiscipline.closest(".select").classList.remove("invalid")
-    //         popupDeleteStatus.classList.add("open")
-    //         document.body.classList.add("no-scroll")
-
-    //         let statusDisciplineId = selectedStatusDiscipline.dataset.id
-    //         popupDeleteStatus.querySelector("#statusDisciplineId").value = statusDisciplineId
-    //     }
-    // })
-
     //нажатие на кнопку да в модальном окне удаления статуса дисциплины
     popupDeleteStatusYesBtn.addEventListener("click", function(e) {
         let statusDisciplineId = popupDeleteStatus.querySelector("#statusDisciplineId").value
@@ -1158,8 +1136,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             optionItem.classList.remove("selected")
                         })
 
-                        
-
                         //помечаем выбранный нами элемент как выбранный
                         selectedOption.classList.add("selected")
                         selectText.textContent = selectedOptionText;
@@ -1218,7 +1194,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let response = await fetch(`${URL}/api/StatusDiscipline/GetStatusDiscipline`, {
             credentials: "include",
         })
-        let res = ""
         if (response.ok) {
             let statusDisciplines = await response.json() 
             const statusChoices = []
@@ -1231,7 +1206,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
             statusDisciplineChoice.setChoices(statusChoices, "value", "label", true);
-            //document.querySelector(".page__status [data-selectfield=statusDiscipline] .select__options").innerHTML = res
         } else if (response.status == 405) {
             window.location.assign(`${URL}/sved/login.html`)
         } else {

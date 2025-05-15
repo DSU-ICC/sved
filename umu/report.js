@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    //const URL = "https://localhost:44370"
     const URL = "https://oop.dgu.ru"
 
     const yearInput = document.querySelector(".report-form__input")
@@ -135,28 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
             levelEduChoice.setChoices(levelEduChoices, "value", "label", true);
         }
     }
-
-    //получить факультеты
-    // const getFaculties = async () => {
-    //     let response = await fetch(`${URL}/api/DekanatData/GetFaculties`, {
-    //         credentials: "include"
-    //     })
-
-    //     if (response.ok) {
-    //         let facultiesData = await response.json()
-
-    //         let facultyChoices = []
-    //         for (let el of facultiesData) {
-    //             facultyChoices.push({
-    //                 value: el.facId,
-    //                 label: el.facName,
-    //                 selected: false,
-    //                 disabled: false
-    //             });
-    //         }
-    //         facultyChoice.setChoices(facultyChoices, "value", "label", true);
-    //     }
-    // }
 
     //получить формы обучения
     const getEduForms = async () => {
@@ -493,7 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
             getFacultiesAndDepartments()
                 .then(_ => getLevelEdues())
                 .then(_ => getEduForms())
-            //getRemovableStatusDisciplines()
         } else { //если пользователь не имеет доступа к данной странице, то он перемещается на страницу, соответствующая его роли        
             let redirectPage = userRole !== "null" ? userRole : "metodist"
             window.location.assign(`${URL}/sved/${redirectPage}/`)

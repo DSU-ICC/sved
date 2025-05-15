@@ -204,7 +204,6 @@ table, th, td {
 
 .page__table {
     overflow-x: auto;
-    /* height: 600px; */
     height: calc(100vh - 272px);
 }
 
@@ -588,8 +587,6 @@ td[itemprop="methodology"] .document-key {
 }
 
 .discipline td:nth-child(1) {
-    /* border-right: 1px solid #cecece; */
-    /* border-bottom: 1px solid #cecece; */
     width: 103px;
     padding-right: 20px;
 }
@@ -621,11 +618,6 @@ td[itemprop="methodology"] .document-key {
     gap: 20px;
 }
 
-/* .discipline .wrapper {
-    width: 100%;
-    max-width: 850px;
-    padding-left: 16px;
-} */
 .discipline-name {
     width: 850px;
 }
