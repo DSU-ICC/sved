@@ -236,6 +236,11 @@ main {
     border-radius: 10px;
 }
 
+.footer__inner .logo__text {
+    font-weight: 500;
+    color: #fff;
+}
+
 .footer__text {
     font-weight: 500;
     width: 191px;
