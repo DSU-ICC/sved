@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
 
-    const URL = "https://oop.dgu.ru"
-    //const URL = "https://localhost:44370"
+    //const URL = "https://oop.dgu.ru"
+    const URL = "https://localhost:44370"
 
     let logoutBtn = document.querySelector(".header .action__btn")
 
