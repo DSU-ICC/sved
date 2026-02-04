@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     var path = window.location.pathname; var host = window.location.hostname;
     document.getElementById("specialVersion").href = "https://finevision.ru/?hostname=" + host + "&path=" + path
+    
     const URL = "https://oop.dgu.ru"
+    //const URL = "https://localhost:44370"
 
     let logoutBtn = document.querySelector(".header .action__btn")
     let closeModalBtns = document.querySelectorAll(".popup__close")
@@ -320,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <th>РПД</th>
                                     <th>ФОС</th>
                                     <th>Удаление дисциплины</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>  
@@ -330,12 +333,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     disciplineMarkup += 
                         `
                         <tr class="discipline">
-                            <td>${discipline.code}</td>
+                            <td>
+                                <span class="discipline-code">${discipline.code}</span>
+                            </td>
                             <td>
                                 <span class="discipline-name">${discipline.disciplineName}</span>
-                                <button type="button" class="edit">
-                                    <span data-disciplineid="${discipline.id}" class="edit__btn btn"></span>
-                                </button> 
                             </td>
                     `
                     //если файл рпд загружен для данной дисциплины, то выводим его вместе с ключом эцп
@@ -433,6 +435,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     disciplineMarkup += `
+                        <td>
+                            <button type="button" class="edit">
+                                <span data-disciplineid="${discipline.id}" class="edit__btn btn"></span>
+                            </button> 
+                        </td>
                     </tr>
                     `
 
@@ -512,11 +519,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 popupEditDiscipline.classList.add("open")
                 document.body.classList.add("no-scroll")
 
+                let disciplineCode = e.target.closest(".discipline").querySelector(".discipline-code").textContent
                 let disciplineName = e.target.closest(".discipline").querySelector(".discipline-name").textContent
                 let disciplineId = e.target.dataset.disciplineid
 
                 popupEditDiscipline.querySelector("#disciplineId").value = disciplineId
-                popupEditDiscipline.querySelector(".popup-form__input").value = disciplineName
+                popupEditDiscipline.querySelector(".popup-form__input#code").value = disciplineCode
+                popupEditDiscipline.querySelector(".popup-form__input#disciplineName").value = disciplineName
                 
             })
         })
@@ -759,19 +768,31 @@ document.addEventListener("DOMContentLoaded", () => {
     popupEditDisciplineBtn.addEventListener("click", function(e) {
         let disciplineId = parseInt(popupEditDiscipline.querySelector("#disciplineId").value)
         let discipline = disciplineList[disciplineList.map(e => e.id).indexOf(disciplineId)]
+
+        let disciplineCodeInput = popupEditDiscipline.querySelector(".popup-form__input#code")
+        let newDisciplineCode = disciplineCodeInput.value
+
+        if (newDisciplineCode.trim() == "") {
+            disciplineCodeInput.closest(".popup-form__label").classList.add("invalid")
+            return
+        } else {
+            disciplineCodeInput.closest(".popup-form__label").classList.remove("invalid")
+        }
         
-        let disciplineNameInput = popupEditDiscipline.querySelector(".popup-form__input")
+        let disciplineNameInput = popupEditDiscipline.querySelector(".popup-form__input#disciplineName")
         let newDisciplineName = disciplineNameInput.value
 
         if (newDisciplineName.trim() == "") {
             disciplineNameInput.closest(".popup-form__label").classList.add("invalid")
+            return
         } else {
-            
-            disciplineNameInput.classList.remove("invalid")
-            discipline.disciplineName = newDisciplineName
-            discipline.lastChangeAuthorId = userId
-            editDiscipline(discipline, e.target)
+            disciplineNameInput.closest(".popup-form__label").classList.remove("invalid")
         }
+
+        discipline.code = newDisciplineCode
+        discipline.disciplineName = newDisciplineName
+        discipline.lastChangeAuthorId = userId
+        editDiscipline(discipline, e.target)
     })
     
     //изменение дисциплины
