@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ...choiceOptions,
         searchPlaceholderValue: "Введите название статуса дисциплины"
     });
+
+    let editStatusDisciplineSelect = document.querySelector("#edit-status-discipline")
+    let editStatusDisciplineChoice = new Choices(editStatusDisciplineSelect, {
+        ...choiceOptions,
+        searchPlaceholderValue: "Введите название статуса дисциплины"
+    });
     
     //закрытие модального окна
     closeModalBtns.forEach(closeItem => {
@@ -303,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let statusItemId of statusListId) {
             const statusName = disciplineList[disciplineList.map(e => e.statusDiscipline.id).indexOf(statusItemId)].statusDiscipline.name
             res += `
-                <li class="accordeon__item">
+                <li class="accordeon__item" data-status-discipline-id="${statusItemId}">
                     <div class="accordeon__control" aria-expanded="false">               
                         <p class="accordeon__title">${statusName}</p>
                         <div class="accordeon__icon"></div>
@@ -522,11 +528,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 let disciplineCode = e.target.closest(".discipline").querySelector(".discipline-code").textContent
                 let disciplineName = e.target.closest(".discipline").querySelector(".discipline-name").textContent
                 let disciplineId = e.target.dataset.disciplineid
+                let statusDisciplineId = parseInt(e.target.closest(".accordeon__item").dataset.statusDisciplineId)
 
                 popupEditDiscipline.querySelector("#disciplineId").value = disciplineId
                 popupEditDiscipline.querySelector(".popup-form__input#code").value = disciplineCode
                 popupEditDiscipline.querySelector(".popup-form__input#disciplineName").value = disciplineName
-                
+                editStatusDisciplineChoice.setChoiceByValue(statusDisciplineId)
             })
         })
 
@@ -789,9 +796,18 @@ document.addEventListener("DOMContentLoaded", () => {
             disciplineNameInput.closest(".popup-form__label").classList.remove("invalid")
         }
 
+        let newStatusDisciplineId = editStatusDisciplineChoice.getValue(true)
+        if (!newStatusDisciplineId) {
+            editStatusDisciplineSelect.closest(".choices__inner").classList.add("invalid")
+            return
+        } else {
+            editStatusDisciplineSelect.closest(".choices__inner").classList.remove("invalid")
+        }
+
         discipline.code = newDisciplineCode
         discipline.disciplineName = newDisciplineName
         discipline.lastChangeAuthorId = userId
+        discipline.statusDisciplineId = newStatusDisciplineId
         editDiscipline(discipline, e.target)
     })
     
@@ -1227,6 +1243,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
             statusDisciplineChoice.setChoices(statusChoices, "value", "label", true);
+            editStatusDisciplineChoice.setChoices(statusChoices, "value", "label", true);
         } else if (response.status == 405) {
             window.location.assign(`${URL}/sved/login.html`)
         } else {
